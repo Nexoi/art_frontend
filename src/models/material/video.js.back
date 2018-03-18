@@ -1,0 +1,54 @@
+/**
+ * Created by neo on 25/2/2018.
+ */
+import { queryVideos, queryVideosByFolderName, uploadVideo } from '../../services/api';
+
+export default {
+  namespace: 'video',
+
+  state: {
+    currentFolder: '',
+    folder: [],
+    list: [],
+    modalVisible: false,
+  },
+
+  effects: {
+    *fetchList(_, { call, put }) {
+      const response = yield call(queryVideos);
+      yield put({
+        type: 'saveList',
+        payload: response,
+      });
+      // console.log(response);
+    },
+    *reloadByFolder({ payload }, { call, put }) {
+      console.log(payload);
+      const response = yield call(queryVideosByFolderName, payload);
+      yield put({
+        type: 'saveList',
+        payload: response,
+      });
+    },
+    *upload({ payload }, { call, put }) {
+      const response = yield call(uploadVideo, payload);
+      yield put({
+        type: 'saveList',
+        payload: response,
+      });
+    },
+  },
+
+  reducers: {
+    saveList(state, action) {
+      console.log(state);
+      const { currentFolder, folder, content } = action.payload;
+      return {
+        // ...state,
+        currentFolder: currentFolder || '-',
+        folder,
+        list: content,
+      };
+    },
+  },
+};

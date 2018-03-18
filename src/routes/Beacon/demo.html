@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<canvas id="canvas" width="800px" height="600px">
+  <p>老王加油加油加油～</p>
+</canvas>
+<script>
+
+  var canvas = document.getElementById('canvas');
+  var context2D = canvas.getContext('2d');
+  var pic = new Image();
+  pic.src = "https://pic1.zhimg.com/80/v2-6ee6267cfcdd21464a1a5cd612c6011e_r.jpg";
+  pic.onload = function () {
+    context2D.drawImage(pic, 0, 0, 800, 600);
+  }
+  var stopDraw = false;
+  canvas.addEventListener('mousemove', (e) => {
+    if (stopDraw) {
+      return;
+    }
+    // 清空画布内容
+    context2D.clearRect(0, 0, canvas.width, canvas.height);
+    context2D.drawImage(pic, 0, 0, 800, 600);
+    // 画框
+    const eve = e || window.event;
+    function getPointOnCanvas() {
+      const bbox = canvas.getBoundingClientRect();
+      return {
+        x: eve.clientX - (bbox.left * (canvas.width / bbox.width)) - 10,
+        y: eve.clientY - (bbox.top * (canvas.height / bbox.height)),
+      };
+    }
+    const { x, y } = getPointOnCanvas();
+    context2D.fillStyle = '#DD3322';
+    context2D.strokeStyle = "red";
+    context2D.lineWidth = 2;
+    context2D.strokeRect(x, y, 100, 120); //线的四个参数(x,y,width,height)
+  }, false);
+  canvas.addEventListener('mousedown', (e) => {
+    stopDraw = !stopDraw;
+  }, false);
+</script>
+
+</body>
+</html>

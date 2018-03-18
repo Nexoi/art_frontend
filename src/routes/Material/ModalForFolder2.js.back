@@ -1,0 +1,109 @@
+/**
+ * Created by neo on 28/2/2018.
+ */
+import React from 'react';
+import { Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
+
+/**
+ * @param that
+ * @param label 只能是 'audio', 'picture', 'video' 任中一个
+ * @param visible
+ * @returns {XML}
+ */
+export default ({ that, label, visible }) => {
+  const state = {
+    data: ['个人图片集合', '测试图片集合', '当文件夹名字很长的时候测试',
+      '个人图片集合', '测试图片集合', '当文件夹名字很长的时候测试当文件夹名字很长的时候测试当文件夹名字很长的时候测试当文件夹名字很长的时候测试',
+      '个人图片集合', '测试图片集合', '当文件夹名字很长的时候测试',
+      '个人图片集合', '测试图片集合', '当文件夹名字很长的时候测试'],
+  };
+
+  function addItem() {
+    message.info('add');
+  }
+
+  const updateItem = (id, value) => {
+    message.info(`update: ${id}, ${value}`);
+  }
+
+  const deleteItem = (id) => {
+    message.info(`delete: ${id}`);
+  }
+
+  const onOk = () => {
+    message.info('ok');
+    that.setState({
+      visible: false,
+    });
+  };
+  const onInputChange = (value) => {
+    message.info(value);
+    that.setState({
+      folderChangeNameValue: value,
+    });
+  }
+
+  const handleMenuClick = (item, e) => {
+    if (e.key === '1') {
+      that.setState({
+        folderCurrentItem: item,
+      });
+      Modal.confirm({
+        title: 'Do you Want to delete these items?',
+        content: (
+          <div>
+            <Input defaultValue={item} onChange={e => onInputChange(e)} />
+          </div>),
+        onOk() {
+          updateItem(item, 'new value');
+          console.log('OK');
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+    } else if (e.key === '2') {
+      Modal.confirm({
+        title: '确定要删除该音频文件吗？',
+        onOk() {
+          deleteItem(item);
+        },
+      });
+    }
+  }
+
+  return (
+    <Modal
+      visible={visible}
+      title="修改分组"
+      okText="确定"
+      onCancel={onOk}
+      onOk={onOk}
+    >
+      <List
+        bordered
+        className="demo-loadmore-list"
+        itemLayout="horizontal"
+        dataSource={state.data}
+        renderItem={item => (
+          <List.Item>
+            <List.Item.Meta
+              title={item}
+            />
+            <Dropdown overlay={
+              <Menu onClick={e => handleMenuClick(item, e)}>
+                <Menu.Item key="1">重命名</Menu.Item>
+                <Menu.Item key="2">删除</Menu.Item>
+              </Menu>}
+            >
+              <Button style={{ marginLeft: 8 }}>
+                操作 <Icon type="down" />
+              </Button>
+            </Dropdown>
+          </List.Item>
+        )}
+      />
+      <Input placeholder="新建分组" onPressEnter={addItem} style={{ marginTop: 20 }} />
+    </Modal>
+  );
+};
