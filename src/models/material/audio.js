@@ -85,6 +85,9 @@ export default {
         });
         message.info('删除成功！');
       }
+      if (response.status === 423) {
+        message.info('删除失败！该资源在其余地方被使用，请先解除关联');
+      }
     },
     // ??
     *addAudio({ payload }, { call, put, select }) {

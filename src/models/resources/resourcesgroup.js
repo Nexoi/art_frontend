@@ -131,14 +131,14 @@ export default {
       const { showId, groupId } = payload;
       const response = yield call(removeAR, { showId, groupId });
       if (response.status === 200) {
-        message.info('取消绑定成功！');
-        const page = yield select(state => state.resourcesgroup.page.number);
-        const size = yield select(state => state.resourcesgroup.page.size);
-        const response2 = yield call(listResourceGroup, { showId, page, size });
-        yield put({
-          type: 'refreshUI',
-          payload: response2.data,
-        });
+        message.info('取消绑定成功！请刷新页面以更新数据');
+        // const page = yield select(state => state.resourcesgroup.page.number);
+        // const size = yield select(state => state.resourcesgroup.page.size);
+        // const response2 = yield call(listResourceGroup, { showId, page, size });
+        // yield put({
+        //   type: 'refreshUI',
+        //   payload: response2.data,
+        // });
       }
     },
     *bindBeacons({ payload }, { call, put, select }) {

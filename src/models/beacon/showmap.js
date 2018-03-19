@@ -88,6 +88,9 @@ export default {
           payload: response2.data,
         });
       }
+      if (response.status === 423) {
+        message.info('删除失败！该地图在其余地方被使用，请先解除关联');
+      }
     },
   },
   reducers: {
