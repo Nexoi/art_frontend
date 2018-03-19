@@ -29,11 +29,11 @@ export default class QRCodeList extends PureComponent {
     if (e.key === '1') {
       const that = this;
       Modal.confirm({
-        title: '确定要解除与该资源组的绑定吗？',
+        title: 'ing',
         cancelText: '取消',
         okText: '确定',
         onOk() {
-          that.deleteShow(record.id);
+          // that.deleteShow(record.id);
         },
       });
     }

@@ -29,7 +29,7 @@ export default class BeaconList extends PureComponent {
     if (e.key === '1') {
       const that = this;
       Modal.confirm({
-        title: `确定要解除该 Beacon 与资源组「${record.name}」 的绑定吗吗？`,
+        title: `确定要解除该 Beacon 与资源组「${record.resourceGroup.name}」 的绑定吗吗？`,
         cancelText: '取消',
         okText: '确定',
         onOk() {
