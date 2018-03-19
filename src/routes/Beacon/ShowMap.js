@@ -29,6 +29,8 @@ export default class ShowMap extends PureComponent {
       width: -1,
       height: -1,
       imageId: -1,
+      imageWidth: -1,
+      imageHeight: -1,
     },
   }
   componentWillMount() {
@@ -71,6 +73,8 @@ export default class ShowMap extends PureComponent {
         width: '',
         height: '',
         imageId: -1,
+        imageWidth: -1,
+        imageHeight: -1,
       },
       selectedShowMapImgUrl: '',
     });
@@ -87,8 +91,8 @@ export default class ShowMap extends PureComponent {
         payload: {
           name: data.name,
           showHallName: data.showHallName,
-          width: data.width,
-          height: data.height,
+          width: data.imageWidth,
+          height: data.imageHeight,
           imageId: data.imageId,
         },
       });
@@ -100,8 +104,8 @@ export default class ShowMap extends PureComponent {
           mapId: data.mapId,
           name: data.name,
           showHallName: data.showHallName,
-          width: data.width,
-          height: data.height,
+          width: data.imageWidth,
+          height: data.imageHeight,
           imageId: data.imageId,
         },
       });
@@ -182,6 +186,8 @@ export default class ShowMap extends PureComponent {
         data: {
           ...this.state.data,
           imageId: value[0].id,
+          imageWidth: value[0].width,
+          imageHeight: value[0].height,
         },
       });
     }
@@ -359,18 +365,18 @@ const CollectionCreateForm = Form.create({
             {/*initialValue: initValues.showHallName,*/}
           {/*})(<Input />)}*/}
         {/*</FormItem>*/}
-        <FormItem label="地图尺寸【长】（单位：厘米，整数）">
-          {getFieldDecorator('height', {
-            rules: [{ required: true, message: '请输入长度！' }],
-            initialValue: initValues.height,
-          })(<Input type="number" />)}
-        </FormItem>
-        <FormItem label="地图尺寸【宽】（单位：厘米，整数）">
-          {getFieldDecorator('width', {
-            rules: [{ required: true, message: '请输入宽度！' }],
-            initialValue: initValues.width,
-          })(<Input type="number" />)}
-        </FormItem>
+        {/*<FormItem label="地图尺寸【长】（单位：厘米，整数）">*/}
+          {/*{getFieldDecorator('height', {*/}
+            {/*rules: [{ required: true, message: '请输入长度！' }],*/}
+            {/*initialValue: initValues.height,*/}
+          {/*})(<Input type="number" />)}*/}
+        {/*</FormItem>*/}
+        {/*<FormItem label="地图尺寸【宽】（单位：厘米，整数）">*/}
+          {/*{getFieldDecorator('width', {*/}
+            {/*rules: [{ required: true, message: '请输入宽度！' }],*/}
+            {/*initialValue: initValues.width,*/}
+          {/*})(<Input type="number" />)}*/}
+        {/*</FormItem>*/}
         <FormItem>
           <Button onClick={selectMap}> 选择地图 </Button>
           { imgUrl !== undefined && imgUrl.length > 1 &&

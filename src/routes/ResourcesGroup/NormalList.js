@@ -19,9 +19,11 @@ export default class NormalList extends PureComponent {
     showId: this.props.match.url.slice(this.props.match.url.indexOf('/shows/') + 7, this.props.match.url.indexOf('/all')),
     mapViewerVisible: false,
     mapViewerData: {
-      width: 0,
-      height: 0,
+      width: undefined,
+      height: undefined,
       imageUrl: '',
+      imageWidth: undefined,
+      imageHeight: undefined,
     },
     arSelectorVisible: false,
     currentSelectedGroupId: -1,
@@ -129,9 +131,13 @@ export default class NormalList extends PureComponent {
     this.setState({
       mapViewerVisible: true,
       mapViewerData: {
-        width: positionWidth / width,
-        height: positionHeight / height,
+        // width: positionWidth / width,
+        // height: positionHeight / height,
+        width: positionWidth,
+        height: positionHeight,
         imageUrl,
+        imageWidth: width,
+        imageHeight: height,
       },
     });
   }
@@ -291,6 +297,8 @@ export default class NormalList extends PureComponent {
         <MapPositionViewer
           positionWidth={this.state.mapViewerData.width}
           positionHeight={this.state.mapViewerData.height}
+          imageWidth={this.state.mapViewerData.imageWidth}
+          imageHeight={this.state.mapViewerData.imageHeight}
           imageUrl={this.state.mapViewerData.imageUrl}
         />
       </Modal>);
@@ -321,7 +329,7 @@ export default class NormalList extends PureComponent {
         <Input
           style={{ marginTop: 16, marginBottom: 16 }}
           placeholder="请输入资源组名称"
-          initialValue={this.state.editGroupNameValue}
+          // initialValue={this.state.editGroupNameValue}
           onChange={this.onEditGroupInputChange}
           onPressEnter={this.updateGroupName}
         />

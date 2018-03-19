@@ -136,11 +136,17 @@ export default class PictureSelector extends PureComponent {
                       <div
                         style={{ overflow: 'hidden', width: 158, height: 160, lineHeight: '200px' }}
                       >
-                        <img
-                          alt="图片"
-                          style={{ width: 158 }}
-                          src={item.url}
-                        />
+                        { item.width < item.height
+                          ? (<img
+                            alt="图片"
+                            style={{ width: 158 }}
+                            src={item.url}
+                          />)
+                          : (<img
+                            alt="图片"
+                            style={{ height: 160 }}
+                            src={item.url}
+                          />) }
                       </div>}
                   >
                     <Checkbox value={item.id} style={{ margin: 0, display: 'inline-flex' }}>

@@ -123,8 +123,8 @@ export async function deleteAllVideos(videoIds) {
 
 /* 素材／图片 */
 export async function addImage(payload) {
-  const { folderId, url, name } = payload;
-  return request(`/api/admin/v1/material/image?folderId=${folderId}&url=${url}&name=${name}`, {
+  const { folderId, url, name, width, height } = payload;
+  return request(`/api/admin/v1/material/image?folderId=${folderId}&width=${width}&height=${height}&url=${url}&name=${name}`, {
     method: 'POST',
   });
 }

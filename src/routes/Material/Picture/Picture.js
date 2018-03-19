@@ -101,7 +101,7 @@ export default class Picture extends PureComponent {
     /* 文件上传 */
     uploadProps: {
       name: 'file',
-      action: '//art.seeuio.com/api/admin/v1/upload',
+      action: '//art.seeuio.com/api/admin/v1/upload/image',
       // fileList: [{
       //   uid: -1,
       //   name: 'demo.png',
@@ -158,6 +158,8 @@ export default class Picture extends PureComponent {
       if (file.response) {
         // Component will show file.url as link
         file.url = file.response.data.url;
+        file.width = file.response.data.width;
+        file.height = file.response.data.height;
       }
       return file;
     });
@@ -214,6 +216,8 @@ export default class Picture extends PureComponent {
       // length: this.state.data.length,
       // size: this.state.uploadProps.fileList[0].size,
       url: this.state.uploadProps.fileList[0].url,
+      width: this.state.uploadProps.fileList[0].width,
+      height: this.state.uploadProps.fileList[0].height,
     };
     // request by data
     this.props.dispatch({
@@ -419,11 +423,17 @@ export default class Picture extends PureComponent {
                         <div
                           style={{ overflow: 'hidden', width: 198, height: 200, lineHeight: '200px' }}
                         >
-                          <img
-                            alt="图片"
-                            style={{ width: 198 }}
-                            src={item.url}
-                          />
+                          { item.width < item.height
+                            ? (<img
+                              alt="图片"
+                              style={{ width: 198 }}
+                              src={item.url}
+                            />)
+                            : (<img
+                              alt="图片"
+                              style={{ height: 200 }}
+                              src={item.url}
+                            />) }
                         </div>}
                     >
                       <Checkbox value={item.id} style={{ margin: 0, display: 'inline-flex', whiteSpace: 'normal' }}>

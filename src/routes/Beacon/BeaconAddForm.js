@@ -97,6 +97,7 @@ export default class BeaconEditForm extends PureComponent {
     });
   }
   selectMap = (record) => {
+    console.log(record)
     this.closeMapSelectModal();
     const data = {
       image: {
@@ -201,6 +202,8 @@ export default class BeaconEditForm extends PureComponent {
             : 0}
           onSelect={this.editMapPosition}
           imageUrl={this.state.selectedMap.image.url}
+          imageWidth={this.state.selectedMap.width}
+          imageHeight={this.state.selectedMap.height}
         />
       </Modal>
     );

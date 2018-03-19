@@ -28,10 +28,10 @@ export default class BeaconEditForm extends PureComponent {
       },
       // showHallName: '',
       name: '',
-      // width: 80,
+      width: -1,
       // updateTime: '',
       id: -1,
-      // height: 100,
+      height: -1,
     },
     // data: {
     //   name: '',
@@ -202,6 +202,8 @@ export default class BeaconEditForm extends PureComponent {
             : 0}
           onSelect={this.editMapPosition}
           imageUrl={this.state.selectedMap.image.url}
+          imageWidth={this.state.selectedMap.width}
+          imageHeight={this.state.selectedMap.height}
         />
       </Modal>
     );
