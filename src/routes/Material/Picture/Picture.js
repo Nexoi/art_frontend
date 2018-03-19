@@ -415,13 +415,18 @@ export default class Picture extends PureComponent {
                     <Card
                       hoverable
                       style={{ width: 200, padding: 0 }}
-                      cover={<img
-                        alt="图片"
-                        style={{ width: 198, height: 200 }}
-                        src={item.url}
-                      />}
+                      cover={
+                        <div
+                          style={{ overflow: 'hidden', width: 198, height: 200, lineHeight: '200px' }}
+                        >
+                          <img
+                            alt="图片"
+                            style={{ width: 198 }}
+                            src={item.url}
+                          />
+                        </div>}
                     >
-                      <Checkbox value={item.id} style={{ margin: 0, display: 'inline-flex' }}>
+                      <Checkbox value={item.id} style={{ margin: 0, display: 'inline-flex', whiteSpace: 'normal' }}>
                         {item.name.toString().length > 10 ? `${item.name.slice(0, 6)}...${item.name.slice(-4)}` : item.name}
                       </Checkbox>
                     </Card>

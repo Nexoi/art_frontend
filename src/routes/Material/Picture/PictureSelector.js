@@ -132,11 +132,16 @@ export default class PictureSelector extends PureComponent {
                   <Card
                     hoverable
                     style={{ width: 160, padding: 0 }}
-                    cover={<img
-                      alt="图片"
-                      style={{ width: 158, height: 160 }}
-                      src={item.url}
-                    />}
+                    cover={
+                      <div
+                        style={{ overflow: 'hidden', width: 158, height: 160, lineHeight: '200px' }}
+                      >
+                        <img
+                          alt="图片"
+                          style={{ width: 158 }}
+                          src={item.url}
+                        />
+                      </div>}
                   >
                     <Checkbox value={item.id} style={{ margin: 0, display: 'inline-flex' }}>
                       {item.name.toString().length > 6 ? `${item.name.slice(0, 3)}..${item.name.slice(-3)}` : item.name}
