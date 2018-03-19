@@ -106,18 +106,6 @@ export default class ShowAddForm extends PureComponent {
           >
             <FormItem
               {...formItemLayout}
-              label="展馆"
-            >
-              {getFieldDecorator('showHallName', {
-              rules: [{
-                required: true, message: '请输入展馆名称',
-              }],
-            })(
-              <Input placeholder="展馆名称" />
-            )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
               label="展览名称"
             >
               {getFieldDecorator('title', {
@@ -127,6 +115,18 @@ export default class ShowAddForm extends PureComponent {
             })(
               <Input placeholder="展览名称" />
             )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="展厅名称"
+            >
+              {getFieldDecorator('showHallName', {
+                rules: [{
+                  required: true, message: '请输入展厅名称',
+                }],
+              })(
+                <Input placeholder="展厅名称" />
+              )}
             </FormItem>
             <FormItem
               {...formItemLayout}

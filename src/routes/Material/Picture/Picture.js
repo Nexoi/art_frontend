@@ -409,7 +409,9 @@ export default class Picture extends PureComponent {
                   { minWidth: 0 } // 如果列表大于 4，则控制宽度
                 }
                 renderItem={item => (
-                  <List.Item>
+                  <List.Item
+                    style={{ height: 300 }}
+                  >
                     <Card
                       hoverable
                       style={{ width: 200, padding: 0 }}
@@ -420,7 +422,7 @@ export default class Picture extends PureComponent {
                       />}
                     >
                       <Checkbox value={item.id} style={{ margin: 0, display: 'inline-flex' }}>
-                        {item.name.toString().length > 8 ? `${item.name.slice(0, 8)}...${item.name.slice(-4)}` : item.name}
+                        {item.name.toString().length > 10 ? `${item.name.slice(0, 6)}...${item.name.slice(-4)}` : item.name}
                       </Checkbox>
                     </Card>
                   </List.Item>

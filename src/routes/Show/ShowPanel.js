@@ -124,7 +124,7 @@ export default class ShowPanel extends PureComponent {
       return (<div> {`${getTimeStringSimple(record.startTime)} - ${getTimeStringSimple(record.endTime)}`} </div>);
     },
   }, {
-    title: '展馆',
+    title: '展厅名称',
     dataIndex: 'showHallName',
     key: 'showHallName',
   }, {

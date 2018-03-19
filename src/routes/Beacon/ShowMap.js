@@ -128,7 +128,8 @@ export default class ShowMap extends PureComponent {
         data: {
           mapId: record.id,
           name: record.name,
-          showHallName: record.showHallName,
+          // showHallName: record.showHallName,
+          showHallName: 'unset',
           width: record.width,
           height: record.height,
           imageId: record.image.id,
@@ -205,10 +206,10 @@ export default class ShowMap extends PureComponent {
     dataIndex: 'name',
     key: 'name',
   }, {
-    title: '展馆',
-    dataIndex: 'showHallName',
-    key: 'showHallName',
-  }, {
+  //   title: '展馆',
+  //   dataIndex: 'showHallName',
+  //   key: 'showHallName',
+  // }, {
     title: '地图尺寸（长）',
     dataIndex: 'height',
     key: 'height',
@@ -352,12 +353,12 @@ const CollectionCreateForm = Form.create({
             initialValue: initValues.name,
           })(<Input />)}
         </FormItem>
-        <FormItem label="展馆名称">
-          {getFieldDecorator('showHallName', {
-            rules: [{ required: true, message: '请输入展馆名称！' }],
-            initialValue: initValues.showHallName,
-          })(<Input />)}
-        </FormItem>
+        {/*<FormItem label="展馆名称">*/}
+          {/*{getFieldDecorator('showHallName', {*/}
+            {/*rules: [{ required: true, message: '请输入展馆名称！' }],*/}
+            {/*initialValue: initValues.showHallName,*/}
+          {/*})(<Input />)}*/}
+        {/*</FormItem>*/}
         <FormItem label="地图尺寸【长】（单位：厘米，整数）">
           {getFieldDecorator('height', {
             rules: [{ required: true, message: '请输入长度！' }],

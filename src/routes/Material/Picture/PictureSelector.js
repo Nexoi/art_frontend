@@ -126,7 +126,9 @@ export default class PictureSelector extends PureComponent {
                   { minWidth: 0 } // 如果列表大于 4，则控制宽度
                 }
               renderItem={item => (
-                <List.Item>
+                <List.Item
+                  style={{ height: 300 }}
+                >
                   <Card
                     hoverable
                     style={{ width: 160, padding: 0 }}
