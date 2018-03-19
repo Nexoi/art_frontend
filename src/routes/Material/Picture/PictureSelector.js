@@ -118,7 +118,7 @@ export default class PictureSelector extends PureComponent {
             value={this.state.selectedPictureIds}
           >
             <List
-              grid={{ gutter: 32, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 3 }}
+              grid={{ gutter: 32, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
               dataSource={this.props.picture.list}
               style={
                   (this.props.picture.list.length < 4 && { minWidth: 900 })
