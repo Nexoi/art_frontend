@@ -202,6 +202,9 @@ export const getRouterData = (app) => {
     '/show-resources/:groupId/items/:groupName': {
       component: dynamicWrapper(app, ['resources/resourceitem'], () => import('../routes/ResourceItem/ResourceItem')),
     },
+    '/show-resources/:groupId/editor': {
+      component: dynamicWrapper(app, ['resources/resourceitem'], () => import('../routes/ResourceItem/WebEditor')),
+    },
     '/users/appusers': {
       component: dynamicWrapper(app, ['seeuser/seeuser'], () => import('../routes/SEEUser/User')),
     },

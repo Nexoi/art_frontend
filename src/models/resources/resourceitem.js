@@ -74,10 +74,10 @@ export default {
       }
     },
     *addWebPage({ payload }, { call, put }) {
-      const { showId, groupId, title, coverImageUrl, contentHtml } = payload;
+      const { showId, groupId, title, author, coverImageUrl, introduce, contentHtml } = payload;
       const response = yield call(
         addResourceWebPage,
-        { showId, groupId, title, coverImageUrl, contentHtml }
+        { showId, groupId, title, author, coverImageUrl, introduce, contentHtml }
       );
       if (response.status === 201) {
         message.info('添加成功！');

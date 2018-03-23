@@ -32,13 +32,15 @@ export async function addResourceImage(payload) {
   });
 }
 export async function addResourceWebPage(payload) {
-  const { showId, groupId, title, coverImageUrl, contentHtml } = payload;
+  const { showId, groupId, title, author, coverImageUrl, introduce, contentHtml } = payload;
   const showId2 = showId === undefined || showId < 1 ? 0 : showId;
   return request(`/api/admin/v1/show/${showId2}/resources-group/${groupId}/item/web`, {
     method: 'POST',
     body: {
       title,
+      author,
       coverImageUrl,
+      introduce,
       contentHtml,
     },
   });

@@ -46,16 +46,14 @@ function checkStatus(response) {
  */
 export default function request(url, options) {
   console.log(`start==> ${url}`);
-  let finalUrl = url;
-  let switcher = false; // use seeuio ?
-  if (url.startsWith('/api/admin/v1')) {
-    finalUrl = `http://art.seeuio.com${url}`;
-    switcher = true;
-  }
-  // const finalUrl = `http://localhost:8000${url}`;
+  // let finalUrl = url;
+  const finalUrl = `http://art.seeuio.com${url}`;
+  // if (url.startsWith('/api/admin/v1')) {
+  //   finalUrl = `http://art.seeuio.com${url}`;
+  // }
   const defaultOptions = {
-    // credentials: 'include',
-    credentials: '*',
+    credentials: 'include',
+    // credentials: '*',
   };
   const newOptions = { ...defaultOptions, ...options };
 
