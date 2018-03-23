@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import {
   Form, Input, DatePicker, Select, Button, Card, InputNumber, Radio, Icon, Tooltip, message,
 } from 'antd';
+import { routerRedux, Route, Switch } from 'dva/router';
 import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/braft.css'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -11,8 +12,9 @@ import MaterialSelecter from '../Material/MaterialSelecter';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
-@connect(({ loading }) => ({
-  submitting: loading.effects['resourceitem/submitRegularForm'],
+@connect(({ resourceitem, loading }) => ({
+  resourceitem,
+  submitting: loading.effects['resourceitem/addWebPage'],
 }))
 @Form.create()
 export default class WebEditor extends PureComponent {
@@ -22,7 +24,14 @@ export default class WebEditor extends PureComponent {
     selectedImageUrl: undefined,
     htmlContent: '',
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.resourceitem.webSaveSuccess === true) {
+      nextProps.resourceitem.webSaveSuccess = false;
+      this.props.dispatch(routerRedux.goBack());
+    }
+  }
   handleSubmit = (e) => {
+    const { dispatch } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -43,7 +52,7 @@ export default class WebEditor extends PureComponent {
           introduce: values.introduce,
           contentHtml: this.state.htmlContent,
         }
-        this.props.dispatch({
+        dispatch({
           type: 'resourceitem/addWebPage',
           payload: data,
         });
@@ -95,7 +104,8 @@ export default class WebEditor extends PureComponent {
     };
 
     const editorProps = {
-      height: 800,
+      height: 600,
+      width: 600,
       contentFormat: 'html',
       initialContent: '<p>请在这里输入正文</p>',
       onChange: this.handleChange,
@@ -181,8 +191,8 @@ export default class WebEditor extends PureComponent {
           />
         </Card>
 
-        <Card border="false" style={{ marginTop: 24 }}>
-          <div className="demo">
+        <Card border="false" style={{ marginTop: 24, textAlign: 'center' }}>
+          <div className="demo" style={{ width: 660, margin: 'auto', border: '1px #eee solid' }}>
             <BraftEditor {...editorProps}/>
           </div>
         </Card>

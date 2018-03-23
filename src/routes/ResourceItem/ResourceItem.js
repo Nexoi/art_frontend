@@ -211,7 +211,9 @@ export default class ResourceItem extends PureComponent {
               columns={this.columns}
               dataSource={this.props.resourceitem.list}
               pagination={{
-                ...this.props.resourceitem.pagination,
+                // ...this.props.resourceitem.pagination,
+                // onShowSizeChange: this.onSizeChange,
+                // onChange: this.onPageChange,
               }}
             />
           </Card>

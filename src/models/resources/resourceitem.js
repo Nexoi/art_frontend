@@ -21,11 +21,12 @@ export default {
   state: {
     list: [],
     pagination: {
-      total: 0,
-      current: 1,
-      pageSize: 10,
+      // total: 0,
+      // current: 1,
+      // pageSize: 10,
       showSizeChanger: true,
     },
+    webSaveSuccess: false,
   },
 
   effects: {
@@ -83,7 +84,7 @@ export default {
         message.info('添加成功！');
         const response2 = yield call(listResourceItems, { showId, groupId });
         yield put({
-          type: 'refreshUI',
+          type: 'webSaveSuccess',
           payload: response2.data,
         });
       }
@@ -127,5 +128,18 @@ export default {
         },
       };
     },
+    webSaveSuccess(state, action) {
+      return {
+        ...state,
+        list: action.payload,
+        pagination: {
+          total: action.payload.length,
+          current: 1,
+          pageSize: 10,
+          showSizeChanger: true,
+        },
+        webSaveSuccess: true,
+      };
+    }
   },
 };
