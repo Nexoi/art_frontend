@@ -182,7 +182,7 @@ export default class ResourceItem extends PureComponent {
               <Menu.Item key="1">添加音频</Menu.Item>
               <Menu.Item key="2">添加视频</Menu.Item>
               <Menu.Item key="3">添加图片</Menu.Item>
-              <Menu.Item key="4"><a href="#/show-resources/22/editor">添加网页</a></Menu.Item>
+              <Menu.Item key="4"><a href={`#/show-resources/${this.state.groupId}/editor`}>添加网页</a></Menu.Item>
             </Menu>}
           >
             <Button size="large" onClick={this.openAddResourceItem}> 添加资源 <Icon type="down" /></Button>
