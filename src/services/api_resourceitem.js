@@ -63,3 +63,23 @@ export async function deleteResourceItem(payload) {
     method: 'DELETE',
   });
 }
+
+export async function getWebPage(itemId) {
+  return request(`/api/admin/v1/webpage/${itemId}`, {
+    method: 'GET',
+  });
+}
+
+export async function updateWebPage(payload) {
+  const { itemId, author, contentHtml, coverImageUrl, introduce, title } = payload;
+  return request(`/api/admin/v1/webpage/${itemId}`, {
+    method: 'PUT',
+    body: {
+      author,
+      contentHtml,
+      coverImageUrl,
+      introduce,
+      title,
+    },
+  });
+}

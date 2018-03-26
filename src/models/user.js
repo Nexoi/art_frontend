@@ -1,7 +1,7 @@
 import { query as queryUsers, queryCurrent } from '../services/user';
 
 export default {
-  namespace: 'user',
+  namespace: 'user-fake',
 
   state: {
     list: [],

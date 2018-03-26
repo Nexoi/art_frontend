@@ -439,7 +439,7 @@ export default class Audio extends PureComponent {
           >
             {folderOption}
           </Select>
-          <Button size="large" onClick={this.showFolder} style={{ marginRight: 20 }}> 修改分组 </Button>
+          {/*<Button size="large" onClick={this.showFolder} style={{ marginRight: 20 }}> 修改分组 </Button>*/}
           <Button size="large" onClick={this.showModal}> 上传音频 </Button>
         </div>
       </div>

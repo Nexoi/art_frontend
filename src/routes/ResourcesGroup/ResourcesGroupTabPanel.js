@@ -11,12 +11,16 @@ export default class ResourcesGroupTabPanel extends Component {
     showId: this.props.match.url.slice(this.props.match.url.indexOf('/shows/') + 7),
     addNewGroupVisible: false,
     addNewGroupInputValue: '',
+    selectedKey: 'all',
   }
   handleTabChange = (key) => {
     const { dispatch, match } = this.props;
-    console.log('=====tab key=====');
-    console.log(this.props.match.url.indexOf('/shows/'));
-    console.log(this.state.showId);
+    // console.log('=====tab key=====');
+    // console.log(this.props.match.url.indexOf('/shows/'));
+    // console.log(this.state.showId);
+    this.setState({
+      selectedKey: key,
+    });
     switch (key) {
       case 'all':
         dispatch(routerRedux.push(`${match.url}/all`));
@@ -78,14 +82,14 @@ export default class ResourcesGroupTabPanel extends Component {
 
     const { match, routerData, location } = this.props;
     const routes = getRoutes(match.path, routerData);
-    const key = location.pathname.replace(`${match.path}/`, '');
-    const activeKey = key.length > 0 ? key : 'all';
     const mainSearch = (
       <div>
         <span style={{ fontSize: 20, fontWeight: 500, color: '#000000' }}>展览资源组</span>
-        <div style={{ marginBottom: 0, float: 'right' }}>
-          <Button size="large" onClick={this.openAddGroupModal}> 新建资源组 </Button>
-        </div>
+        {this.state.selectedKey === 'all' &&
+          (<div style={{ marginBottom: 0, float: 'right' }}>
+            <Button size="large" onClick={this.openAddGroupModal}> 新建资源组 </Button>
+          </div>)
+        }
       </div>
     );
     const newGroupModal = (
@@ -105,7 +109,7 @@ export default class ResourcesGroupTabPanel extends Component {
     return (
       <PageHeaderLayout
         tabList={tabList}
-        tabActiveKey={activeKey}
+        tabActiveKey={location.pathname.replace(`${match.path}/`, '')}
         content={mainSearch}
         onTabChange={this.handleTabChange}
       >

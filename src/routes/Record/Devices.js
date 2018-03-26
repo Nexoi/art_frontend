@@ -1,0 +1,242 @@
+/**
+ * Created by neo on 18/3/2018.
+ */
+
+import React, { PureComponent } from 'react';
+import { Row, Col, Card, DatePicker, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
+import { connect } from 'dva';
+import moment from 'moment';
+import echarts from 'echarts';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import { getTimeYYYYMMDD } from '../../utils/utils';
+
+/* 主界面 */
+@connect(({ record, loading }) => ({
+  record,
+  loading: loading.effects['record/listDevices'],
+}))
+export default class Devices extends PureComponent {
+  state = {
+    startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
+    endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+  }
+  componentWillMount() {
+    this.props.dispatch({
+      type: 'record/listDevices',
+      payload: {
+        startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
+        endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+      },
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    const data = nextProps.record.devices;
+    this.loadChart(data);
+  }
+  componentDidMount() {
+    const data = this.props.record.devices;
+    this.loadChart(data);
+  }
+  loadChart = (data) => {
+    if (data === undefined || data.ars === undefined) {
+      return;
+    }
+    const days = [];
+    const ar = [];
+    const beacon = [];
+    const qrcode = [];
+    const startDay = parseInt(this.state.startDay);
+    const day = parseInt(this.state.endDay) - parseInt(this.state.startDay);
+    for (let i = 0; i < day; i += 1) {
+      days.push(startDay + i);
+      if (i < data.ars.length) {
+        ar.push(data.ars[i].times);
+      } else {
+        ar.push(0);
+      }
+      if (i < data.beacons.length) {
+        beacon.push(data.beacons[i].times);
+      } else {
+        beacon.push(0);
+      }
+      if (i < data.qrcodes.length) {
+        qrcode.push(data.qrcodes[i].times);
+      } else {
+        qrcode.push(0);
+      }
+    }
+    let option = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data:['Beacon','AR','二维码'],
+        bottom:'1%'
+      },
+      backgroundColor: '#fff',
+      grid: {
+        // left: '3%',
+        // right: '4%',
+        // top: '4%',
+        containLabel: true
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
+        }
+      },
+      xAxis: [
+        {
+          type: 'category',
+          // boundaryGap : false,
+          data: days,
+          splitLine: {
+            show: false,
+          },
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          scale: true,
+          // show: false,
+          splitLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+        }
+      ],
+      // color:[],
+      series : [
+        {
+          name:'AR',
+          type:'line',
+          stack: '总量',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#EC6D70',
+              lineStyle:{
+                width: 3, //设置线条粗细
+              },
+            },
+          },
+          data: ar,
+          smooth: true,
+        },
+        {
+          name:'Beacon',
+          type:'line',
+          stack: '总量',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#378DCB',
+              lineStyle:{
+                width: 3, //设置线条粗细
+              },
+            },
+          },
+          data: beacon,
+          smooth: true,
+        },
+        {
+          name:'二维码',
+          type:'line',
+          stack: '总量',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#FFBC00',
+              lineStyle:{
+                color: '#FFBC00',
+                width: 3, //设置线条粗细
+              },
+            },
+          },
+          data: qrcode,
+          smooth: true,
+        },
+      ]
+    }
+
+    let myCharts = echarts.init(document.getElementById('demo'));
+    myCharts.setOption(option);
+  }
+  onChange = (date, dateString) => {
+    console.log(date, dateString);
+    if (date.length < 2) {
+      return;
+    }
+    const start = date[0].format('YYYYMMDD');
+    const end = date[1].format('YYYYMMDD');
+    this.setState({
+      startDay: start,
+      endDay: end,
+    });
+    this.props.dispatch({
+      type: 'record/listDevices',
+      payload: {
+        startDay: start,
+        endDay: end,
+      },
+    });
+  }
+
+
+  render() {
+    const visitData = [];
+    const beginDay = new Date().getTime();
+    for (let i = 0; i < 20; i += 1) {
+      visitData.push({
+        x: moment(new Date(beginDay + (1000 * 60 * 60 * 24 * i))).format('YYYY-MM-DD'),
+        y: Math.floor(Math.random() * 100) + 10,
+        y2: 100,
+      });
+    }
+    const mainSearch = (
+      <div>
+        <DatePicker.RangePicker
+          onChange={this.onChange}
+          initialValue={[ moment(), moment() ]}
+        />
+      </div>
+    );
+
+    return (
+      <div>
+        <PageHeaderLayout
+          title="设备使用情况"
+          content={mainSearch}
+        >
+          <Card border="false">
+            <div>
+              <Row gutter={24}>
+                <Col span={22}>
+                  <div id="demo" style={{ height: 420, width: '100%' }}>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </Card>
+        </PageHeaderLayout>
+      </div>);
+  }
+}

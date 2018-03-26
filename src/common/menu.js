@@ -4,10 +4,12 @@ const menuData = [{
   name: '展览管理',
   icon: 'desktop',
   path: 'show',
+  authority: ['user', 'admin'],
 }, {
   name: '素材库',
   icon: 'folder',
   path: 'material',
+  authority: ['user', 'admin'],
   children: [{
     name: '图片',
     path: 'picture',
@@ -22,12 +24,13 @@ const menuData = [{
   name: 'Beacon 管理',
   icon: 'environment',
   path: 'beacon',
+  authority: 'admin',
   children: [{
     name: 'Beacon',
     path: 'beacon',
   }, {
     name: '楼层地图',
-    path: 'map',
+    path: 'shows',
   }],
 }, {
   name: '用户管理',
@@ -36,14 +39,17 @@ const menuData = [{
   children: [{
     name: '普通用户',
     path: 'appusers',
-  // }, {
-  //   name: '管理员',
-  //   path: 'admins',
+    authority: ['user', 'admin'],
+  }, {
+    name: '管理员',
+    path: 'admins',
+    authority: 'admin',
   }],
 }, {
   name: '统计分析',
   icon: 'area-chart',
-  path: 'chart',
+  path: 'record',
+  authority: ['user', 'admin'],
   children: [{
     name: '设备使用情况',
     path: 'device',

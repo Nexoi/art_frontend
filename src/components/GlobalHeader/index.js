@@ -25,12 +25,15 @@ export default class GlobalHeader extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>
-        <Menu.Item disabled><Icon type="setting" />设置</Menu.Item>
+        {/*<Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>*/}
+        {/*<Menu.Item disabled><Icon type="setting" />设置</Menu.Item>*/}
+        <Menu.Item disabled><Icon type="user" />{currentUser.nickname}</Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
       </Menu>
     );
+    console.log('==============')
+    console.log(currentUser)
     return (
       <div className={styles.header}>
         {isMobile && (
@@ -63,8 +66,8 @@ export default class GlobalHeader extends PureComponent {
           {currentUser ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
-                <span className={styles.name}>管理员</span>
+                <Avatar size="small" className={styles.avatar} src={`${currentUser.headIconUrl}`} />
+                <span className={styles.name}>{`${currentUser.nickname}`}</span>
               </span>
             </Dropdown>
           ) : <Spin size="small" style={{ marginLeft: 8 }} />}

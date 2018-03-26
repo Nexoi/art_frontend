@@ -71,7 +71,7 @@ function getFlatMenuData(menus) {
 export const getRouterData = (app) => {
   const routerConfig = {
     '/': {
-      component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['seeuser/login'], () => import('../layouts/BasicLayout')),
     },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
@@ -152,7 +152,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
     '/user/login': {
-      component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
+      component: dynamicWrapper(app, ['seeuser/login'], () => import('../routes/User/Login')),
     },
     '/user/register': {
       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
@@ -181,8 +181,11 @@ export const getRouterData = (app) => {
     '/beacon/beacon': {
       component: dynamicWrapper(app, ['beacon/beacon'], () => import('../routes/Beacon/Beacon')),
     },
-    '/beacon/map': {
+    '/beacon/show/:showId/maps/:showTitle': {
       component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowMap')),
+    },
+    '/beacon/shows': {
+      component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowPanel2Map')),
     },
     '/shows/:showId': {
       component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/ResourcesGroupTabPanel')),
@@ -203,10 +206,16 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['resources/resourceitem'], () => import('../routes/ResourceItem/ResourceItem')),
     },
     '/show-resources/:groupId/editor': {
-      component: dynamicWrapper(app, ['resources/resourceitem'], () => import('../routes/ResourceItem/WebEditor')),
+      component: dynamicWrapper(app, ['material/webpage'], () => import('../routes/ResourceItem/WebEditor')),
+    },
+    '/show-resources/:groupId/items/editor/:itemId': {
+      component: dynamicWrapper(app, ['material/webpage'], () => import('../routes/ResourceItem/WebEditor2Edit')),
     },
     '/users/appusers': {
       component: dynamicWrapper(app, ['seeuser/seeuser'], () => import('../routes/SEEUser/User')),
+    },
+    '/record/device': {
+      component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/Devices')),
     },
   };
   // Get name from ./menu.js or just set it in the router data.

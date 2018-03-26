@@ -4,6 +4,38 @@ export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
+export function transNum2ZhongWen(num) {
+  if (num === undefined) {
+    return '';
+  }
+  const digit = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  let n = num;
+  let result = '';
+  if (n < 0) {
+    result += '负';
+    n = 0 - num;
+  }
+  if (n <= 10) {
+    result += digit[n];
+    return result;
+  }
+  let nStr = '' + n;
+  for (let i = 0; i < nStr.length; i += 1) {
+    result += digit[parseInt(nStr[i])];
+  }
+  return result;
+}
+
+export function getTimeYYYYMMDD(date) {
+  console.log(date)
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const dayOfMonth = date.getDate();
+  const month2 = month < 10 ? `0${month}` : month;
+  const day2 = dayOfMonth < 10 ? `0${dayOfMonth}` : dayOfMonth;
+  return `${year}${month2}${day2}`.toString();
+}
+
 export function getTimeStringSimple(timeStamp) {
   const date = new Date(timeStamp);
   const year = date.getFullYear();

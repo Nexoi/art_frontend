@@ -5,6 +5,8 @@
  * Created by neo on 16/3/2018.
  */
 import { message } from 'antd';
+import { routerRedux } from 'dva/router';
+
 import {
   listResourceItems,
   addResourceAudio,
@@ -13,6 +15,8 @@ import {
   addResourceWebPage,
   changeName,
   deleteResourceItem,
+  getWebPage,
+  updateWebPage,
 } from '../../services/api_resourceitem';
 
 export default {
@@ -27,6 +31,8 @@ export default {
       showSizeChanger: true,
     },
     webSaveSuccess: false,
+    currentWebPage: {
+    },
   },
 
   effects: {
@@ -70,21 +76,6 @@ export default {
         const response2 = yield call(listResourceItems, { showId, groupId });
         yield put({
           type: 'refreshUI',
-          payload: response2.data,
-        });
-      }
-    },
-    *addWebPage({ payload }, { call, put }) {
-      const { showId, groupId, title, author, coverImageUrl, introduce, contentHtml } = payload;
-      const response = yield call(
-        addResourceWebPage,
-        { showId, groupId, title, author, coverImageUrl, introduce, contentHtml }
-      );
-      if (response.status === 201) {
-        message.info('添加成功！');
-        const response2 = yield call(listResourceItems, { showId, groupId });
-        yield put({
-          type: 'webSaveSuccess',
           payload: response2.data,
         });
       }
@@ -140,6 +131,12 @@ export default {
         },
         webSaveSuccess: true,
       };
-    }
+    },
+    loadCurrentWebPage(state, action) {
+      return {
+        ...state,
+        currentWebPage: action.payload,
+      };
+    },
   },
 };

@@ -17,15 +17,34 @@ export async function searchShows(payload) {
 }
 
 export async function addShow(payload) {
-  const { title, showHallName, startTime, endTime, posterImageId, introduceText } = payload;
-  return request(`/api/admin/v1/show?posterImageId=${posterImageId}&title=${title}&showHallName=${showHallName}&startTime=${startTime}&endTime=${endTime}&introduceText=${introduceText}`, {
+  const {
+    title,
+    startTime,
+    endTime,
+    introduceText,
+    imageHeight,
+    imageWidth,
+    imageUrl,
+    imageThumbUrl,
+  } = payload;
+  return request(`/api/admin/v1/show?title=${title}&startTime=${startTime}&endTime=${endTime}&introduceText=${introduceText}&imageHeight=${imageHeight}&imageWidth=${imageWidth}&imageUrl=${imageUrl}&imageThumbUrl=${imageThumbUrl}`, {
     method: 'POST',
   });
 }
 
 export async function updateShow(payload) {
-  const { showId, title, showHallName, startTime, endTime, posterImageId, introduceText } = payload;
-  return request(`/api/admin/v1/show/${showId}?posterImageId=${posterImageId}&title=${title}&showHallName=${showHallName}&startTime=${startTime}&endTime=${endTime}&introduceText=${introduceText}`, {
+  const {
+    showId,
+    title,
+    startTime,
+    endTime,
+    introduceText,
+    imageHeight,
+    imageWidth,
+    imageUrl,
+    imageThumbUrl,
+  } = payload;
+  return request(`/api/admin/v1/show/${showId}?title=${title}&startTime=${startTime}&endTime=${endTime}&introduceText=${introduceText}&imageHeight=${imageHeight}&imageWidth=${imageWidth}&imageUrl=${imageUrl}&imageThumbUrl=${imageThumbUrl}`, {
     method: 'PUT',
   });
 }

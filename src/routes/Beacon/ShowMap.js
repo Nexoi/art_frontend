@@ -3,11 +3,12 @@
  */
 
 import React, { PureComponent } from 'react';
-import { Form, Card, Table, Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
+import { Form, Card, Table, Modal, message, InputNumber, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getTimeString } from '../../utils/utils';
 import MaterialSelecter from '../Material/MaterialSelecter';
+import { transNum2ZhongWen } from '../../utils/utils';
 
 /* 主界面 */
 @connect(({ showmap, loading }) => ({
@@ -16,6 +17,8 @@ import MaterialSelecter from '../Material/MaterialSelecter';
 }))
 export default class ShowMap extends PureComponent {
   state = {
+    showId: this.props.match.url.slice(this.props.match.url.indexOf('/beacon/show/') + 13, this.props.match.url.indexOf('/maps/')),
+    showTitle: this.props.match.url.slice(this.props.match.url.indexOf('/maps/') + 6),
     viewModalVisible: false,
     viewModalImageUrl: '', // 图片预览
     modalVisible: false,
@@ -26,6 +29,7 @@ export default class ShowMap extends PureComponent {
       mapId: -1,
       name: '',
       showHallName: '',
+      floor: -1,
       width: -1,
       height: -1,
       imageId: -1,
@@ -36,6 +40,9 @@ export default class ShowMap extends PureComponent {
   componentWillMount() {
     this.props.dispatch({
       type: 'showmap/initList',
+      payload: {
+        showId: this.state.showId,
+      },
     });
     console.log(this.props);
   }
@@ -49,6 +56,7 @@ export default class ShowMap extends PureComponent {
     this.props.dispatch({
       type: 'showmap/fetchList',
       payload: {
+        showId: this.state.showId,
         page: current - 1,
         size: pageSize,
       },
@@ -58,6 +66,7 @@ export default class ShowMap extends PureComponent {
     this.props.dispatch({
       type: 'showmap/fetchList',
       payload: {
+        showId: this.state.showId,
         page: page - 1,
         size: pageSize,
       },
@@ -70,6 +79,7 @@ export default class ShowMap extends PureComponent {
         mapId: -1,
         name: '',
         showHallName: '',
+        floor: -1,
         width: '',
         height: '',
         imageId: -1,
@@ -89,8 +99,10 @@ export default class ShowMap extends PureComponent {
       this.props.dispatch({
         type: 'showmap/addOneShowMap',
         payload: {
+          showId: this.state.showId,
           name: data.name,
           showHallName: data.showHallName,
+          floor: data.floor,
           width: data.imageWidth,
           height: data.imageHeight,
           imageId: data.imageId,
@@ -101,9 +113,11 @@ export default class ShowMap extends PureComponent {
       this.props.dispatch({
         type: 'showmap/updateOneShowMap',
         payload: {
+          showId: this.state.showId,
           mapId: data.mapId,
           name: data.name,
           showHallName: data.showHallName,
+          floor: data.floor,
           width: data.imageWidth,
           height: data.imageHeight,
           imageId: data.imageId,
@@ -132,11 +146,13 @@ export default class ShowMap extends PureComponent {
         data: {
           mapId: record.id,
           name: record.name,
-          // showHallName: record.showHallName,
-          showHallName: 'unset',
-          width: record.width,
-          height: record.height,
+          showHallName: record.showHallName,
+          floor: record.floor,
+          width: record.width || 1000,
+          height: record.height || 1000,
           imageId: record.image.id,
+          imageWidth: record.width || 1000,
+          imageHeight: record.height || 1000,
         },
         selectedShowMapImgUrl: record.image.url,
       });
@@ -212,10 +228,17 @@ export default class ShowMap extends PureComponent {
     dataIndex: 'name',
     key: 'name',
   }, {
-  //   title: '展馆',
-  //   dataIndex: 'showHallName',
-  //   key: 'showHallName',
-  // }, {
+    title: '展厅',
+    dataIndex: 'showHallName',
+    key: 'showHallName',
+  }, {
+    title: '楼层',
+    dataIndex: 'floor',
+    key: 'floor',
+    render: text => {
+      return (<Button size="small">{`${transNum2ZhongWen(text)}楼`}</Button>);
+    },
+  }, {
     title: '地图尺寸（长）',
     dataIndex: 'height',
     key: 'height',
@@ -288,7 +311,7 @@ export default class ShowMap extends PureComponent {
     return (
       <div>
         <PageHeaderLayout
-          title="地图"
+          title={`「${this.state.showTitle}」展览地图`}
           content={mainSearch}
         >
           <Card border="false">
@@ -304,9 +327,9 @@ export default class ShowMap extends PureComponent {
             />
           </Card>
         </PageHeaderLayout>
-        {modal}
-        {viewModal}
-        {selector}
+        {this.state.modalVisible ? modal : ''}
+        {this.state.viewModalVisible ? viewModal : ''}
+        {this.state.selectorModalVisible ? selector : ''}
       </div>
     );
   }
@@ -359,12 +382,18 @@ const CollectionCreateForm = Form.create({
             initialValue: initValues.name,
           })(<Input />)}
         </FormItem>
-        {/*<FormItem label="展馆名称">*/}
-          {/*{getFieldDecorator('showHallName', {*/}
-            {/*rules: [{ required: true, message: '请输入展馆名称！' }],*/}
-            {/*initialValue: initValues.showHallName,*/}
-          {/*})(<Input />)}*/}
-        {/*</FormItem>*/}
+        <FormItem label="展厅名称">
+          {getFieldDecorator('showHallName', {
+            rules: [{ required: true, message: '请输入展厅名称！' }],
+            initialValue: initValues.showHallName,
+          })(<Input />)}
+        </FormItem>
+        <FormItem label="所在楼层">
+          {getFieldDecorator('floor', {
+            rules: [{ required: true, message: '请输入所在楼层！' }],
+            initialValue: initValues.floor,
+          })(<InputNumber style={{ width: '50%' }} placeholder="请输入所在楼层" />)}
+        </FormItem>
         {/*<FormItem label="地图尺寸【长】（单位：厘米，整数）">*/}
           {/*{getFieldDecorator('height', {*/}
             {/*rules: [{ required: true, message: '请输入长度！' }],*/}

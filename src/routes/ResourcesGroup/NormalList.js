@@ -114,6 +114,7 @@ export default class NormalList extends PureComponent {
       payload: {
         groupId,
         showId,
+        type: 'normalList',
       },
     });
   }
@@ -246,9 +247,27 @@ export default class NormalList extends PureComponent {
     key: 'name',
     render: (text, record) => (<a href={`#/show-resources/${record.id}/items/${record.name}`}> {text} </a>),
   }, {
-    title: '地图',
+    title: '所在地图',
     dataIndex: 'showMap.name',
     key: 'showMap.name',
+  }, {
+    title: 'Beacon',
+    dataIndex: 'name',
+    key: 'beacon_',
+    render: (text, record) => {
+      return record.beacons === undefined || record.beacons.length === 0
+        ? (<Button size="small" type="default">未绑定</Button>)
+        : (<Button size="small" type="primary">已绑定</Button>)
+    },
+  }, {
+    title: 'AR',
+    dataIndex: 'name',
+    key: 'ar_',
+    render: (text, record) => {
+      return record.ar === undefined || record.ar.id === undefined
+        ? (<Button size="small" type="default">未绑定</Button>)
+        : (<Button size="small" type="primary">已绑定</Button>)
+    },
   }, {
     title: '浏览量',
     dataIndex: 'viewTimes',

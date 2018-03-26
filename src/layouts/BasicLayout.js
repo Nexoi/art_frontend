@@ -86,9 +86,9 @@ class BasicLayout extends React.PureComponent {
       });
     });
     // TODO 个人基础信息获取
-    // this.props.dispatch({
-    //   type: 'user/fetchCurrent',
-    // });
+    this.props.dispatch({
+      type: 'login/queryCurrent',
+    });
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -243,8 +243,8 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ user, global, loading }) => ({
-  currentUser: user.currentUser,
+export default connect(({ login, global, loading }) => ({
+  currentUser: login.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,

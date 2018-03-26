@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import {
-  Form, Input, DatePicker, Button, Card, message,
+  Form, Input, DatePicker, Button, Card, message, Upload, Icon,
 } from 'antd';
 import MaterialSelecter from '../Material/MaterialSelecter';
 
@@ -16,27 +16,35 @@ const { TextArea } = Input;
 export default class ShowAddForm extends PureComponent {
   state = {
     selectorModalVisible: false,
-    selectedImage: {
-      id: -1,
-      url: '',
+    uploadProps: {
+      name: 'file',
+      action: '//art.seeuio.com/api/admin/v1/upload/image',
+      fileList: [],
     },
+    uploadFileAvailable: false,
   }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(values);
       if (!err) {
-        if (this.state.selectedImage.id === -1) {
-          message.warn('请选择一张海报图片');
+        if (!this.state.uploadFileAvailable) {
+          message.warn('请先上传一张海报图片');
+          return;
+        }
+        if (this.state.uploadProps.fileList.length !== 1) {
+          message.warn('请先上传一张海报图片');
           return;
         }
         const data = {
           title: values.title,
-          showHallName: values.showHallName,
           introduceText: values.introduceText,
-          posterImageId: this.state.selectedImage.id,
           startTime: values.date[0].format('YYYY-MM-DD'),
           endTime: values.date[1].format('YYYY-MM-DD'),
+          imageHeight: this.state.uploadProps.fileList[0].height,
+          imageWidth: this.state.uploadProps.fileList[0].width,
+          imageUrl: this.state.uploadProps.fileList[0].url,
+          imageThumbUrl: this.state.uploadProps.fileList[0].thumbUrl,
         }
         this.props.dispatch({
           type: 'showmain/addShow',
@@ -46,25 +54,54 @@ export default class ShowAddForm extends PureComponent {
       }
     });
   }
-  openSelector = () => {
-    this.setState({
-      selectorModalVisible: true,
+  /* 文件上传前验证 */
+  beforeUpload = (file) => {
+    const isPicture = file.type.slice(0, 5) === 'image';
+    if (!isPicture) {
+      message.error('请上传正确的图片文件');
+      this.setState({
+        uploadFileAvailable: false,
+      });
+    }
+    return isPicture;
+  };
+  /* 文件上传监听 */
+  onUploadChange = (info) => {
+    console.log(info);
+    // 只允许上传一个文件
+    let { fileList } = info;
+    fileList = fileList.slice(-1);
+    // 转化为 state 标准格式
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.data.url;
+        file.thumbUrl = file.response.data.thumbUrl;
+        file.width = file.response.data.width;
+        file.height = file.response.data.height;
+      }
+      return file;
     });
-  }
-  closeSelector = () => {
+    //
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} 文件上传成功！`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} 文件上传失败！`);
+    }
+    // 更新 Component 数据
+    const { uploadProps } = this.state;
     this.setState({
-      selectorModalVisible: false,
+      uploadProps: {
+        ...uploadProps,
+        fileList,
+      },
+      uploadFileAvailable: true, // 上传的文件可用
     });
-  }
-  handlePictureSelected = (type, values) => {
-    console.log(values);
-    const data = values[0];
-    this.setState({
-      selectedImage: data,
-    });
-    this.state.selectedImage = data;
-    this.closeSelector();
-  }
+  };
+
   render() {
     const { submitting } = this.props;
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -88,14 +125,6 @@ export default class ShowAddForm extends PureComponent {
       },
     };
 
-    const selector = (
-      <MaterialSelecter
-        visible={this.state.selectorModalVisible}
-        handleSelected={this.handlePictureSelected}
-        onCancel={this.closeSelector}
-        isSingleSelect="true"
-        availableType={['picture']}
-      />);
     return (
       <div>
         <Card bordered={false}>
@@ -116,18 +145,18 @@ export default class ShowAddForm extends PureComponent {
               <Input placeholder="展览名称" />
             )}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="展厅名称"
-            >
-              {getFieldDecorator('showHallName', {
-                rules: [{
-                  required: true, message: '请输入展厅名称',
-                }],
-              })(
-                <Input placeholder="展厅名称" />
-              )}
-            </FormItem>
+            {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label="展厅名称"*/}
+            {/*>*/}
+              {/*{getFieldDecorator('showHallName', {*/}
+                {/*rules: [{*/}
+                  {/*required: true, message: '请输入展厅名称',*/}
+                {/*}],*/}
+              {/*})(*/}
+                {/*<Input placeholder="展厅名称" />*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
             <FormItem
               {...formItemLayout}
               label="开展日期"
@@ -144,17 +173,18 @@ export default class ShowAddForm extends PureComponent {
               {...formItemLayout}
               label="海报"
             >
-              {getFieldDecorator('picture', {
-              // rules: [{
-              //   required: this.state.selectedImage.id === -1, message: '请选择展览海报',
-              // }],
-            })(
-              <div>
-                <Button onClick={this.openSelector}> 选择图片 </Button>
-                {this.state.selectedImage.url.length > 1 &&
-                (<img alt="预览图片" style={{ width: 300 }} src={this.state.selectedImage.url} />)}
-              </div>
-            )}
+              {getFieldDecorator('file', {
+                // rules: [{ required: true, message: '请上传海报！' }],
+              })(
+                <div>
+                  <Upload {...this.state.uploadProps} onChange={this.onUploadChange} beforeUpload={this.beforeUpload}>
+                    <Button><Icon type="upload" /> 上传文件</Button>
+                  </Upload>
+                  {/*<Button onClick={this.openSelector}> 选择图片 </Button>*/}
+                  {this.state.uploadProps.uploadFileAvailable &&
+                  (<img alt="预览图片" style={{ width: 300 }} src={this.state.uploadProps.fileList[0].url} />)}
+                </div>
+              )}
             </FormItem>
             <FormItem
               {...formItemLayout}
@@ -175,7 +205,6 @@ export default class ShowAddForm extends PureComponent {
             </FormItem>
           </Form>
         </Card>
-        {selector}
       </div>
     );
   }

@@ -14,22 +14,43 @@ const { TextArea } = Input;
 
 @connect(({ webpage, loading }) => ({
   webpage,
-  submitting: loading.effects['webpage/addWebPage'],
+  submitting: loading.effects['webpage/getWebPage'],
 }))
 @Form.create()
-export default class WebEditor extends PureComponent {
+export default class WebEditor2Edit extends PureComponent {
   state = {
-    groupId: this.props.match.url.slice(this.props.match.url.indexOf('/show-resources/') + 16, this.props.match.url.indexOf('/editor')),
+    itemId: this.props.match.url.slice(this.props.match.url.indexOf('/editor/') + 8),
     selectorVisible: false,
-    selectedImageUrl: undefined,
-    htmlContent: '',
+    selectedImageUrl: this.props.webpage.currentWebPage.coverImageUrl,
+    htmlContent: this.props.webpage.currentWebPage.contentHtml,
+    currentSourceData: this.props.webpage.currentWebPage, // resourceItemId, author, contentHtml, coverImageUrl, introduce, title
   }
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.webpage.webSaveSuccess === true) {
-  //     nextProps.webpage.webSaveSuccess = false;
-  //     this.props.dispatch(routerRedux.goBack());
-  //   }
-  // }
+
+  componentWillMount() {
+    // console.log('component did mount')
+    // console.log(`${this.state.itemId}`)
+    // console.log(`${this.state.currentSourceData.resourceItemId}`)
+    // console.log(`${this.props.webpage.currentWebPage.resourceItemId}`)
+    // console.log('component did mount')
+    // const itemId = this.props.match.url.slice(this.props.match.url.indexOf('/editor/') + 8);
+    // if (parseInt(this.state.currentSourceData.resourceItemId) !== parseInt(this.state.itemId)) {
+    //   console.log('updating!!!')
+    //
+    //   this.forceUpdate(this.flushPage);
+    // }
+    this.props.dispatch({
+      type: 'webpage/getWebPage',
+      payload: {
+        itemId: this.state.itemId,
+      },
+    });
+    // this.setState({
+    //   itemId: this.props.match.url.slice(this.props.match.url.indexOf('/editor/') + 8),
+    //   selectedImageUrl: undefined,
+    //   htmlContent: undefined,
+    //   currentSourceData: {},
+    // });
+  }
   handleSubmit = (e) => {
     const { dispatch } = this.props;
     e.preventDefault();
@@ -44,8 +65,7 @@ export default class WebEditor extends PureComponent {
           return;
         }
         const data = {
-          showId: -1,
-          groupId: this.state.groupId,
+          itemId: this.state.itemId,
           title: values.title,
           author: values.author,
           coverImageUrl: this.state.selectedImageUrl,
@@ -53,7 +73,7 @@ export default class WebEditor extends PureComponent {
           contentHtml: this.state.htmlContent,
         }
         dispatch({
-          type: 'webpage/addWebPage',
+          type: 'webpage/updateWebPage',
           payload: data,
         });
       }
@@ -107,7 +127,7 @@ export default class WebEditor extends PureComponent {
       height: 600,
       width: 600,
       contentFormat: 'html',
-      initialContent: '<p>请在这里输入正文</p>',
+      initialContent: this.state.currentSourceData.contentHtml || '请在这里输入正文',
       onChange: this.handleChange,
       onRawChange: this.handleRawChange
     }
@@ -148,6 +168,7 @@ export default class WebEditor extends PureComponent {
                 rules: [{
                   required: true, message: '请输入标题',
                 }],
+                initialValue: this.state.currentSourceData.title || '',
               })(
                 <Input style={{ width: 400 }} placeholder="请在这里输入文章标题" />
               )}
@@ -160,6 +181,7 @@ export default class WebEditor extends PureComponent {
                 rules: [{
                   required: true, message: '请输入作者',
                 }],
+                initialValue: this.state.currentSourceData.author || '',
               })(
                 <Input style={{ width: 400 }} placeholder="请输入作者" />
               )}
@@ -172,6 +194,7 @@ export default class WebEditor extends PureComponent {
                 rules: [{
                   required: true, message: '请输入摘要',
                 }],
+                initialValue: this.state.currentSourceData.introduce || '',
               })(
                 <TextArea style={{ minHeight: 32, minWidth: 400 }} placeholder="请输入摘要（ 50 字左右）" rows={4} />
               )}
@@ -182,7 +205,8 @@ export default class WebEditor extends PureComponent {
             style={{ float: 'right', overflow: 'hidden', cursor: 'pointer', maxHeight: 216, maxWidth: 200, margin: 12, marginRight: 48 }}
             cover={
               <div style={{ float: 'right', overflow: 'hidden', height: 216, width: 200, textAlign: 'center' }}>
-                { this.state.selectedImageUrl === undefined || this.state.selectedImageUrl.length < 2
+                {this.state.selectedImageUrl === undefined
+                || this.state.selectedImageUrl.length < 2
                   ? (<div style={{ marginTop: 80 }}><Icon type="plus" /> 添加封面 </div>)
                   : (<img style = {{ maxHeight: 400 }} src={this.state.selectedImageUrl} />)
                 }

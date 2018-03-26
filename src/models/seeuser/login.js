@@ -1,26 +1,41 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
-import { setAuthority } from '../utils/authority';
-import { reloadAuthorized } from '../utils/Authorized';
+import { message } from 'antd';
+import { queryCurrent, adminLogin } from '../../services/api_user_login';
+import { setAuthority } from '../../utils/authority';
+import { reloadAuthorized } from '../../utils/Authorized';
 
 export default {
-  namespace: 'login-fake',
+  namespace: 'login',
 
   state: {
     status: undefined,
+    currentUser: {},
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+    *queryCurrent(_, { call, put }) {
+      const response = yield call(queryCurrent);
       yield put({
-        type: 'changeLoginStatus',
-        payload: response,
+        type: 'saveCurrentUser',
+        payload: response.data,
       });
+    },
+    *login({ payload }, { call, put }) {
+      const response = yield call(adminLogin, payload);
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.status === 200) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            currentAuthority: response.data.currentAuthority === 'adminx' ? 'admin' : 'user',
+            type: 'account',
+            status: 'ok',
+          },
+        });
         reloadAuthorized();
         yield put(routerRedux.push('/'));
+      } else if (response.status === 400) {
+        message.info(response.message);
       }
     },
     *logout(_, { put, select }) {
@@ -47,11 +62,19 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      console.log('======')
+      console.log(payload)
       setAuthority(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,
         type: payload.type,
+      };
+    },
+    saveCurrentUser(state, action) {
+      return {
+        ...state,
+        currentUser: action.payload,
       };
     },
   },

@@ -44,15 +44,24 @@ export default {
     *addShow({ payload }, { call, put }) {
       const {
         title,
-        showHallName,
         startTime,
         endTime,
-        posterImageId,
         introduceText,
+        imageHeight,
+        imageWidth,
+        imageUrl,
+        imageThumbUrl,
       } = payload;
       const response = yield call(
         addShow,
-        { title, showHallName, startTime, endTime, posterImageId, introduceText }
+        { title,
+          startTime,
+          endTime,
+          introduceText,
+          imageHeight,
+          imageWidth,
+          imageUrl,
+          imageThumbUrl, }
       );
       if (response.status === 201) {
         message.info('添加成功！');
@@ -70,15 +79,25 @@ export default {
       const {
         showId,
         title,
-        showHallName,
         startTime,
         endTime,
-        posterImageId,
         introduceText,
+        imageHeight,
+        imageWidth,
+        imageUrl,
+        imageThumbUrl,
       } = payload;
       const response = yield call(
         updateShow,
-        { showId, title, showHallName, startTime, endTime, posterImageId, introduceText }
+        { showId,
+          title,
+          startTime,
+          endTime,
+          introduceText,
+          imageHeight,
+          imageWidth,
+          imageUrl,
+          imageThumbUrl, }
       );
       if (response.status === 200) {
         message.info('更新成功！');

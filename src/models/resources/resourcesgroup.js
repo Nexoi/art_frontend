@@ -77,12 +77,12 @@ export default {
       const { showId, name } = payload;
       const response = yield call(addResourseGroup, { showId, name });
       if (response.status === 201) {
-        message.info('添加成功！请刷新页面以加载最新数据');
-        // const response2 = yield call(listResourceGroup, { page: 0, size: 10 });
-        // yield put({
-        //   type: 'refreshUI',
-        //   payload: response2.data,
-        // });
+        message.info('添加成功！');
+        const response2 = yield call(listResourceGroup, { page: 0, size: 10 });
+        yield put({
+          type: 'refreshUI',
+          payload: response2.data,
+        });
       }
     },
     *changeName({ payload }, { call, put, select }) {
@@ -128,17 +128,27 @@ export default {
       }
     },
     *removeAR({ payload }, { call, put, select }) {
-      const { showId, groupId } = payload;
+      const { showId, groupId, type } = payload;
       const response = yield call(removeAR, { showId, groupId });
       if (response.status === 200) {
-        message.info('取消绑定成功！请刷新页面以更新数据');
-        // const page = yield select(state => state.resourcesgroup.page.number);
-        // const size = yield select(state => state.resourcesgroup.page.size);
-        // const response2 = yield call(listResourceGroup, { showId, page, size });
-        // yield put({
-        //   type: 'refreshUI',
-        //   payload: response2.data,
-        // });
+        message.info('取消绑定成功！');
+        if (type === 'normalList') {
+          const page = yield select(state => state.resourcesgroup.page.number);
+          const size = yield select(state => state.resourcesgroup.page.size);
+          const response2 = yield call(listResourceGroup, { showId, page, size });
+          yield put({
+            type: 'refreshUI',
+            payload: response2.data,
+          });
+        } else if (type === 'arList') {
+          const page = yield select(state => state.resourcesgroup.page.number);
+          const size = yield select(state => state.resourcesgroup.page.size);
+          const response2 = yield call(listResourceGroupByAR, { showId, page, size });
+          yield put({
+            type: 'refreshUI',
+            payload: response2.data,
+          });
+        }
       }
     },
     *bindBeacons({ payload }, { call, put, select }) {

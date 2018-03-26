@@ -64,9 +64,9 @@ export default class LoginPage extends Component {
           }
           <UserName name="username" placeholder="请输入账号" />
           <Password name="password" placeholder="请输入密码" />
-          <div>
-            <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
-          </div>
+          {/*<div>*/}
+            {/*<Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>*/}
+          {/*</div>*/}
           <Submit loading={submitting}>登录</Submit>
         </Login>
       </div>

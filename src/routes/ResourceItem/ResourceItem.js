@@ -3,6 +3,7 @@
  */
 
 import React, { PureComponent } from 'react';
+import { routerRedux, Route, Switch } from 'dva/router';
 import { Card, Table, Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import { getTimeString } from '../../utils/utils';
@@ -33,6 +34,16 @@ export default class ResourceItem extends PureComponent {
   }
   handleMenuClick = (record, e) => {
     if (e.key === '1') {
+      this.props.dispatch(routerRedux.push(`editor/${record.id}`));
+      console.log('-=-==-=-=-=-=-=-=')
+      this.props.dispatch({
+        type: 'resourceitem/getWebPage',
+        payload: {
+          itemId: record.id,
+        },
+      });
+    }
+    if (e.key === '2') {
       const that = this;
       Modal.confirm({
         title: '确定要删除该资源吗？',
@@ -165,7 +176,8 @@ export default class ResourceItem extends PureComponent {
     render: (text, record) => (
       <Dropdown overlay={
         <Menu onClick={e => this.handleMenuClick(record, e)}>
-          <Menu.Item key="1">删除</Menu.Item>
+          { record.type === 'WEB' && (<Menu.Item key="1">编辑</Menu.Item>)}
+          <Menu.Item key="2">删除</Menu.Item>
         </Menu>}
       >
         <Button style={{ marginLeft: 8 }}>

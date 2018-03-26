@@ -25,31 +25,32 @@ export default {
   },
 
   effects: {
-    *initList(_, { call, put }) {
-      const response = yield call(listShowMaps, { page: 0, size: 10 });
+    *initList({ payload }, { call, put }) {
+      const { showId } = payload;
+      const response = yield call(listShowMaps, { showId, page: 0, size: 10 });
       yield put({
         type: 'refreshUI',
         payload: response.data,
       });
     },
     *fetchList({ payload }, { call, put }) {
-      const { page, size } = payload;
-      const response = yield call(listShowMaps, { page, size });
+      const { showId, page, size } = payload;
+      const response = yield call(listShowMaps, { showId, page, size });
       yield put({
         type: 'refreshUI',
         payload: response.data,
       });
     },
     *addOneShowMap({ payload }, { call, put }) {
-      const { name, showHallName, width, height, imageId } = payload;
+      const { showId, floor, name, showHallName, width, height, imageId } = payload;
       const response = yield call(
         addShowMap,
-        { name, showHallName, width, height, imageId }
+        { showId, floor, name, showHallName, width, height, imageId }
       );
       if (response.status === 201) {
         message.info('添加成功！');
         // refresh
-        const response2 = yield call(listShowMaps, { page: 0, size: 10 });
+        const response2 = yield call(listShowMaps, { showId, page: 0, size: 10 });
         yield put({
           type: 'refreshUI',
           payload: response2.data,
@@ -57,17 +58,17 @@ export default {
       }
     },
     *updateOneShowMap({ payload }, { call, put, select }) {
-      const { mapId, name, showHallName, width, height, imageId } = payload;
+      const { showId, mapId, floor, name, showHallName, width, height, imageId } = payload;
       const response = yield call(
         updateShowMap,
-        { mapId, name, showHallName, width, height, imageId }
+        { showId, mapId, floor, name, showHallName, width, height, imageId }
       );
       if (response.status === 200) {
         message.info('修改成功！');
         // refresh
         const page = yield select(state => state.showmap.page.number);
         const size = yield select(state => state.showmap.page.size);
-        const response2 = yield call(listShowMaps, { page, size });
+        const response2 = yield call(listShowMaps, { showId, page, size });
         yield put({
           type: 'refreshUI',
           payload: response2.data,
@@ -82,7 +83,7 @@ export default {
         // refresh
         const page = yield select(state => state.showmap.page.number);
         const size = yield select(state => state.showmap.page.size);
-        const response2 = yield call(listShowMaps, { page, size });
+        const response2 = yield call(listShowMaps, { showId, page, size });
         yield put({
           type: 'refreshUI',
           payload: response2.data,

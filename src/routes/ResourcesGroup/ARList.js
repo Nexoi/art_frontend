@@ -44,6 +44,7 @@ export default class ARList extends PureComponent {
       payload: {
         groupId,
         showId,
+        type: 'arList',
       },
     });
   }
@@ -72,6 +73,7 @@ export default class ARList extends PureComponent {
     title: 'AR 图片名称',
     dataIndex: 'ar.name',
     key: 'ar.name',
+    render: (text, record) => (<a target="blank" href={`${record.ar.url}`}> {text} </a>),
   }, {
     title: '绑定资源组',
     dataIndex: 'name',
