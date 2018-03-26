@@ -47,7 +47,7 @@ class UserLayout extends React.PureComponent {
                   <span className={styles.title} style={{ top: 0 }}> 广东美术馆 </span>
                 </Link>
               </div>
-              <div className={styles.desc}> ——————— 广东美术馆智能导览系统 ——————— </div>
+              <div className={styles.desc}> ——————  广东美术馆智能导览系统  —————— </div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item =>
