@@ -3,6 +3,24 @@
  */
 import request from '../utils/request';
 
+export async function getShowsData() {
+  return request(`/api/admin/v1/record/sup/shows`, {
+    method: 'GET',
+  });
+}
+
+export async function getResourceGroupsData(showId) {
+  return request(`/api/admin/v1/record/sup/${showId}/resource-groups`, {
+    method: 'GET',
+  });
+}
+
+export async function getResourceItemsData(groupId) {
+  return request(`/api/admin/v1/record/sup/{showId}/resource-groups/${groupId}/items`, {
+    method: 'GET',
+  });
+}
+
 export async function listDevices(payload) {
   const { startDay, endDay } = payload;
   return request(`/api/admin/v1/record/devices?start=${startDay}&end=${endDay}`, {

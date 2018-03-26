@@ -58,7 +58,7 @@ const menuData = [{
     path: 'user',
   }, {
     name: '浏览量统计',
-    path: 'view',
+    path: 'view/show',
   }],
 // }, {
 //   name: 'dashboard',

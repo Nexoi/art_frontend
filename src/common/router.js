@@ -217,6 +217,21 @@ export const getRouterData = (app) => {
     '/record/device': {
       component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/Devices')),
     },
+    '/record/user': {
+      component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/Users')),
+    },
+    '/record/view': {
+      component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/RecordTabPanel')),
+    },
+    '/record/view/show': {
+      component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/Shows')),
+    },
+    '/record/view/resource-group': {
+      component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/ResourceGroups')),
+    },
+    '/record/view/resource-item': {
+      component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/ResourceItems')),
+    },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());

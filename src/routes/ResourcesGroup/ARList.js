@@ -73,7 +73,7 @@ export default class ARList extends PureComponent {
     title: 'AR 图片名称',
     dataIndex: 'ar.name',
     key: 'ar.name',
-    render: (text, record) => (<a target="blank" href={`${record.ar.url}`}> {text} </a>),
+    render: (text, record) => (<a target="blank" href={ record.ar === undefined ? '#' : `${record.ar.url}`}> {text} </a>),
   }, {
     title: '绑定资源组',
     dataIndex: 'name',

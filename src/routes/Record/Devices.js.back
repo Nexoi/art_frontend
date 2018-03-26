@@ -6,8 +6,7 @@ import React, { PureComponent } from 'react';
 import { Row, Col, Card, DatePicker, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Chart, Axis, Geom, Tooltip, Legend } from 'bizcharts';
-import { View, DataSet } from '@antv/data-set';
+import echarts from 'echarts';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getTimeYYYYMMDD } from '../../utils/utils';
 
@@ -20,7 +19,6 @@ export default class Devices extends PureComponent {
   state = {
     startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
     endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
-    data: [],
   }
   componentWillMount() {
     this.props.dispatch({
@@ -77,6 +75,120 @@ export default class Devices extends PureComponent {
       }
       days.push(currentDay);
     }
+    let option = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data:['Beacon','AR','二维码'],
+        bottom:'1%'
+      },
+      backgroundColor: '#fff',
+      grid: {
+        // left: '3%',
+        // right: '4%',
+        // top: '4%',
+        containLabel: true
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
+        }
+      },
+      xAxis: [
+        {
+          type: 'category',
+          // boundaryGap : false,
+          data: days,
+          splitLine: {
+            show: false,
+          },
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          scale: true,
+          // show: false,
+          splitLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+        }
+      ],
+      // color:[],
+      series : [
+        {
+          name:'AR',
+          type:'line',
+          stack: 'AR',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#EC6D70',
+              lineStyle:{
+                width: 3, //设置线条粗细
+              },
+            },
+          },
+          data: ar,
+          smooth: true,
+        },
+        {
+          name:'Beacon',
+          type:'line',
+          stack: 'Beacon',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#378DCB',
+              lineStyle:{
+                width: 3, //设置线条粗细
+              },
+            },
+          },
+          data: beacon,
+          smooth: true,
+        },
+        {
+          name:'二维码',
+          type:'line',
+          stack: 'QRCode',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#FFBC00',
+              lineStyle:{
+                color: '#FFBC00',
+                width: 3, //设置线条粗细
+              },
+            },
+          },
+          data: qrcode,
+          smooth: true,
+        },
+      ]
+    }
+
+    let myCharts = echarts.init(document.getElementById('demo'));
+    myCharts.setOption(option);
   }
   onChange = (date, dateString) => {
     console.log(date, dateString);
@@ -98,39 +210,16 @@ export default class Devices extends PureComponent {
     });
   }
 
-  transferData = (data) => {
-    const dd = [];
-    if (data.ars === undefined || data.ars.length === 0
-    || data.beacons === undefined || data.beacons.length === 0
-    || data.qrcodes === undefined || data.qrcodes.length === 0) {
-      return [];
-    }
-    let dayCounts = data.ars.length;
-    for (let i = 0; i < dayCounts; i += 1) {
-      dd.push({
-        date: data.ars[i].day,
-        AR: data.ars[i].times,
-        Beacon: data.beacons[i].times,
-        二维码: data.qrcodes[i].times,
-      });
-    }
-    return dd;
-  }
 
   render() {
-    const ds = new DataSet();
-    const dv = ds.createView().source(this.transferData(this.props.record.devices));
-    dv.transform({
-      type: 'fold',
-      fields: [ 'AR', 'Beacon', '二维码' ], // 展开字段集
-      key: '设备', // key字段
-      value: '触发次数', // value字段
-    });
-    console.log(dv);
-    const cols = {
-      date: {
-        range: [ 0, 1 ]
-      }
+    const visitData = [];
+    const beginDay = new Date().getTime();
+    for (let i = 0; i < 20; i += 1) {
+      visitData.push({
+        x: moment(new Date(beginDay + (1000 * 60 * 60 * 24 * i))).format('YYYY-MM-DD'),
+        y: Math.floor(Math.random() * 100) + 10,
+        y2: 100,
+      });
     }
     const mainSearch = (
       <div>
@@ -148,14 +237,14 @@ export default class Devices extends PureComponent {
           content={mainSearch}
         >
           <Card border="false">
-            <Chart height={400} data={dv} scale={cols} forceFit>
-              <Legend />
-              <Axis name="date" />
-              <Axis name="触发次数" label={{formatter: val => `${val}`}}/>
-              <Tooltip crosshairs={{type : "y"}}/>
-              <Geom type="line" position="date*触发次数" size={2} color={'设备'} shape={'smooth'} />
-              <Geom type='point' position="date*触发次数" size={4} shape={'circle'} color={'设备'} style={{ stroke: '#fff', lineWidth: 1}} />
-            </Chart>
+            <div>
+              <Row gutter={24}>
+                <Col span={22}>
+                  <div id="demo" style={{ height: 420, width: '100%' }}>
+                  </div>
+                </Col>
+              </Row>
+            </div>
           </Card>
         </PageHeaderLayout>
       </div>);

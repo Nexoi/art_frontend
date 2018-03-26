@@ -2,6 +2,9 @@
  * Created by neo on 26/3/2018.
  */
 import {
+  getShowsData,
+  getResourceGroupsData,
+  getResourceItemsData,
   listDevices,
   listResourceGroups,
   listResourceItems,
@@ -14,13 +17,45 @@ export default {
 
   state: {
     devices: {},
+    users: {},
     resourceGroups: [],
     resourceItems: [],
     shows: [],
-    users: {},
+    showsData: [],
+    resourceGroupsData: [],
+    resourceItemsData: [],
   },
 
   effects: {
+    *getShowsData(_, { call, put }) {
+      const response = yield call(getShowsData);
+      if (response.status === 200) {
+        yield put({
+          type: 'resaveShowsData',
+          payload: response.data,
+        });
+      }
+    },
+    *getResourceGroupsData({ payload }, { call, put }) {
+      const { showId } = payload;
+      const response = yield call(getResourceGroupsData, showId);
+      if (response.status === 200) {
+        yield put({
+          type: 'resaveResourceGroupsData',
+          payload: response.data,
+        });
+      }
+    },
+    *getResourceItemsData({ payload }, { call, put }) {
+      const { groupId } = payload;
+      const response = yield call(getResourceItemsData, groupId);
+      if (response.status === 200) {
+        yield put({
+          type: 'resaveResourceItemsData',
+          payload: response.data,
+        });
+      }
+    },
     *listDevices({ payload }, { call, put }) {
       const { startDay, endDay } = payload;
       const response = yield call(listDevices, { startDay, endDay });
@@ -74,6 +109,24 @@ export default {
   },
 
   reducers: {
+    resaveShowsData(state, action) {
+      return {
+        ...state,
+        showsData: action.payload,
+      };
+    },
+    resaveResourceGroupsData(state, action) {
+      return {
+        ...state,
+        resourceGroupsData: action.payload,
+      };
+    },
+    resaveResourceItemsData(state, action) {
+      return {
+        ...state,
+        resourceItemsData: action.payload,
+      };
+    },
     reloadDevices(state, action) {
       return {
         ...state,
