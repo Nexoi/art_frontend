@@ -36,6 +36,9 @@ export default class Shows extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { selectedShowIds } = values;
+        if (selectedShowIds === undefined || selectedShowIds.length < 1) {
+          return;
+        }
         let showIds = '';
         for (let i = 0; i < selectedShowIds.length; i += 1) {
           if (i < selectedShowIds.length - 1) {
@@ -122,6 +125,7 @@ export default class Shows extends PureComponent {
                 rules: [{
                   required: true, message: '请选择起止日期',
                 }],
+                initialValue:[moment(new Date(new Date().getTime() - 8*(60 * 60 * 24 * 1000))), moment(new Date(new Date().getTime() - (60 * 60 * 24 * 1000)))]
               })(
                 <RangePicker style={{ margin: '8px 0', width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}

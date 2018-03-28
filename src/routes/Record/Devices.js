@@ -18,82 +18,82 @@ import { getTimeYYYYMMDD } from '../../utils/utils';
 }))
 export default class Devices extends PureComponent {
   state = {
-    startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
-    endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+    // startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
+    // endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
     data: [],
+    startMoment: moment(new Date(new Date().getTime() - 8*(60*60*24*1000))),
+    endMoment: moment(new Date(new Date().getTime() - (60*60*24*1000))),
   }
   componentWillMount() {
     this.props.dispatch({
       type: 'record/listDevices',
       payload: {
-        startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
-        endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+        startDay: this.state.startMoment.format('YYYYMMDD'),
+        endDay: this.state.endMoment.format('YYYYMMDD'),
       },
     });
   }
   componentWillReceiveProps(nextProps) {
     const data = nextProps.record.devices;
-    this.loadChart(data);
+    // this.loadChart(data);
   }
   componentDidMount() {
     const data = this.props.record.devices;
-    this.loadChart(data);
+    // this.loadChart(data);
   }
-  loadChart = (data) => {
-    if (data === undefined || data.ars === undefined) {
-      return;
-    }
-    const days = [];
-    const ar = [];
-    const beacon = [];
-    const qrcode = [];
-    const day = parseInt(this.state.endDay) - parseInt(this.state.startDay);
-    for (let i = 0; i < day; i += 1) {
-      let currentDay = '';
-      if (i < data.ars.length) {
-        ar.push(data.ars[i].times);
-        currentDay = data.ars[i].day;
-      } else {
-        ar.push(0);
-        currentDay = undefined;
-      }
-      if (i < data.beacons.length) {
-        beacon.push(data.beacons[i].times);
-        if (currentDay === undefined) {
-          currentDay = data.beacons[i].day;
-        }
-      } else {
-        beacon.push(0);
-        currentDay = undefined;
-      }
-      if (i < data.qrcodes.length) {
-        qrcode.push(data.qrcodes[i].times);
-        if (currentDay === undefined) {
-          currentDay = data.qrcodes[i].day;
-        }
-      } else {
-        qrcode.push(0);
-        currentDay = '';
-      }
-      days.push(currentDay);
-    }
-  }
+  // loadChart = (data) => {
+  //   if (data === undefined || data.ars === undefined) {
+  //     return;
+  //   }
+  //   const days = [];
+  //   const ar = [];
+  //   const beacon = [];
+  //   const qrcode = [];
+  //   const day = parseInt(this.state.endDay) - parseInt(this.state.startDay);
+  //   for (let i = 0; i < day; i += 1) {
+  //     let currentDay = '';
+  //     if (i < data.ars.length) {
+  //       ar.push(data.ars[i].times);
+  //       currentDay = data.ars[i].day;
+  //     } else {
+  //       ar.push(0);
+  //       currentDay = undefined;
+  //     }
+  //     if (i < data.beacons.length) {
+  //       beacon.push(data.beacons[i].times);
+  //       if (currentDay === undefined) {
+  //         currentDay = data.beacons[i].day;
+  //       }
+  //     } else {
+  //       beacon.push(0);
+  //       currentDay = undefined;
+  //     }
+  //     if (i < data.qrcodes.length) {
+  //       qrcode.push(data.qrcodes[i].times);
+  //       if (currentDay === undefined) {
+  //         currentDay = data.qrcodes[i].day;
+  //       }
+  //     } else {
+  //       qrcode.push(0);
+  //       currentDay = '';
+  //     }
+  //     days.push(currentDay);
+  //   }
+  // }
   onChange = (date, dateString) => {
     console.log(date, dateString);
     if (date.length < 2) {
       return;
     }
-    const start = date[0].format('YYYYMMDD');
-    const end = date[1].format('YYYYMMDD');
     this.setState({
-      startDay: start,
-      endDay: end,
+      startMoment: date[0],
+      endMoment: date[1],
     });
     this.props.dispatch({
       type: 'record/listDevices',
       payload: {
-        startDay: start,
-        endDay: end,
+        startDay: date[0].format('YYYYMMDD'),
+        endDay: date[1].format('YYYYMMDD'),
       },
     });
   }
@@ -136,7 +136,7 @@ export default class Devices extends PureComponent {
       <div>
         <DatePicker.RangePicker
           onChange={this.onChange}
-          initialValue={[ moment(), moment() ]}
+          value={[ this.state.startMoment, this.state.endMoment ]}
         />
       </div>
     );

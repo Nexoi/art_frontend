@@ -18,15 +18,17 @@ import { getTimeYYYYMMDD } from '../../utils/utils';
 }))
 export default class Users extends PureComponent {
   state = {
-    startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
-    endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+    // startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
+    // endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+    startMoment: moment(new Date(new Date().getTime() - 8*(60*60*24*1000))),
+    endMoment: moment(new Date(new Date().getTime() - (60*60*24*1000))),
   }
   componentWillMount() {
     this.props.dispatch({
       type: 'record/listUsers',
       payload: {
-        startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8*(60*60*24*1000))),
-        endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60*60*24*1000))),
+        startDay: this.state.startMoment.format('YYYYMMDD'),
+        endDay: this.state.endMoment.format('YYYYMMDD'),
       },
     });
   }
@@ -35,17 +37,17 @@ export default class Users extends PureComponent {
     if (date.length < 2) {
       return;
     }
-    const start = date[0].format('YYYYMMDD');
-    const end = date[1].format('YYYYMMDD');
+    // const start = date[0].format('YYYYMMDD');
+    // const end = date[1].format('YYYYMMDD');
     this.setState({
-      startDay: start,
-      endDay: end,
+      startMoment: date[0],
+      endMoment: date[1],
     });
     this.props.dispatch({
       type: 'record/listUsers',
       payload: {
-        startDay: start,
-        endDay: end,
+        startDay: date[0].format('YYYYMMDD'),
+        endDay: date[1].format('YYYYMMDD'),
       },
     });
   }
@@ -86,7 +88,7 @@ export default class Users extends PureComponent {
       <div>
         <DatePicker.RangePicker
           onChange={this.onChange}
-          initialValue={[ moment(new Date(new Date().getTime() - 8*(60*60*24*1000))), moment(new Date(new Date().getTime() - (60*60*24*1000))) ]}
+          value={[ this.state.startMoment, this.state.endMoment ]}
         />
       </div>
     );

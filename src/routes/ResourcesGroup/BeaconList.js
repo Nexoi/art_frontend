@@ -33,10 +33,19 @@ export default class BeaconList extends PureComponent {
         cancelText: '取消',
         okText: '确定',
         onOk() {
-          that.deleteShow(record.id);
+          that.removeBeacon(record.resourcesGroupId, record.uuid);
         },
       });
     }
+  }
+  removeBeacon = (resourcesGroupId, uuid) => {
+    this.props.dispatch({
+      type: 'resourcesgroup/removeBeacon',
+      payload: {
+        groupId: resourcesGroupId,
+        uuid,
+      },
+    });
   }
   /* 分页数据改变 */
   onSizeChange = (current, pageSize) => {

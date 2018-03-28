@@ -36,6 +36,9 @@ export default class ResourceItems extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { selectedItemIds } = values;
+        if (selectedItemIds === undefined || selectedItemIds.length < 1) {
+          return;
+        }
         let itemIds = '';
         for (let i = 0; i < selectedItemIds.length; i += 1) {
           if (i < selectedItemIds.length - 1) {
@@ -63,6 +66,9 @@ export default class ResourceItems extends PureComponent {
   }
   handleChange = (value) => {
     console.log(`selected ${value}`);
+    const { resetFields } = this.props.form;
+    resetFields(['selectedGroupId']);
+    resetFields(['selectedItemIds']);
     this.props.dispatch({
       type: 'record/getResourceGroupsData',
       payload: {
@@ -73,6 +79,8 @@ export default class ResourceItems extends PureComponent {
 
   handleChange2 = (value) => {
     console.log(`selected ${value}`);
+    const { resetFields } = this.props.form;
+    resetFields(['selectedItemIds']);
     this.props.dispatch({
       type: 'record/getResourceItemsData',
       payload: {
@@ -141,6 +149,7 @@ export default class ResourceItems extends PureComponent {
                 rules: [{
                   required: true, message: '请选择起止日期',
                 }],
+                initialValue:[moment(new Date(new Date().getTime() - 8*(60 * 60 * 24 * 1000))), moment(new Date(new Date().getTime() - (60 * 60 * 24 * 1000)))]
               })(
                 <RangePicker style={{ margin: '8px 0', width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
@@ -181,7 +190,6 @@ export default class ResourceItems extends PureComponent {
                   style={{
                     margin: '8px 0',
                   }}
-                  value={this.state.groupIds}
                 >
                   { this.props.record.resourceItemsData.map(item => (<Option value={item.id}>{`${item.title}`}</Option>)) }
                 </Select>

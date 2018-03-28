@@ -24,7 +24,7 @@ export default class ResourceGroups extends PureComponent {
   state = {
     startDay: getTimeYYYYMMDD(new Date(new Date().getTime() - 8 * (60 * 60 * 24 * 1000))),
     endDay: getTimeYYYYMMDD(new Date(new Date().getTime() - (60 * 60 * 24 * 1000))),
-    selectedGroupIds: [],
+    needCleanSelectInput: false,
   }
 
   componentWillMount() {
@@ -37,6 +37,9 @@ export default class ResourceGroups extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { selectedGroupIds } = values;
+        if (selectedGroupIds === undefined || selectedGroupIds.length < 1) {
+          return;
+        }
         let groupIds = '';
         for (let i = 0; i < selectedGroupIds.length; i += 1) {
           if (i < selectedGroupIds.length - 1) {
@@ -64,7 +67,8 @@ export default class ResourceGroups extends PureComponent {
   }
   handleChange = (value) => {
     console.log(`selected ${value}`);
-    this.props.form.getFieldValue('selectedGroupIds');
+    const { resetFields } = this.props.form;
+    resetFields(['selectedGroupIds']);
     this.props.dispatch({
       type: 'record/getResourceGroupsData',
       payload: {
@@ -133,6 +137,7 @@ export default class ResourceGroups extends PureComponent {
                 rules: [{
                   required: true, message: '请选择起止日期',
                 }],
+                initialValue:[moment(new Date(new Date().getTime() - 8*(60 * 60 * 24 * 1000))), moment(new Date(new Date().getTime() - (60 * 60 * 24 * 1000)))]
               })(
                 <RangePicker style={{ margin: '8px 0', width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
@@ -159,7 +164,6 @@ export default class ResourceGroups extends PureComponent {
                   style={{
                     margin: '8px 0',
                   }}
-                  value={this.state.groupIds}
                 >
                   { this.props.record.resourceGroupsData.map(item => (<Option value={item.id}>{`${item.title}`}</Option>)) }
                 </Select>

@@ -214,6 +214,9 @@ export const getRouterData = (app) => {
     '/users/appusers': {
       component: dynamicWrapper(app, ['seeuser/seeuser'], () => import('../routes/SEEUser/User')),
     },
+    '/users/admins': {
+      component: dynamicWrapper(app, ['seeuser/seeuadmin'], () => import('../routes/SEEUser/UserAdmin')),
+    },
     '/record/device': {
       component: dynamicWrapper(app, ['record/record'], () => import('../routes/Record/Devices')),
     },

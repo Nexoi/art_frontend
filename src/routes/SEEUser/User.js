@@ -42,7 +42,7 @@ export default class User extends PureComponent {
     key: 'headIconUrl',
     render: text => (<Avatar src={text} />),
   }, {
-    title: '#',
+    title: '#ID',
     dataIndex: 'uid',
     key: 'uid',
   }, {
@@ -59,7 +59,7 @@ export default class User extends PureComponent {
     key: 'memberStatus',
     render: text => (
       <Button size="small" type="primary">
-        {text === 'OK' ? '正常' : text === 'UNACTIVED' ? '未激活' : text === 'DISTORY' ? '已注销' : text === 'BAD' ? '恶意用户' : text}
+        {text === 'OK' ? '正常' : text === 'UNACTIVED' ? '未激活' : text === 'DISTORY' ? '已注销' : text === 'BAD' ? '违规用户' : text}
       </Button>),
   }];
   render() {
@@ -83,7 +83,7 @@ export default class User extends PureComponent {
         >
           <Card border="false">
             <Table
-              rowKey="id"
+              rowKey="uid"
               columns={this.columns}
               dataSource={this.props.seeuser.list}
               pagination={{
