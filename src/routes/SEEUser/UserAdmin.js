@@ -3,10 +3,13 @@
  */
 
 import React, { PureComponent } from 'react';
-import { Avatar, Card, Table, Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
+import { Avatar, Card, Table, Modal, message, Form, Input, Dropdown, Menu, Button, Icon, Select } from 'antd';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ShowAuthSelector from './ShowAuthSelector';
+import UserAdminForm from './UserAdminForm';
+
+const { Option } = Select;
 
 /* 主界面 */
 @connect(({ seeuadmin, loading }) => ({
@@ -17,6 +20,9 @@ export default class UserAdmin extends PureComponent {
   state = {
     authSelectorVisible: false,
     currentUid: undefined,
+    data: {},
+    addModalVisible: false,
+    editModalVisible: false,
   }
   componentWillMount() {
     this.props.dispatch({
@@ -42,7 +48,6 @@ export default class UserAdmin extends PureComponent {
       this.openAuthSelector(record.uid);
     }
     if (e.key === '2') {
-      this.openEditBeaconPage(record);
     }
     if (e.key === '3') {
       const that = this;
@@ -82,6 +87,26 @@ export default class UserAdmin extends PureComponent {
       },
     });
   }
+  /* 表单上传数据 在这里汇合 */
+  onFormDataChange = (changedFields) => {
+    this.setState({
+      data: { ...this.state.data, ...changedFields },
+    });
+  }
+  openAddModal = (record) => {
+    this.setState({
+      data: record,
+      addModalVisible: true,
+    });
+  }
+  closeAddModal = () => {
+    this.setState({
+      addModalVisible: false,
+    });
+  }
+  handleAddModalOk = () => {
+    // 添加管理员
+  }
 
   columns = [{
     title: '头像',
@@ -115,7 +140,7 @@ export default class UserAdmin extends PureComponent {
       <Dropdown overlay={
         <Menu onClick={e => this.handleMenuClick(record, e)}>
           <Menu.Item key="1">修改权限</Menu.Item>
-          <Menu.Item key="2">编辑</Menu.Item>
+          {/*<Menu.Item key="2">编辑</Menu.Item>*/}
           <Menu.Item key="3">删除</Menu.Item>
         </Menu>}
       >
@@ -148,6 +173,35 @@ export default class UserAdmin extends PureComponent {
         // updateShowAuths={this.updateShowAuths}
       />
     );
+    const addModal = (
+      <Modal
+        title="添加管理员"
+        visible={this.state.addModalVisible}
+        onCreate={this.handleAddModalOk}
+        onCancel={this.closeAddModal}
+        footer={null}
+      >
+        <UserAdminForm
+          initValues={this.state.data}
+          onCancel={this.closeAddModal}
+          type="add"
+        />
+      </Modal>
+    );
+    // const editModal = (
+    //   <Modal
+    //     title="编辑管理员"
+    //     visible={this.state.addModalVisible}
+    //     onCreate={this.handleAddModalOk}
+    //     onCancel={this.closeAddModal}
+    //     footer={null}
+    //   >
+    //     <UserAdminForm
+    //       initValues={this.state.data}
+    //       type="edit"
+    //     />
+    //   </Modal>
+    // );
     return (
       <div>
         <PageHeaderLayout
@@ -166,6 +220,7 @@ export default class UserAdmin extends PureComponent {
           </Card>
         </PageHeaderLayout>
         { this.state.authSelectorVisible ? showSelector : '' }
+        { this.state.addModalVisible ? addModal : '' }
       </div>);
   }
 }

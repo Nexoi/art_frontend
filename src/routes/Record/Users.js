@@ -76,7 +76,7 @@ export default class Users extends PureComponent {
       type: 'fold',
       fields: [ '匿名用户', '已注册用户' ], // 展开字段集
       key: '用户数', // key字段
-      value: '日活跃人数', // value字段
+      value: '日访问量', // value字段
     });
     // console.log(dv);
     const cols = {
@@ -103,10 +103,10 @@ export default class Users extends PureComponent {
             <Chart height={400} data={dv} scale={cols} forceFit>
               <Legend />
               <Axis name="date" />
-              <Axis name="日活跃人数" title="日活跃人数" label={{formatter: val => `${val}`}}/>
+              <Axis name="日访问量" title="日访问量" label={{formatter: val => `${val}`}}/>
               <Tooltip crosshairs={{type : "y"}}/>
-              <Geom type="line" position="date*日活跃人数" size={2} color={'用户数'} shape={'smooth'} />
-              <Geom type='point' position="date*日活跃人数" size={4} shape={'circle'} color={'用户数'} style={{ stroke: '#fff', lineWidth: 1}} />
+              <Geom type="line" position="date*日访问量" size={2} color={'用户数'} shape={'smooth'} />
+              <Geom type='point' position="date*日访问量" size={4} shape={'circle'} color={'用户数'} style={{ stroke: '#fff', lineWidth: 1}} />
             </Chart>
           </Card>
         </PageHeaderLayout>

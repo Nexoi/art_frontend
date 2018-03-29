@@ -7,6 +7,7 @@ import { Input, Button, Card, message, Select, Checkbox, Icon, Pagination, Modal
 import { connect } from 'dva';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import ModalForFolder from '../ModalForFolder';
+import { domain_api } from '../../../utils/utils';
 
 /* 弹出 Modal 添加内容 */
 const FormItem = Form.Item;
@@ -101,7 +102,7 @@ export default class Picture extends PureComponent {
     /* 文件上传 */
     uploadProps: {
       name: 'file',
-      action: '//art.seeuio.com/api/admin/v1/upload/image',
+      action: `${domain_api}/api/admin/v1/upload/image`,
       // fileList: [{
       //   uid: -1,
       //   name: 'demo.png',

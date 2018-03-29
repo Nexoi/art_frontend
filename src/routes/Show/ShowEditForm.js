@@ -4,7 +4,7 @@ import {
   Form, Input, DatePicker, Button, Card, message, Upload, Icon,
 } from 'antd';
 import moment from 'moment';
-import MaterialSelecter from '../Material/MaterialSelecter';
+import { domain_api } from '../../utils/utils';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -20,7 +20,7 @@ export default class ShowEditForm extends PureComponent {
     sourceData: this.props.sourceData,
     uploadProps: {
       name: 'file',
-      action: '//art.seeuio.com/api/admin/v1/upload/image',
+      action: `${domain_api}/api/admin/v1/upload/image`,
       fileList: [],
     },
     uploadFileAvailable: false,

@@ -2,6 +2,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
+import { domain_api, domain_web } from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -47,7 +48,7 @@ function checkStatus(response) {
 export default function request(url, options) {
   console.log(`start==> ${url}`);
   // let finalUrl = url;
-  const finalUrl = `http://art.seeuio.com${url}`;
+  const finalUrl = `${domain_api}${url}`;
   // if (url.startsWith('/api/admin/v1')) {
   //   finalUrl = `http://art.seeuio.com${url}`;
   // }

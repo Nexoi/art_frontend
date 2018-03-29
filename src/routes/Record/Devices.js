@@ -9,7 +9,6 @@ import moment from 'moment';
 import { Chart, Axis, Geom, Tooltip, Legend } from 'bizcharts';
 import { View, DataSet } from '@antv/data-set';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getTimeYYYYMMDD } from '../../utils/utils';
 
 /* 主界面 */
 @connect(({ record, loading }) => ({

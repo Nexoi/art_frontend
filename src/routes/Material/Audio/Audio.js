@@ -6,7 +6,7 @@ import React, { PureComponent } from 'react';
 import { Table, Input, Button, Card, message, Select, Dropdown, Icon, Menu, Modal, Form, Upload } from 'antd';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
-import { getTimeString, getSizeOfFile } from '../../../utils/utils';
+import { getTimeString, getSizeOfFile, domain_api } from '../../../utils/utils';
 import ModalForFolder from '../ModalForFolder';
 
 /* 可编辑单元格 */
@@ -140,7 +140,7 @@ export default class Audio extends PureComponent {
     /* 文件上传 */
     uploadProps: {
       name: 'file',
-      action: '//art.seeuio.com/api/admin/v1/upload',
+      action: `${domain_api}/api/admin/v1/upload`,
       // headers: {
       //   authorization: 'authorization-text',
       // },

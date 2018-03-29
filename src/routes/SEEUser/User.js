@@ -35,6 +35,9 @@ export default class User extends PureComponent {
       },
     });
   }
+  exportUsers = () => {
+    console.log('导出用户数据中...')
+  }
 
   columns = [{
     title: '头像',
@@ -72,6 +75,9 @@ export default class User extends PureComponent {
           onSearch={this.onClickSearch}
           style={{ width: 360, float: 'left' }}
         />
+        <div style={{ float: 'right' }}>
+          <Button size="large" onClick={this.exportUsers}><a target="blank" href="//art.seeuio.com/export/users.txt"> 导出用户 </a></Button>
+        </div>
       </div>
     );
 

@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import {
   Form, Input, DatePicker, Button, Card, message, Upload, Icon,
 } from 'antd';
-import MaterialSelecter from '../Material/MaterialSelecter';
+import { domain_api } from '../../utils/utils';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -18,7 +18,7 @@ export default class ShowAddForm extends PureComponent {
     selectorModalVisible: false,
     uploadProps: {
       name: 'file',
-      action: '//art.seeuio.com/api/admin/v1/upload/image',
+      action: `${domain_api}/api/admin/v1/upload/image`,
       fileList: [],
     },
     uploadFileAvailable: false,

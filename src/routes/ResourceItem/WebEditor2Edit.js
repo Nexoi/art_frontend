@@ -21,9 +21,9 @@ export default class WebEditor2Edit extends PureComponent {
   state = {
     itemId: this.props.match.url.slice(this.props.match.url.indexOf('/editor/') + 8),
     selectorVisible: false,
-    selectedImageUrl: this.props.webpage.currentWebPage.coverImageUrl,
-    htmlContent: this.props.webpage.currentWebPage.contentHtml,
-    currentSourceData: this.props.webpage.currentWebPage, // resourceItemId, author, contentHtml, coverImageUrl, introduce, title
+    selectedImageUrl: '',
+    htmlContent: '',
+    currentSourceData: {}, // resourceItemId, author, contentHtml, coverImageUrl, introduce, title
   }
 
   componentWillMount() {
@@ -43,6 +43,12 @@ export default class WebEditor2Edit extends PureComponent {
       payload: {
         itemId: this.state.itemId,
       },
+    }).then(() => {
+      this.setState({
+        selectedImageUrl: this.props.webpage.currentWebPage.coverImageUrl,
+        htmlContent: this.props.webpage.currentWebPage.contentHtml,
+        currentSourceData: this.props.webpage.currentWebPage,
+      });
     });
     // this.setState({
     //   itemId: this.props.match.url.slice(this.props.match.url.indexOf('/editor/') + 8),
