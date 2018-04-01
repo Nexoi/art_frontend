@@ -91,7 +91,7 @@ export default function request(url, options) {
     .then((json) => {
       // console.log('--------------------^^--------------')
       // console.log(json);
-      if (json.status !== undefined && json.status === 400) {
+      if (json.status !== undefined && json.status === 400 && newOptions.method !== 'GET') {
         message.warn(json.message);
         // console.log('----------------------&&------------')
       }
