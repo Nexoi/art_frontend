@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import {
-  Form, Input, Button, Card, Modal, Radio, Icon, Tooltip, Switch,
+  Form, Input, Button, Card, Modal, Radio, Icon, Tooltip, Switch, message, InputNumber,
 } from 'antd';
 import styles from './style.less';
 import ShowMapSelector from './ShowMapSelector';
@@ -67,7 +67,22 @@ export default class BeaconEditForm extends PureComponent {
         //   type: 'beacon/addBeacon',
         //   payload: values,
         // });
-
+        if (values.uuid === undefined || values.uuid.length !== 36) {
+          message.warn('UUID 长度必须为 36 位（含分隔符）');
+          return;
+        }
+        if (values.majorValue < 0 || values.majorValue > 9999) {
+          message.warn('MajorValue 必须在 0～9999 之间！');
+          return;
+        }
+        if (values.minorValue < 0 || values.minorValue > 9999) {
+          message.warn('MinorValue 必须在 0～9999 之间！');
+          return;
+        }
+        if (parseInt(height, 10) < 0 || parseInt(width, 10) < 0) {
+          message.warn('请设定地图信息！');
+          return;
+        }
         const data = {
           name: values.name,
           uuid: values.uuid,
@@ -253,7 +268,7 @@ export default class BeaconEditForm extends PureComponent {
               }],
               initialValue: this.state.sourceData.majorValue,
             })(
-              <Input placeholder="8000" />
+              <InputNumber placeholder="8000" />
             )}
           </FormItem>
           <FormItem
@@ -266,7 +281,7 @@ export default class BeaconEditForm extends PureComponent {
               }],
               initialValue: this.state.sourceData.minorValue,
             })(
-              <Input placeholder="8888" />
+              <InputNumber placeholder="8000" />
             )}
           </FormItem>
           <FormItem

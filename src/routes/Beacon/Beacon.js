@@ -218,7 +218,7 @@ export default class Beacon extends PureComponent {
             />
           </Card>
         </PageHeaderLayout>
-        {modalAdd}
+        {this.state.addModalVisible ? modalAdd : ''}
         {this.state.editModalVisible ? modalEdit : ''}
       </div>);
   }

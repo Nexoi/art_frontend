@@ -57,9 +57,9 @@ export default {
           payload: response2.data,
         });
       }
-      if (response.status === 400) {
-        message.error(response.message);
-      }
+      // if (response.status === 400) {
+      //   message.error(response.message);
+      // }
     },
   },
 

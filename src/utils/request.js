@@ -22,7 +22,7 @@ const codeMessage = {
   504: '网关超时。',
 };
 function checkStatus(response) {
-  console.log(response);
+  // console.log(response);
 
   if ((response.status >= 200 && response.status < 300) || response.status === 400 || response.status === 423) {
     return response;
@@ -46,7 +46,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
-  console.log(`start==> ${url}`);
+  // console.log(`start==> ${url}`);
   // let finalUrl = url;
   const finalUrl = `${domain_api}${url}`;
   // if (url.startsWith('/api/admin/v1')) {
@@ -84,9 +84,18 @@ export default function request(url, options) {
     .then((response) => {
       if (newOptions.method === 'DELETE' || response.status === 204) {
         // return response.text();
-        return response;
+        return response.json();
       }
       return response.json();
+    })
+    .then((json) => {
+      // console.log('--------------------^^--------------')
+      // console.log(json);
+      if (json.status !== undefined && json.status === 400) {
+        message.warn(json.message);
+        // console.log('----------------------&&------------')
+      }
+      return json;
     })
     .catch((e) => {
       const { dispatch } = store;
@@ -97,9 +106,9 @@ export default function request(url, options) {
         });
         return;
       }
-      if (status === 400) {
-        message.warn(e.message);
-      }
+      // if (status === 400) {
+      //   message.warn(e.message);
+      // }
       if (status === 403) {
         dispatch(routerRedux.push('/exception/403'));
         return;

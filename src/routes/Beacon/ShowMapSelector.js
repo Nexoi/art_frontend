@@ -18,6 +18,9 @@ export default class ShowMapSelector extends PureComponent {
   componentWillMount() {
     this.props.dispatch({
       type: 'showmap/initList',
+      payload: {
+        showId: 0,
+      },
     });
     console.log(this.props);
   }
@@ -25,6 +28,7 @@ export default class ShowMapSelector extends PureComponent {
     this.props.dispatch({
       type: 'showmap/fetchList',
       payload: {
+        showId: 0,
         page: current - 1,
         size: pageSize,
       },
@@ -34,6 +38,7 @@ export default class ShowMapSelector extends PureComponent {
     this.props.dispatch({
       type: 'showmap/fetchList',
       payload: {
+        showId: 0,
         page: page - 1,
         size: pageSize,
       },

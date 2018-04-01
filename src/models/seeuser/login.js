@@ -34,8 +34,8 @@ export default {
         });
         reloadAuthorized();
         yield put(routerRedux.push('/'));
-      } else if (response.status === 400) {
-        message.info(response.message);
+      // } else if (response.status === 400) {
+      //   message.info(response.message);
       }
     },
     *logout(_, { put, select }) {
