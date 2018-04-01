@@ -169,8 +169,7 @@ export default class ResourceItem extends PureComponent {
                     width: 200px;
                     min-height: 40px;
                     line-height: 40px;
-                    font-size: 26px;
-                    border: solid;`;
+                    font-size: 26px;`; // xx border: solid;
     domtoimage.toJpeg(qrDiv, { quality: 0.95 })
       .then(function (dataUrl) {
         var link = document.createElement('a');
@@ -184,8 +183,7 @@ export default class ResourceItem extends PureComponent {
                         width: 200px;
                         min-height: 40px;
                         line-height: 40px;
-                        font-size: 26px;
-                        border: solid;`;
+                        font-size: 26px;`; // xx border: solid;
       });
   }
   // 点击下载选中的所有列表
@@ -208,8 +206,7 @@ export default class ResourceItem extends PureComponent {
                       width: 200px;
                       min-height: 40px;
                       line-height: 40px;
-                      font-size: 26px;
-                      border: solid;`;
+                      font-size: 26px;`; // xx border: solid;
       console.log('---exchange...---')
       domtoimage.toBlob(qrDiv)
         .then(function (blob) {
@@ -332,7 +329,7 @@ export default class ResourceItem extends PureComponent {
             minHeight: 40,
             lineHeight: '40px',
             fontSize: '26px',
-            border: 'double',
+            // border: 'double',
           }}>{this.state.currentSelectedTitle}</span>
           <QRCode
             style={{ margin: 'auto 0' }}
