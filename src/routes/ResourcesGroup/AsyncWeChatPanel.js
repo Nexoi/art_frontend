@@ -8,7 +8,7 @@ import { Button, Modal, Input, List } from 'antd';
 
 let isAsync = false; // 在更新中
 let countAsync = 0;
-const timeOut = [1, 1, 1, 1, 1, 2, 2, 3, 3, 5, 5, 7, 11, 13, 17, 23, 29];
+const timeOut = [1, 1, 1, 1, 1, 1, 1, 2, 3, 5, 5, 7, 11, 13, 17, 23, 29];
 
 @connect(({ wxasync, loading }) => ({
   wxasync,
@@ -40,33 +40,76 @@ export default class AsyncWeChatPanel extends Component {
       },
     }).then(() => {
       const list = this.props.wxasync.list.filter(it => it.status === 'ING');
-      if (list.length === 0) {
-      // if (true) {
-        // 以前的任务都是完成了的，说明用户要重新同步
-        // this.setState({
-        //   isSynchronizing: false,
-        // });
-        // 准备开始
-        isAsync = true;
-        // 开启同步
-        this.props.dispatch({
-          type: 'wxasync/startAsync',
-          payload: {
-            showId: this.state.showId,
-          },
-        }).then(() => {
-          this.setState({
-            isSynchronizing: true,
-          });
-          // 开启定时刷新直至全部同步完成
-          this.startFlsuhResult();
-        });
-      } else {
-        // 还有任务在进行中，只需要列出来即可
+      if (list.length !== 0) {
+        // 还有任务在进行中，需要列出来
         this.setState({
           currentList: this.props.wxasync.list.slice(0, 8),
         });
+        // 询问用户是否需要同步
+        const that = this;
+        Modal.confirm({
+          title: '有正在同步的网页，确认要重新同步吗？',
+          cancelText: '取消',
+          okText: '确定',
+          onOk() {
+            that.asyncWxOk();
+          },
+          onCancel() {
+            // 开启刷新，用户可能是来看进度的
+            isAsync = true;
+            countAsync = 0;
+            that.startFlushResult();
+          },
+        });
+      } else {
+        // 直接开始同步！
+        // 准备开始
+        this.asyncWxOk();
       }
+      // if (list.length === 0) {
+      // // if (true) {
+      //   // 以前的任务都是完成了的，说明用户要重新同步
+      //   // this.setState({
+      //   //   isSynchronizing: false,
+      //   // });
+      //   // 准备开始
+      //   isAsync = true;
+      //   // 开启同步
+      //   this.props.dispatch({
+      //     type: 'wxasync/startAsync',
+      //     payload: {
+      //       showId: this.state.showId,
+      //     },
+      //   }).then(() => {
+      //     this.setState({
+      //       isSynchronizing: true,
+      //     });
+      //     // 开启定时刷新直至全部同步完成
+      //     this.startFlsuhResult();
+      //   });
+      // } else {
+      //   // 还有任务在进行中，只需要列出来即可
+      //   this.setState({
+      //     currentList: this.props.wxasync.list.slice(0, 8),
+      //   });
+      // }
+    });
+  }
+  asyncWxOk = () => {
+    isAsync = true;
+    countAsync = 0;
+    // 开启同步
+    this.props.dispatch({
+      type: 'wxasync/startAsync',
+      payload: {
+        showId: this.state.showId,
+      },
+    }).then(() => {
+      this.setState({
+        isSynchronizing: true,
+      });
+      // 开启定时刷新直至全部同步完成
+      this.startFlushResult();
     });
   }
   listAsyncResult = () => {
@@ -78,8 +121,8 @@ export default class AsyncWeChatPanel extends Component {
     });
   }
 
-  startFlsuhResult = () => {
-    if (isAsync && countAsync < 17) {
+  startFlushResult = () => {
+    if (isAsync && countAsync < 60) { // 刷新一分钟！不怂
       // 刷新
       this.props.dispatch({
         type: 'wxasync/listAsyncResult',
@@ -102,8 +145,8 @@ export default class AsyncWeChatPanel extends Component {
           });
         }
       });
-      setTimeout(this.startFlsuhResult, 1000 * timeOut[countAsync]); // 素数倍刷新频率机制
       countAsync += 1;
+      setTimeout(this.startFlushResult, 1000); // 素数倍刷新频率机制
     }
   }
 
