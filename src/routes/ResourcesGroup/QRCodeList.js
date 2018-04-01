@@ -84,8 +84,7 @@ export default class QRCodeList extends PureComponent {
                     width: 200px;
                     min-height: 40px;
                     line-height: 40px;
-                    font-size: 26px;
-                    border: double;`;
+                    font-size: 26px;`; // xx border: double;
     domtoimage.toJpeg(qrDiv, { quality: 0.95 })
       .then(function (dataUrl) {
         var link = document.createElement('a');
@@ -99,8 +98,7 @@ export default class QRCodeList extends PureComponent {
                         width: 200px;
                         min-height: 40px;
                         line-height: 40px;
-                        font-size: 26px;
-                        border: double;`;
+                        font-size: 26px;`; // xx border: double;
       });
   }
   // 点击下载选中的所有列表
@@ -123,8 +121,7 @@ export default class QRCodeList extends PureComponent {
                       width: 200px;
                       min-height: 40px;
                       line-height: 40px;
-                      font-size: 26px;
-                      border: double;`;
+                      font-size: 26px;`; // xx border: double;
       console.log('---exchange...---')
       domtoimage.toBlob(qrDiv)
         .then(function (blob) {
@@ -220,7 +217,7 @@ export default class QRCodeList extends PureComponent {
             minHeight: 40,
             lineHeight: '40px',
             fontSize: '26px',
-            border: 'double',
+            // border: 'double',
           }}>{this.state.currentSelectedTitle}</span>
           <QRCode
             style={{ margin: 'auto 0' }}
@@ -247,7 +244,7 @@ export default class QRCodeList extends PureComponent {
                 minHeight: 40,
                 lineHeight: '40px',
                 fontSize: '26px',
-                border: 'double',
+                // border: 'double',
               }}>
                 {item.name}
               </span>

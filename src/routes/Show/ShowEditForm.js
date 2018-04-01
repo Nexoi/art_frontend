@@ -72,11 +72,13 @@ export default class ShowEditForm extends PureComponent {
             imageThumbUrl: this.props.sourceData.posterImage.thumbUrl,
           }
         }
+        const that = this;
         this.props.dispatch({
           type: 'showmain/updateShow',
           payload: data,
+        }).then(() => {
+          that.props.onCloseModal(true);
         });
-        this.props.onCloseModal(true);
       }
     });
   }

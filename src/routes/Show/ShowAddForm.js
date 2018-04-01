@@ -46,11 +46,13 @@ export default class ShowAddForm extends PureComponent {
           imageUrl: this.state.uploadProps.fileList[0].url,
           imageThumbUrl: this.state.uploadProps.fileList[0].thumbUrl,
         }
+        const that = this;
         this.props.dispatch({
           type: 'showmain/addShow',
           payload: data,
+        }).then(() => {
+          that.props.onCloseModal(true);
         });
-        this.props.onCloseModal(true);
       }
     });
   }

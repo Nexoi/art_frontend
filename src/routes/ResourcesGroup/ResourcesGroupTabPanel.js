@@ -4,14 +4,33 @@ import { connect } from 'dva';
 import { Button, Modal, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getRoutes } from '../../utils/utils';
+import AsyncWeChatPanel from './AsyncWeChatPanel';
 
 @connect()
 export default class ResourcesGroupTabPanel extends Component {
   state = {
     showId: this.props.match.url.slice(this.props.match.url.indexOf('/shows/') + 7),
+    selectedKey: this.props.location.pathname.replace(`${this.props.match.path}/`, '') || 'all',
     addNewGroupVisible: false,
     addNewGroupInputValue: '',
-    selectedKey: 'all',
+    asyncWeChatModalVisible: false,
+  }
+  componentDidMount() {
+    const key = this.props.location.pathname.replace(`${this.props.match.path}/`, '');
+    // console.log(key);
+    let finalKey = 'all';
+    if (key.indexOf('all') !== -1) {
+      finalKey = 'all';
+    } else if (key.indexOf('beacon') !== -1) {
+      finalKey = "beacon";
+    } else if (key.indexOf('ar') !== -1) {
+      finalKey = "ar";
+    } else if (key.indexOf('qrcode') !== -1) {
+      finalKey = "qrcode";
+    }
+    this.setState({
+      selectedKey: finalKey,
+    });
   }
   handleTabChange = (key) => {
     const { dispatch, match } = this.props;
@@ -56,14 +75,36 @@ export default class ResourcesGroupTabPanel extends Component {
   }
   addNewGroup = () => {
     // console.log(this.state.addNewGroupInputValue);
+    const that = this;
     this.props.dispatch({
       type: 'resourcesgroup/addGroup',
       payload: {
         showId: this.state.showId,
         name: this.state.addNewGroupInputValue,
       },
+    }).then(() => {
+      that.props.dispatch({
+        type: 'resourcesgroup/listGroup',
+        payload: {
+          showId: this.state.showId,
+          page: 0,
+          size: 10,
+        },
+      });
+      that.closeAddGroupModal();
     });
-    this.closeAddGroupModal();
+  }
+
+  // 同步微信
+  openAsyncWxModal = () => {
+    this.setState({
+      asyncWeChatModalVisible: true,
+    });
+  }
+  closeAsyncWxModal = () => {
+    this.setState({
+      asyncWeChatModalVisible: false,
+    });
   }
   render() {
     const tabList = [{
@@ -87,6 +128,7 @@ export default class ResourcesGroupTabPanel extends Component {
         <span style={{ fontSize: 20, fontWeight: 500, color: '#000000' }}>展览资源组</span>
         {this.state.selectedKey === 'all' &&
           (<div style={{ marginBottom: 0, float: 'right' }}>
+            <Button size="large" style={{ marginRight: 20 }} onClick={this.openAsyncWxModal}> 微信同步 </Button>
             <Button size="large" onClick={this.openAddGroupModal}> 新建资源组 </Button>
           </div>)
         }
@@ -106,10 +148,18 @@ export default class ResourcesGroupTabPanel extends Component {
           onPressEnter={this.addNewGroup}
         />
       </Modal>);
+    const asyncWeChatModal = (
+      <AsyncWeChatPanel
+        visible={this.state.asyncWeChatModalVisible}
+        showId={this.state.showId}
+        onCloseModal={this.closeAsyncWxModal}
+      />
+    );
     return (
       <PageHeaderLayout
         tabList={tabList}
-        tabActiveKey={location.pathname.replace(`${match.path}/`, '')}
+        // tabActiveKey={location.pathname.replace(`${match.path}/`, '')}
+        tabActiveKey={this.state.selectedKey}
         content={mainSearch}
         onTabChange={this.handleTabChange}
       >
@@ -127,7 +177,9 @@ export default class ResourcesGroupTabPanel extends Component {
             )
           }
         </Switch>
-        {newGroupModal}
+        {this.state.addNewGroupVisible ? newGroupModal : ''}
+        {/*{this.state.asyncWeChatModalVisible ? asyncWeChatModal : ''}*/}
+        {asyncWeChatModal} {/*保持长期维护，不能删去该组件*/}
       </PageHeaderLayout>
     );
   }

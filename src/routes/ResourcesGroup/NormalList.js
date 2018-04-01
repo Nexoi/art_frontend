@@ -227,6 +227,7 @@ export default class NormalList extends PureComponent {
   }
   updateGroupName = () => {
     // console.log(this.state.addNewGroupInputValue);
+    const that = this;
     this.props.dispatch({
       type: 'resourcesgroup/changeName',
       payload: {
@@ -234,8 +235,9 @@ export default class NormalList extends PureComponent {
         groupId: this.state.currentSelectedGroupId,
         name: this.state.editGroupNameValue,
       },
+    }).then(() => {
+      that.closeEditGroupNameModal();
     });
-    this.closeEditGroupNameModal();
   }
   columns = [{
     title: '#ID',

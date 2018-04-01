@@ -3,6 +3,16 @@
  */
 import request from '../utils/request';
 
+export async function uploadFile(payload) {
+  const { file } = payload;
+  let fd = new FormData();
+  fd.append('file', file);
+  return request(`/api/admin/v1/upload`, {
+    method: 'POST',
+    body: fd,
+  })
+}
+
 /* 素材／文件夹 */
 export async function listFolders(type) {
   return request(`/api/admin/v1/material/folder/${type}`, {

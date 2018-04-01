@@ -123,11 +123,13 @@ export default class Picture extends PureComponent {
   }
 
   componentWillMount() {
+    const that = this;
     this.props.dispatch({
       type: 'picture/initFolders',
-    });
-    this.props.dispatch({
-      type: 'picture/initList',
+    }).then(() => {
+      that.props.dispatch({
+        type: 'picture/initList',
+      });
     });
   }
 
@@ -221,16 +223,18 @@ export default class Picture extends PureComponent {
       height: this.state.uploadProps.fileList[0].height,
     };
     // request by data
+    const that = this;
     this.props.dispatch({
       type: 'picture/addImage',
       payload: data,
+    }).then(() => {
+      // 下面两行会执行吗？
+      // message.info('添加成功！');
+      that.setState({
+        // ...this.props.picture,
+        modalVisible: false,
+      });
     });
-    // 下面两行会执行吗？
-    this.setState({
-      // ...this.props.picture,
-      modalVisible: false,
-    });
-    // message.info('添加成功！');
   };
   /* Modal 框 */
   handleModalCancel = () => {
@@ -366,7 +370,7 @@ export default class Picture extends PureComponent {
           <Select
             size="large"
             placeholder="选择一个素材组"
-            defaultValue={this.props.picture.currentFolder.name || '-'}
+            defaultValue={this.props.picture.currentFolder.name}
             style={{ width: 120, marginRight: 20 }}
             onChange={this.handleChange}
           >

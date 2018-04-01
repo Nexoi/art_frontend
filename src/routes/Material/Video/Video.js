@@ -299,15 +299,17 @@ export default class Video extends PureComponent {
       url: this.state.uploadProps.fileList[0].url,
     };
     // request by data
+    const that = this;
     this.props.dispatch({
       type: 'video/addVideo',
       payload: data,
+    }).then(() => {
+      // 下面两行会执行吗？
+      // message.info('添加成功！');
+      that.setState({
+        modalVisible: false,
+      });
     });
-    // 下面两行会执行吗？
-    this.setState({
-      modalVisible: false,
-    });
-    // message.info('添加成功！');
   };
   /* Modal 框 */
   handleModalCancel = () => {
@@ -420,7 +422,7 @@ export default class Video extends PureComponent {
           <Select
             size="large"
             placeholder="选择一个素材组"
-            defaultValue={this.props.video.currentFolder.name || '-'}
+            defaultValue={this.props.video.currentFolder.name}
             style={{ width: 120, marginRight: 20 }}
             onChange={this.handleChange}
           >

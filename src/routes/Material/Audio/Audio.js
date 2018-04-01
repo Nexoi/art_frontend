@@ -164,9 +164,10 @@ export default class Audio extends PureComponent {
   componentWillMount() {
     this.props.dispatch({
       type: 'audio/initFolders',
-    });
-    this.props.dispatch({
-      type: 'audio/initList',
+    }).then(() => {
+      this.props.dispatch({
+        type: 'audio/initList',
+      });
     });
   }
 
@@ -312,15 +313,17 @@ export default class Audio extends PureComponent {
       url: this.state.uploadProps.fileList[0].url,
     };
     // request by data
+    const that = this;
     this.props.dispatch({
       type: 'audio/addAudio',
       payload: data,
+    }).then(() => {
+      // 下面两行会执行吗？
+      that.setState({
+        modalVisible: false,
+      });
+      // message.info('添加成功！');
     });
-    // 下面两行会执行吗？
-    this.setState({
-      modalVisible: false,
-    });
-    // message.info('添加成功！');
   };
   /* Modal 框 */
   handleModalCancel = () => {
@@ -433,7 +436,7 @@ export default class Audio extends PureComponent {
           <Select
             size="large"
             placeholder="选择一个素材组"
-            defaultValue={this.props.audio.currentFolder.name || '-'}
+            defaultValue={this.props.audio.currentFolder.name}
             style={{ width: 120, marginRight: 20 }}
             onChange={this.handleChange}
           >

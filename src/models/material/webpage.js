@@ -8,6 +8,9 @@ import {
   updateWebPage,
   addResourceWebPage,
 } from '../../services/api_resourceitem';
+import {
+  uploadFile,
+} from '../../services/api_material';
 
 export default {
   namespace: 'webpage',
@@ -50,6 +53,18 @@ export default {
         message.info('修改成功！');
         yield put(routerRedux.goBack());
       }
+    },
+    *uploadFile({ payload }, { call, put }) {
+      const { file, success } = payload;
+      const response = yield call(uploadFile, { file });
+      if (response.status !== 200) {
+        message.error('文件上传失败！');
+      } else {
+        success({
+          url: response.data.url,
+        });
+      }
+      return response;
     },
   },
 

@@ -54,6 +54,7 @@ export default class BeaconEditForm extends PureComponent {
   }
   handleSubmit = (e) => {
     e.preventDefault();
+    const that = this;
     console.log(this.state.selectedMap);
     const { positionWidth, positionHeight } = this.state.sourceData;
     const showMapId = this.state.sourceData.showMap.id;
@@ -66,27 +67,29 @@ export default class BeaconEditForm extends PureComponent {
         //   type: 'beacon/addBeacon',
         //   payload: values,
         // });
+
+        const data = {
+          name: values.name,
+          uuid: values.uuid,
+          availableRange: values.availableRange,
+          majorValue: values.majorValue,
+          minorValue: values.minorValue,
+          status: values.status === undefined ? 'off' : values.status === true ? 'on' : 'off',
+          height: height === -1 ? positionHeight : parseInt(height, 10),
+          width: width === -1 ? positionWidth : parseInt(width, 10),
+          mapId: id === -1 ? showMapId : id,
+        }
+        this.props.dispatch({
+          type: 'beacon/updateBeacon',
+          payload: {
+            ...data,
+          },
+        }).then(() => {
+          const needReFlush = true;
+          that.props.onCloseModal(needReFlush); // 关闭自己
+        });
+        // console.log(data);
       }
-      const data = {
-        name: values.name,
-        uuid: values.uuid,
-        availableRange: values.availableRange,
-        majorValue: values.majorValue,
-        minorValue: values.minorValue,
-        status: values.status === undefined ? 'off' : values.status === true ? 'on' : 'off',
-        height: height === -1 ? positionHeight : parseInt(height, 10),
-        width: width === -1 ? positionWidth : parseInt(width, 10),
-        mapId: id === -1 ? showMapId : id,
-      }
-      this.props.dispatch({
-        type: 'beacon/updateBeacon',
-        payload: {
-          ...data,
-        },
-      });
-      // console.log(data);
-      const needReFlush = true;
-      this.props.onCloseModal(needReFlush); // 关闭自己
     });
   }
   openMapSelectModal = () => {

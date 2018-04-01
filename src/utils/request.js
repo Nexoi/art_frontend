@@ -1,5 +1,5 @@
 import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
 import { domain_api, domain_web } from './utils';
@@ -9,7 +9,7 @@ const codeMessage = {
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
   204: '删除数据成功。',
-  400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
+  400: '请求错误，请确认参数后重试',
   401: '用户没有权限（令牌、用户名、密码错误）。',
   403: '用户得到授权，但是访问是被禁止的。',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
@@ -96,6 +96,9 @@ export default function request(url, options) {
           type: 'login/logout',
         });
         return;
+      }
+      if (status === 400) {
+        message.warn(e.message);
       }
       if (status === 403) {
         dispatch(routerRedux.push('/exception/403'));

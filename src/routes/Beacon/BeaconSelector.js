@@ -68,6 +68,7 @@ export default class BeaconSelector extends PureComponent {
     return beacons.length === 0 ? { name: uuid } : beacons[0];
   }
   bindBeacons = (showId, groupId, uuids) => {
+    const that = this;
     if (uuids === undefined || uuids.length === 0) {
       return;
     }
@@ -82,9 +83,10 @@ export default class BeaconSelector extends PureComponent {
         groupId,
         uuids: uuidStr,
       },
+    }).then(() => {
+      // close modal
+      that.onCancel(true);
     });
-    // close modal
-    this.onCancel(true);
   }
   onOk = () => {
     const { showId, groupId, selectedUUIDs } = this.state;

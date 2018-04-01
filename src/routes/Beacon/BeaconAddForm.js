@@ -52,6 +52,7 @@ export default class BeaconEditForm extends PureComponent {
     },
   }
   handleSubmit = (e) => {
+    const that = this;
     e.preventDefault();
     console.log(this.state.selectedMap);
     const { width, height } = this.state.position;
@@ -63,27 +64,27 @@ export default class BeaconEditForm extends PureComponent {
         //   type: 'beacon/addBeacon',
         //   payload: values,
         // });
+        const data = {
+          name: values.name,
+          uuid: values.uuid,
+          availableRange: values.availableRange,
+          majorValue: values.majorValue,
+          minorValue: values.minorValue,
+          status: values.status === undefined ? 'off' : values.status === true ? 'on' : 'off',
+          height: parseInt(height, 10),
+          width: parseInt(width, 10),
+          mapId: id,
+        }
+        this.props.dispatch({
+          type: 'beacon/addBeacon',
+          payload: {
+            ...data,
+          },
+        }).then(() => {
+          const needReFlush = true;
+          that.props.onCloseModal(needReFlush); // 关闭自己
+        });
       }
-      const data = {
-        name: values.name,
-        uuid: values.uuid,
-        availableRange: values.availableRange,
-        majorValue: values.majorValue,
-        minorValue: values.minorValue,
-        status: values.status === undefined ? 'off' : values.status === true ? 'on' : 'off',
-        height: parseInt(height, 10),
-        width: parseInt(width, 10),
-        mapId: id,
-      }
-      this.props.dispatch({
-        type: 'beacon/addBeacon',
-        payload: {
-          ...data,
-        },
-      });
-      console.log(data);
-      const needReFlush = true;
-      this.props.onCloseModal(needReFlush); // 关闭自己
     });
   }
   openMapSelectModal = () => {

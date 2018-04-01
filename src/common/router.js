@@ -188,7 +188,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowPanel2Map')),
     },
     '/shows/:showId': {
-      component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/ResourcesGroupTabPanel')),
+      component: dynamicWrapper(app, ['resources/resourcesgroup', 'resources/wxasync'], () => import('../routes/ResourcesGroup/ResourcesGroupTabPanel')),
     },
     '/shows/:showId/all': {
       component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/NormalList')),
