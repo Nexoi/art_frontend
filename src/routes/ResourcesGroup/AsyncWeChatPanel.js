@@ -8,6 +8,7 @@ import { Button, Modal, Input, List } from 'antd';
 
 let isAsync = false; // 在更新中
 let countAsync = 0;
+const timeOut = [1, 1, 1, 1, 1, 2, 2, 3, 3, 5, 5, 7, 11, 13, 17, 23, 29];
 
 @connect(({ wxasync, loading }) => ({
   wxasync,
@@ -80,7 +81,6 @@ export default class AsyncWeChatPanel extends Component {
   startFlsuhResult = () => {
     if (isAsync && countAsync < 17) {
       // 刷新
-      countAsync += 1;
       this.props.dispatch({
         type: 'wxasync/listAsyncResult',
         payload: {
@@ -102,7 +102,8 @@ export default class AsyncWeChatPanel extends Component {
           });
         }
       });
-      setTimeout(this.startFlsuhResult, 1000)
+      setTimeout(this.startFlsuhResult, 1000 * timeOut[countAsync]); // 素数倍刷新频率机制
+      countAsync += 1;
     }
   }
 
