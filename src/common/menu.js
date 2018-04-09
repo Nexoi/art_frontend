@@ -26,11 +26,14 @@ const menuData = [{
   path: 'beacon',
   authority: 'admin',
   children: [{
-    name: 'Beacon',
+    name: '基础 Beacon 管理',
     path: 'beacon',
   }, {
-    name: '楼层地图',
-    path: 'shows',
+    name: '展览 Beacon 管理',
+    path: 'show-beacons',
+  }, {
+    name: '展览地图',
+    path: 'show-maps',
   }],
 }, {
   name: '用户管理',

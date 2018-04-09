@@ -155,7 +155,7 @@ export default {
       const { showId, groupId, uuids } = payload;
       const response = yield call(bindBeacons, { showId, groupId, uuids });
       if (response.status === 200) {
-        message.info('绑定成功！');
+        message.info('绑定信息修改成功！');
         const page = yield select(state => state.resourcesgroup.page.number);
         const size = yield select(state => state.resourcesgroup.page.size);
         const response2 = yield call(listResourceGroup, { showId, page, size });

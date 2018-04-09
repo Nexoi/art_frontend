@@ -17,8 +17,8 @@ import { transNum2ZhongWen } from '../../utils/utils';
 }))
 export default class ShowMap extends PureComponent {
   state = {
-    showId: this.props.match.url.slice(this.props.match.url.indexOf('/beacon/show/') + 13, this.props.match.url.indexOf('/maps/')),
-    showTitle: this.props.match.url.slice(this.props.match.url.indexOf('/maps/') + 6),
+    showId: this.props.match.url.slice(this.props.match.url.indexOf('/beacon/show/') + 13, this.props.match.url.indexOf('/beacons/')),
+    showTitle: this.props.match.url.slice(this.props.match.url.indexOf('/beacons/') + 9),
     viewModalVisible: false,
     viewModalImageUrl: '', // 图片预览
     modalVisible: false,
@@ -236,7 +236,7 @@ export default class ShowMap extends PureComponent {
     dataIndex: 'floor',
     key: 'floor',
     render: text => {
-      return (<label style={{ cursor: 'initial' }} size="small">{`${transNum2ZhongWen(text)}楼`}</label>);
+      return (<Button size="small">{`${transNum2ZhongWen(text)}楼`}</Button>);
     },
   }, {
     title: '地图尺寸（长）',
@@ -311,7 +311,7 @@ export default class ShowMap extends PureComponent {
     return (
       <div>
         <PageHeaderLayout
-          title={`「${this.state.showTitle}」展览地图`}
+          title={`「${this.state.showTitle}」展览 Beacon`}
           content={mainSearch}
         >
           <Card border="false">

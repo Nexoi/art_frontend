@@ -56,9 +56,8 @@ export default class BeaconEditForm extends PureComponent {
     e.preventDefault();
     const that = this;
     console.log(this.state.selectedMap);
-    const { showId } = this.state.sourceData;
     const { positionWidth, positionHeight } = this.state.sourceData;
-    const showMapId = this.state.sourceData.showMap === undefined ? -1 : this.state.sourceData.showMap.id;
+    const showMapId = this.state.sourceData.showMap.id;
     const { width, height } = this.state.position;
     const { id } = this.state.selectedMap;
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -80,15 +79,16 @@ export default class BeaconEditForm extends PureComponent {
           message.warn('MinorValue 必须在 0～9999 之间！');
           return;
         }
-        if ((parseInt(height, 10) < 0 || parseInt(width, 10) < 0) && this.state.sourceData.showMap === undefined) {
+        if (parseInt(height, 10) < 0 || parseInt(width, 10) < 0) {
           message.warn('请设定地图信息！');
           return;
         }
         const data = {
-          showId,
           name: values.name,
           uuid: values.uuid,
           availableRange: values.availableRange,
+          majorValue: values.majorValue,
+          minorValue: values.minorValue,
           status: values.status === undefined ? 'off' : values.status === true ? 'on' : 'off',
           height: height === -1 ? positionHeight : parseInt(height, 10),
           width: width === -1 ? positionWidth : parseInt(width, 10),
@@ -199,7 +199,6 @@ export default class BeaconEditForm extends PureComponent {
         footer={null}
       >
         <ShowMapSelector
-          showId={this.state.sourceData.showId}
           onSelect={this.selectMap}
         />
       </Modal>
@@ -241,7 +240,7 @@ export default class BeaconEditForm extends PureComponent {
               rules: [{
                 required: true, message: '请输入名称',
               }],
-              initialValue: this.state.sourceData.name || '未命名',
+              initialValue: this.state.sourceData.name,
             })(
               <Input placeholder="如：一层大门出口处" />
             )}
@@ -254,9 +253,9 @@ export default class BeaconEditForm extends PureComponent {
               rules: [{
                 required: true, message: '请输入UUID',
               }],
-              initialValue: this.state.sourceData.basicInfo.uuid,
+              initialValue: this.state.sourceData.uuid,
             })(
-              <Input disabled placeholder="12345678-abcd-88cc-1111aaaa2222" />
+              <Input placeholder="12345678-abcd-88cc-1111aaaa2222" />
             )}
           </FormItem>
           <FormItem
@@ -267,9 +266,9 @@ export default class BeaconEditForm extends PureComponent {
               rules: [{
                 required: true, message: '请输入 Major Value',
               }],
-              initialValue: this.state.sourceData.basicInfo.majorValue,
+              initialValue: this.state.sourceData.majorValue,
             })(
-              <InputNumber disabled placeholder="8000" />
+              <InputNumber placeholder="8000" />
             )}
           </FormItem>
           <FormItem
@@ -280,9 +279,9 @@ export default class BeaconEditForm extends PureComponent {
               rules: [{
                 required: true, message: '请输入 Minor Value',
               }],
-              initialValue: this.state.sourceData.basicInfo.minorValue,
+              initialValue: this.state.sourceData.minorValue,
             })(
-              <InputNumber disabled placeholder="8000" />
+              <InputNumber placeholder="8000" />
             )}
           </FormItem>
           <FormItem
@@ -293,7 +292,7 @@ export default class BeaconEditForm extends PureComponent {
               <div>
                 <Button placeholder="8888" onClick={this.openMapSelectModal}> 设置地图 </Button>
                 { this.state.selectedMap.id === -1
-                  ? (<div> {this.state.sourceData.showMap === undefined ? '' : `${this.state.sourceData.showMap.name}`} </div>)
+                  ? (<div> {this.state.sourceData.showMap.name} </div>)
                   : (<div> {this.state.selectedMap.name} </div>)}
               </div>
             )}

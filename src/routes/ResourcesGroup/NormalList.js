@@ -258,8 +258,8 @@ export default class NormalList extends PureComponent {
     key: 'beacon_',
     render: (text, record) => {
       return record.beacons === undefined || record.beacons.length === 0
-        ? (<Button size="small" type="default">未绑定</Button>)
-        : (<Button size="small" type="primary">已绑定</Button>)
+        ? (<Button size="small" style={{ cursor: 'initial' }} type="default">未绑定</Button>)
+        : (<Button size="small" style={{ cursor: 'initial' }} type="primary">已绑定</Button>)
     },
   }, {
     title: 'AR',
@@ -267,8 +267,8 @@ export default class NormalList extends PureComponent {
     key: 'ar_',
     render: (text, record) => {
       return record.ar === undefined || record.ar.id === undefined
-        ? (<Button size="small" type="default">未绑定</Button>)
-        : (<Button size="small" type="primary">已绑定</Button>)
+        ? (<Button size="small" style={{ cursor: 'initial' }} type="default">未绑定</Button>)
+        : (<Button size="small" style={{ cursor: 'initial' }} type="primary">已绑定</Button>)
     },
   }, {
     title: '浏览量',

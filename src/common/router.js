@@ -73,63 +73,6 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, ['seeuser/login'], () => import('../layouts/BasicLayout')),
     },
-    // '/dashboard/analysis': {
-    //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-    // },
-    // '/dashboard/monitor': {
-    //   component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
-    // },
-    // '/dashboard/workplace': {
-    //   component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
-    //   // hideInBreadcrumb: true,
-    //   // name: '工作台',
-    //   // authority: 'admin',
-    // },
-    // '/form/basic-form': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
-    // },
-    // '/form/step-form': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),
-    // },
-    // '/form/step-form/info': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
-    // },
-    // '/form/step-form/confirm': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
-    // },
-    // '/form/step-form/result': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
-    // },
-    // '/form/advanced-form': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
-    // },
-    // '/list/table-list': {
-    //   component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
-    // },
-    // '/list/basic-list': {
-    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
-    // },
-    // '/list/card-list': {
-    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/CardList')),
-    // },
-    // '/list/search': {
-    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/List')),
-    // },
-    // '/list/search/projects': {
-    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/Projects')),
-    // },
-    // '/list/search/applications': {
-    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/Applications')),
-    // },
-    // '/list/search/articles': {
-    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/Articles')),
-    // },
-    // '/profile/basic': {
-    //   component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/BasicProfile')),
-    // },
-    // '/profile/advanced': {
-    //   component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/AdvancedProfile')),
-    // },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
     },
@@ -179,25 +122,31 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['material/folder'], () => import('../routes/Material/ModalForFolder')),
     },
     '/beacon/beacon': {
-      component: dynamicWrapper(app, ['beacon/beacon'], () => import('../routes/Beacon/Beacon')),
+      component: dynamicWrapper(app, ['beacon/installBeacon'], () => import('../routes/BeaconInstalled/Beacon')),
     },
     '/beacon/show/:showId/maps/:showTitle': {
       component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowMap')),
     },
-    '/beacon/shows': {
+    '/beacon/show-maps': {
       component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowPanel2Map')),
+    },
+    '/beacon/show/:showId/beacons/:showTitle': {
+      component: dynamicWrapper(app, ['beacon/installBeacon2Show'], () => import('../routes/BeaconInstalled/ShowBeacon')),
+    },
+    '/beacon/show-beacons': {
+      component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/BeaconInstalled/ShowPanel2Beacon')),
     },
     '/shows/:showId': {
       component: dynamicWrapper(app, ['resources/resourcesgroup', 'resources/wxasync'], () => import('../routes/ResourcesGroup/ResourcesGroupTabPanel')),
     },
     '/shows/:showId/all': {
-      component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/NormalList')),
+      component: dynamicWrapper(app, ['resources/resourcesgroup', 'beacon/beacon'], () => import('../routes/ResourcesGroup/NormalList')),
     },
     '/shows/:showId/ar': {
       component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/ARList')),
     },
     '/shows/:showId/beacons': {
-      component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/BeaconList')),
+      component: dynamicWrapper(app, ['resources/resourcesgroup', 'beacon/beacon'], () => import('../routes/ResourcesGroup/BeaconList')),
     },
     '/shows/:showId/qrcode': {
       component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/QRCodeList')),

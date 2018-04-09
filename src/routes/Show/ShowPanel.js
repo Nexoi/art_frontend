@@ -135,16 +135,16 @@ export default class ShowPanel extends PureComponent {
           </Button>);
       } else {
         const items = record.showHallNames
-          .map(item => <Menu.Item key={item}>{item}</Menu.Item>);
+          .map(item => <Menu.Item style={{ cursor: 'initial' }} key={item}>{item}</Menu.Item>);
         return (
-          <Dropdown overlay={
+          <Dropdown style={{ cursor: 'initial' }} overlay={
             <Menu>
               {items}
             </Menu>}
           >
-            <Button style={{ marginLeft: 8 }}>
+            <label style={{ marginLeft: 8, display: 'inline-block', minWidth: 100 }}>
               查看展厅 <Icon type="down" />
-            </Button>
+            </label>
           </Dropdown>)
       }
     },

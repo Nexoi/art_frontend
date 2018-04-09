@@ -9,17 +9,22 @@ import styles from './beaconselector.less';
 
 @connect(({ beacon, loading }) => ({
   beacon,
-  loading: loading.effects['beacon/initList'],
+  loading: loading.effects['beacon/fetchList'],
 }))
 export default class BeaconSelector extends PureComponent {
   state = {
-    selectedUUIDs: this.props.initialData.map((item) => { return item.uuid; }) || [],
+    selectedUUIDs: this.props.initialData.map((item) => { return item.basicInfo.uuid; }) || [],
     showId: this.props.showId,
     groupId: this.props.groupId,
   }
   componentWillMount() {
     this.props.dispatch({
-      type: 'beacon/initList',
+      type: 'beacon/fetchList',
+      payload: {
+        showId: this.state.showId,
+        page: 0,
+        size: 10,
+      },
     });
   }
   /* 分页数据改变 */
@@ -27,6 +32,7 @@ export default class BeaconSelector extends PureComponent {
     this.props.dispatch({
       type: 'beacon/fetchList',
       payload: {
+        showId: this.state.showId,
         page: current - 1,
         size: pageSize,
       },
@@ -36,6 +42,7 @@ export default class BeaconSelector extends PureComponent {
     this.props.dispatch({
       type: 'beacon/fetchList',
       payload: {
+        showId: this.state.showId,
         page: page - 1,
         size: pageSize,
       },
@@ -70,7 +77,8 @@ export default class BeaconSelector extends PureComponent {
   bindBeacons = (showId, groupId, uuids) => {
     const that = this;
     if (uuids === undefined || uuids.length === 0) {
-      return;
+      // return;
+      uuids = [];
     }
     let uuidStr = '';
     for (let i = 0; i < uuids.length; i += 1) {
@@ -114,12 +122,13 @@ export default class BeaconSelector extends PureComponent {
               renderItem={item => (
                 <List.Item
                   className={styles.listItem}
-                  style={this.state.selectedUUIDs.indexOf(item.uuid) !== -1 ? { backgroundColor: '#DDDDDD' } : {}}
-                  onClick={e => this.selectIt(item.uuid)}
+                  style={this.state.selectedUUIDs.indexOf(item.basicInfo.uuid) !== -1 ? { backgroundColor: '#DDDDDD' }
+                  : item.resourcesGroupId === undefined ? {} : { backgroundColor: '#B0C4DE' }}
+                  onClick={e => this.selectIt(item.basicInfo.uuid)}
                 >
                   <List.Item.Meta
-                    title={item.name}
-                    description={item.uuid}
+                    title={item.name || '未命名'}
+                    description={item.basicInfo.uuid}
                   />
                 </List.Item>
               )}

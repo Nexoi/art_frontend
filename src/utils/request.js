@@ -28,10 +28,18 @@ function checkStatus(response) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
-  notification.error({
-    message: `请求错误 ${response.status}: ${response.url}`,
-    description: errortext,
-  });
+  if (response.status === 401) {
+    notification.error({
+      message: `无权限访！请使用正确的账号登录之后操作`,
+      description: errortext,
+    });
+    // message.warn('无权限访！请使用正确的账号登录之后操作');
+  } else {
+    notification.error({
+      message: `请求错误 ${response.status}: ${response.url}`,
+      description: errortext,
+    });
+  }
   const error = new Error(errortext);
   error.name = response.status;
   error.response = response;

@@ -14,12 +14,13 @@ import { getTimeString } from '../../utils/utils';
 }))
 export default class ShowMapSelector extends PureComponent {
   state = {
+    showId: this.props.showId,
   }
   componentWillMount() {
     this.props.dispatch({
       type: 'showmap/initList',
       payload: {
-        showId: 0,
+        showId: this.state.showId,
       },
     });
     console.log(this.props);
@@ -28,7 +29,7 @@ export default class ShowMapSelector extends PureComponent {
     this.props.dispatch({
       type: 'showmap/fetchList',
       payload: {
-        showId: 0,
+        showId: this.state.showId,
         page: current - 1,
         size: pageSize,
       },
@@ -38,7 +39,7 @@ export default class ShowMapSelector extends PureComponent {
     this.props.dispatch({
       type: 'showmap/fetchList',
       payload: {
-        showId: 0,
+        showId: this.state.showId,
         page: page - 1,
         size: pageSize,
       },
