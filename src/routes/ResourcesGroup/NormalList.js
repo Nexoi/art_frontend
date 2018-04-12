@@ -257,18 +257,60 @@ export default class NormalList extends PureComponent {
     dataIndex: 'name',
     key: 'beacon_',
     render: (text, record) => {
+      const stylesEn = {
+        display: 'block',
+        padding: '0 2px',
+        cursor: 'initial',
+        border: 'solid 1px #40a9ff',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+        backgroundColor: '#1890ff',
+        color: 'white',
+      }
+      const stylesUn = {
+        display: 'block',
+        padding: '0 2px',
+        cursor: 'initial',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+        color: 'rgba(0, 0, 0, 0.65)',
+        border: '1px solid transparent',
+        borderColor: '#d9d9d9',
+        backgroundColor: 'white',
+      }
       return record.beacons === undefined || record.beacons.length === 0
-        ? (<Button size="small" style={{ cursor: 'initial' }} type="default">未绑定</Button>)
-        : (<Button size="small" style={{ cursor: 'initial' }} type="primary">已绑定</Button>)
+        ? (<label size="small" style={{ ...stylesUn }} type="default">未绑定</label>)
+        : (<label size="small" style={{ ...stylesEn }} type="primary">已绑定</label>)
     },
   }, {
     title: 'AR',
     dataIndex: 'name',
     key: 'ar_',
     render: (text, record) => {
+      const stylesEn = {
+        display: 'block',
+        padding: '0 2px',
+        cursor: 'initial',
+        border: 'solid 1px #40a9ff',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+        backgroundColor: '#1890ff',
+        color: 'white',
+      };
+      const stylesUn = {
+        display: 'block',
+        padding: '0 2px',
+        cursor: 'initial',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+        color: 'rgba(0, 0, 0, 0.65)',
+        border: '1px solid transparent',
+        borderColor: '#d9d9d9',
+        backgroundColor: 'white',
+      };
       return record.ar === undefined || record.ar.id === undefined
-        ? (<Button size="small" style={{ cursor: 'initial' }} type="default">未绑定</Button>)
-        : (<Button size="small" style={{ cursor: 'initial' }} type="primary">已绑定</Button>)
+        ? (<label size="small" style={{ ...stylesUn }} type="default">未绑定</label>)
+        : (<label size="small" style={{ ...stylesEn }} type="primary">已绑定</label>)
     },
   }, {
     title: '浏览量',

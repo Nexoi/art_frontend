@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Checkbox, Alert } from 'antd';
+import { Checkbox, Alert, message } from 'antd';
 import Login from '../../components/Login';
 import styles from './Login.less';
 
@@ -14,24 +15,83 @@ export default class LoginPage extends Component {
   state = {
     type: 'account',
     autoLogin: true,
+    username: '',
+    password: '',
+  }
+
+  componentDidMount() {
+    const args = this.props.match.url.slice(this.props.match.url.indexOf('#/user/login') + 12);
+    if ((args === undefined || args.indexOf('rebuild=false') === -1)) {
+      // if (args !== '?rebuild=false') {
+      window.location.href='/#/user/login?rebuild=false';
+      // }
+    }
   }
 
   onTabChange = (type) => {
     this.setState({ type });
   }
+  //
+  // signin = () => {
+  //   const { username, password } = this.state;
+  //   if (username === undefined || username.length < 1) {
+  //     message.warn('请输入账户名');
+  //     return;
+  //   }
+  //   if (password === undefined || password.length < 1) {
+  //     message.warn('请输入密码');
+  //     return;
+  //   }
+  //   console.log({ username, password });
+  //   this.props.dispatch({
+  //     type: 'login/login',
+  //     payload: {
+  //       username,
+  //       password,
+  //       // type,
+  //       // rememberMe: autoLogin, // 记住我
+  //     },
+  //   });
+  // }
 
   handleSubmit = (err, values) => {
     const { type, autoLogin } = this.state;
-    if (!err) {
+    if (true) {
+      // if (!err) {
+      const { username, password } = values;
+      if (username === undefined || username.length < 1) {
+        message.warn('请输入账户名');
+        return;
+      }
+      if (password === undefined || password.length < 1) {
+        message.warn('请输入密码');
+        return;
+      }
+      // console.log({ username, password });
+      // console.log(this.props.dispatch);
       this.props.dispatch({
         type: 'login/login',
         payload: {
-          ...values,
-          type,
-          rememberMe: autoLogin, // 记住我
+          username,
+          password,
+          // type,
+          // rememberMe: autoLogin, // 记住我
         },
       });
     }
+  }
+
+  onUserNameChange =  (e) => {
+    const { value } = e.target;
+    this.setState({
+      username: value,
+    });
+  }
+  onPasswordChange =  (e) => {
+    const { value } = e.target;
+    this.setState({
+      password: value,
+    });
   }
 
   changeAutoLogin = (e) => {
@@ -62,12 +122,10 @@ export default class LoginPage extends Component {
             !login.submitting &&
             this.renderMessage('账户或密码错误')
           }
-          <UserName name="username" placeholder="请输入账号" />
-          <Password name="password" placeholder="请输入密码" />
-          {/*<div>*/}
-            {/*<Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>*/}
-          {/*</div>*/}
+          <UserName name="username" placeholder="请输入账号" onChange={this.onUserNameChange} />
+          <Password name="password" placeholder="请输入密码" onChange={this.onPasswordChange} />
           <Submit loading={submitting}>登录</Submit>
+          {/*<Submit onClick={this.signin}>登录</Submit>*/}
         </Login>
       </div>
     );

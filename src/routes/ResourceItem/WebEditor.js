@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import fetch from 'dva/fetch';
 import {
   Form, Input, DatePicker, Select, Button, Card, InputNumber, Radio, Icon, Tooltip, message,
 } from 'antd';
@@ -10,6 +9,7 @@ import 'braft-editor/dist/braft.css'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import MaterialSelecter from '../Material/MaterialSelecter';
 import { domain_api } from '../../utils/utils';
+import styles from './editor.less';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -66,7 +66,7 @@ export default class WebEditor extends PureComponent {
     this.setState({
       htmlContent: content,
     });
-    console.log(content)
+    // console.log(content)
   }
 
   handleRawChange = (rawContent) => {
@@ -182,6 +182,7 @@ export default class WebEditor extends PureComponent {
       initialContent: '<p>请在这里输入正文</p>',
       onChange: this.handleChange,
       onRawChange: this.handleRawChange,
+      onHTMLChange: this.handleHtmlChange,
       media: {
         allowPasteImage: true, // 是否允许直接粘贴剪贴板图片（例如QQ截图等）到编辑器
         image: true, // 开启图片插入功能
@@ -199,6 +200,14 @@ export default class WebEditor extends PureComponent {
           video: true,
         },
       },
+      // extendControls: [{
+      //   type: 'button',
+      //   text: 'Hello',
+      //   html: '<span style="color: #6a6f7b; margin: 0 6px;">一键居中</span>',
+      //   hoverTitle: 'Hello World!',
+      //   className: 'preview-button',
+      //   onClick: () => console.log('Hello World!')
+      // }],
     }
 
     const content = (

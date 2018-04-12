@@ -37,12 +37,18 @@ export default class MapPositionViewer extends PureComponent {
     pic.onload = function () {
       context2D.drawImage(pic, 36, 36, width, height);
       // 画 icon
-      context2D.font = '28px FontAwesome';
-      context2D.fillStyle = '#DD3322';
-      context2D.shadowOffsetX = 3;
-      context2D.shadowOffsetY = 3;
-      context2D.shadowColor = 'rgba(0,0,0,0.3)';
-      context2D.fillText('\uF041', x, y);
+      // context2D.font = '28px FontAwesome';
+      // context2D.fillStyle = '#DD3322';
+      // context2D.shadowOffsetX = 3;
+      // context2D.shadowOffsetY = 3;
+      // context2D.shadowColor = 'rgba(0,0,0,0.3)';
+      // context2D.fillText('\uF041', x, y);
+      // context2D.fillText('\uF041', x, y);
+      const picIcon = new Image();
+      picIcon.src = 'map-marker-alt.svg';
+      picIcon.onload = function () {
+        context2D.drawImage(picIcon, x, y - 25, 18, 25);
+      }
     };
   }
   getSuitRect = (width, height, positionWidth, positionHeight) => {

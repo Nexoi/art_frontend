@@ -44,6 +44,7 @@ export default class WebEditor2Edit extends PureComponent {
         itemId: this.state.itemId,
       },
     }).then(() => {
+      console.log(this.props.webpage.currentWebPage)
       this.setState({
         selectedImageUrl: this.props.webpage.currentWebPage.coverImageUrl,
         htmlContent: this.props.webpage.currentWebPage.contentHtml,
@@ -202,6 +203,7 @@ export default class WebEditor2Edit extends PureComponent {
     const editorProps = {
       height: 600,
       width: 600,
+      contentId: this.state.currentSourceData.resourceItemId,
       contentFormat: 'html',
       initialContent: this.state.currentSourceData.contentHtml || '请在这里输入正文',
       onChange: this.handleChange,

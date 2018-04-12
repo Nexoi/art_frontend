@@ -22,6 +22,8 @@ export default {
     },
     *login({ payload }, { call, put }) {
       const response = yield call(adminLogin, payload);
+      console.log('==================================  LOGIN ING  ====================================')
+      console.log(response);
       // Login successfully
       if (response.status === 200) {
         yield put({
@@ -36,6 +38,8 @@ export default {
         yield put(routerRedux.push('/'));
       // } else if (response.status === 400) {
       //   message.info(response.message);
+      } else {
+        message.warn(response.message);
       }
     },
     *logout(_, { put, select }) {
@@ -56,15 +60,16 @@ export default {
         });
         reloadAuthorized();
         yield put(routerRedux.push('/user/login'));
+        yield put(routerRedux.push('/user/login'));
       }
     },
   },
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      console.log('======')
-      console.log(payload)
+      console.log('===登录状态修改！===')
       setAuthority(payload.currentAuthority);
+      // setAuthority(undefined);
       return {
         ...state,
         status: payload.status,

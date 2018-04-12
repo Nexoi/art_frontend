@@ -34,7 +34,7 @@ export default class Beacon extends PureComponent {
       type: 'beacon/changeStatus',
       payload: {
         showId: this.state.showId,
-        uuid: record.basicInfo.uuid,
+        uuid: record.basicInfo.id,
       },
     });
   }
@@ -118,10 +118,19 @@ export default class Beacon extends PureComponent {
     dataIndex: 'availableRange',
     key: 'availableRange',
     render: (text) => {
+      const styles = {
+        display: 'block',
+        padding: '0 2px',
+        cursor: 'initial',
+        border: 'solid 1px #40a9ff',
+        color: '#40a9ff',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+      }
       if (text === 'one') {
-        return (<Button size="small" type="primary" style={{ cursor: 'initial' }} ghost> 一米 </Button>);
+        return (<label size="small" type="primary" style={styles}> 一米 </label>);
       } else {
-        return (<Button size="small" type="primary" style={{ cursor: 'initial' }} ghost> 五米 </Button>);
+        return (<label size="small" type="primary" style={styles}> 五米 </label>);
       }
     },
   }, {
@@ -129,11 +138,20 @@ export default class Beacon extends PureComponent {
     dataIndex: 'resourcesGroupId',
     key: 'resourcesGroupId',
     render: (text, record) => {
+      const styles = {
+        display: 'block',
+        padding: '0 2px',
+        cursor: 'initial',
+        border: 'solid 1px #40a9ff',
+        color: '#40a9ff',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+      }
       if (text === undefined) {
-        return (<Button size="small" type="primary" style={{ cursor: 'initial' }} ghost> 未绑定 </Button>);
+        return (<label size="small" type="primary" style={styles}> 未绑定 </label>);
       } else {
         return record.resourceGroup === undefined
-          ? (<Button size="small" type="primary" style={{ cursor: 'initial' }} ghost> 已绑定 </Button>)
+          ? (<label size="small" type="primary" style={styles}> 已绑定 </label>)
           : (<a href={`#/show-resources/${record.resourcesGroupId}/items/${record.resourceGroup.name}`}
                 size="small"
                 type="primary"

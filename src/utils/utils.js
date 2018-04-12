@@ -1,8 +1,12 @@
 import moment from 'moment';
 
-export const domain_api = 'http://art.seeuio.com';
+// export const domain_api = 'http://art.seeuio.com';
+//
+// export const domain_web = 'http://artshow.seeuio.com';
 
-export const domain_web = 'http://artshow.seeuio.com';
+export const domain_api = 'http://api.vvaryun.com';
+
+export const domain_web = 'http://web.vvaryun.com';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;

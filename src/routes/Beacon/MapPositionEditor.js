@@ -26,12 +26,18 @@ export default class MapPositionEditor extends PureComponent {
     }
     // 初始化 icon
     if (this.state.width !== 0) {
-      context2D.font = '28px FontAwesome';
-      context2D.fillStyle = '#DD3322';
-      context2D.shadowOffsetX = 3;
-      context2D.shadowOffsetY = 3;
-      context2D.shadowColor = 'rgba(0,0,0,0.3)';
-      context2D.fillText('\uF041', this.state.width * suit.width, this.state.height * suit.height);
+      // context2D.font = '28px FontAwesome';
+      // context2D.fillStyle = '#DD3322';
+      // context2D.shadowOffsetX = 3;
+      // context2D.shadowOffsetY = 3;
+      // context2D.shadowColor = 'rgba(0,0,0,0.3)';
+      // context2D.fillText('\uF041', this.state.width * suit.width, this.state.height * suit.height);
+      // context2D.fillText('\uF041', this.state.width * suit.width, this.state.height * suit.height);
+      const picIcon = new Image();
+      picIcon.src = 'map-marker-alt.svg';
+      picIcon.onload = function () {
+        context2D.drawImage(picIcon, this.state.width * suit.width, this.state.height * suit.height - 25, 18, 25);
+      }
     }
     canvas.addEventListener('mousedown', (e) => {
       // 清空画布内容
@@ -48,12 +54,19 @@ export default class MapPositionEditor extends PureComponent {
       }
       const { x, y } = getPointOnCanvas();
       console.log({ x, y });
-      context2D.font = '28px FontAwesome';
-      context2D.fillStyle = '#DD3322';
-      context2D.shadowOffsetX = 3;
-      context2D.shadowOffsetY = 3;
-      context2D.shadowColor = 'rgba(0,0,0,0.3)';
-      context2D.fillText('\uF041', x, y);
+      // context2D.font = '28px FontAwesome';
+      // context2D.fillStyle = '#DD3322';
+      // context2D.shadowOffsetX = 3;
+      // context2D.shadowOffsetY = 3;
+      // context2D.shadowColor = 'rgba(0,0,0,0.3)';
+      // context2D.fillText('\uF041', x, y);
+      // context2D.fillText('\uF041', x, y);
+      // picIcon SVG
+      const picIcon = new Image();
+      picIcon.src = 'map-marker-alt.svg';
+      picIcon.onload = function () {
+        context2D.drawImage(picIcon, x, y - 25, 18, 25);
+      }
       // 外界回调
       if (this.props.onSelect !== undefined) {
         this.props.onSelect(x / suit.width, y / suit.height);

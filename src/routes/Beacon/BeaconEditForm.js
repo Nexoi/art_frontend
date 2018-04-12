@@ -59,6 +59,8 @@ export default class BeaconEditForm extends PureComponent {
     const { showId } = this.state.sourceData;
     const { positionWidth, positionHeight } = this.state.sourceData;
     const showMapId = this.state.sourceData.showMap === undefined ? -1 : this.state.sourceData.showMap.id;
+    const beaconId = this.state.sourceData.basicInfo === undefined? -1 : this.state.sourceData.basicInfo.id;
+    const beaconStatus = this.state.sourceData.basicInfo === undefined? 'off' : this.state.sourceData.basicInfo.status;
     const { width, height } = this.state.position;
     const { id } = this.state.selectedMap;
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -87,9 +89,10 @@ export default class BeaconEditForm extends PureComponent {
         const data = {
           showId,
           name: values.name,
-          uuid: values.uuid,
+          // uuid: values.uuid,
+          uuid: beaconId,
           availableRange: values.availableRange,
-          status: values.status === undefined ? 'off' : values.status === true ? 'on' : 'off',
+          status: values.status === undefined ? beaconStatus : values.status === true ? 'on' : 'off',
           height: height === -1 ? positionHeight : parseInt(height, 10),
           width: width === -1 ? positionWidth : parseInt(width, 10),
           mapId: id === -1 ? showMapId : id,

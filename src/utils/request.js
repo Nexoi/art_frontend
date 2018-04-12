@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 import { notification, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
-import { domain_api, domain_web } from './utils';
+import { domain_api } from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -34,6 +34,7 @@ function checkStatus(response) {
       description: errortext,
     });
     // message.warn('无权限访！请使用正确的账号登录之后操作');
+    // return response;
   } else {
     notification.error({
       message: `请求错误 ${response.status}: ${response.url}`,
@@ -109,6 +110,10 @@ export default function request(url, options) {
       const { dispatch } = store;
       const status = e.name;
       if (status === 401) {
+        dispatch({
+          type: 'login/logout',
+        });
+        console.log('logout 第二遍！')
         dispatch({
           type: 'login/logout',
         });

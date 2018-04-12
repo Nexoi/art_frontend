@@ -1,12 +1,12 @@
 {
-  "name": "ant-design-pro",
+  "name": "art-show-admin-end",
   "version": "1.1.0",
-  "description": "An out-of-box UI solution for enterprise applications",
+  "description": "广东美术馆智能导览系统",
   "private": true,
   "scripts": {
     "precommit": "npm run lint-staged",
-    "start": "cross-env DISABLE_ESLINT=true roadhog dev",
-    "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true roadhog dev",
+    "start": "cross-env DISABLE_ESLINT=true roadhog server",
+    "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true roadhog server",
     "build": "cross-env DISABLE_ESLINT=true roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true roadhog build",
