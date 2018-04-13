@@ -178,6 +178,7 @@ export default class ShowMap extends PureComponent {
     this.props.dispatch({
       type: 'showmap/deleteShowMap',
       payload: {
+        showId: this.state.showId,
         mapId: id,
       },
     });

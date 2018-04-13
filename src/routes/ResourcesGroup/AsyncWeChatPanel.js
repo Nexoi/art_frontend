@@ -132,10 +132,11 @@ export default class AsyncWeChatPanel extends Component {
       }).then(() => {
         const list = this.props.wxasync.list.filter(it => it.status === 'ING');
         if (list.length === 0) {
-          // 停止更新
+          // 停止更新 & 刷新页面
           this.setState({
             isSynchronizing: false,
             currentBtnTitle: '已完成（点击可再次同步）',
+            currentList: this.props.wxasync.list.slice(0, 8),
           });
           isAsync = false;
         } else {

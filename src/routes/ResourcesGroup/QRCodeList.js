@@ -37,11 +37,11 @@ export default class QRCodeList extends PureComponent {
   handleMenuClick = (record, e) => {
     if (e.key === '1') {
       // 打开二维码 modal
-      console.log(`${domain_api}/api/v1/show/resources/${record.id}?type=QRCODE`)
+      console.log(`${domain_api}/api/v1/show/${record.showId}/resources/${record.id}?type=QRCODE`)
       this.setState({
         qrcodeModalVisible: true,
         currentSelectedTitle: `${record.name}`,
-        currentSelectedUrl: `${domain_api}/api/v1/show/resources/${record.id}?type=QRCODE`,
+        currentSelectedUrl: `${domain_api}/api/v1/show/${record.showId}/resources/${record.id}?type=QRCODE`,
       })
     }
   }

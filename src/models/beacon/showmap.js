@@ -76,7 +76,7 @@ export default {
       }
     },
     *deleteShowMap({ payload }, { call, put, select }) {
-      const { mapId } = payload;
+      const { showId, mapId } = payload;
       const response = yield call(deleteShowMap, mapId);
       if (response.status === 200) {
         message.info('删除成功！');
