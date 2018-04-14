@@ -372,6 +372,7 @@ export default class NormalList extends PureComponent {
         onCancel={this.closeARSelector}
         isSingleSelect="true"
         availableType={['picture']}
+        showId={this.state.showId}
       />);
     const beaconSelector = (
       <BeaconSelector

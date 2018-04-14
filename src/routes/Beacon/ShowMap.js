@@ -308,6 +308,7 @@ export default class ShowMap extends PureComponent {
         onCancel={this.closeSelectorModal}
         isSingleSelect="true"
         availableType={['picture']}
+        showId={this.state.showId}
       />);
     return (
       <div>

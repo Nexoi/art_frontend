@@ -17,14 +17,39 @@ import ModalForFolder from '../ModalForFolder';
 export default class VideoSelector extends PureComponent {
   state = {
     selectedRowKeys: [],
+    showId: this.props.showId,
+    folderId: undefined,
   }
 
   componentWillMount() {
     this.props.dispatch({
       type: 'video/initFolders',
-    });
-    this.props.dispatch({
-      type: 'video/initList',
+    }).then(() => {
+      // 确定加载模式，是否只列出该展览数据
+      const { showId } = this.state;
+      if (showId === undefined) {
+        return;
+      }
+      const folders = this.props.picture.folders;
+      const theFolder = folders.filter(it => parseInt(it.showId) === parseInt(showId));
+      if (theFolder === undefined || theFolder.length === 0) {
+        return;
+      }
+      const folderId = theFolder[0].id;
+      if (folderId === undefined || folderId <= 0) {
+        this.setState({
+          folderId: undefined,
+        });
+        // 加载全部数据
+        this.props.dispatch({
+          type: 'video/initList',
+        });
+      } else {
+        this.setState({
+          folderId,
+        });
+        this.handleChange(folderId); // 加载某一个文件夹下的数据
+      }
     });
   }
 
@@ -39,7 +64,7 @@ export default class VideoSelector extends PureComponent {
       payload: {
         folderId: folder,
         page: 0,
-        size: this.props.video.page.size,
+        size: this.props.video.page.size || 10,
       },
     });
   };
@@ -132,7 +157,7 @@ export default class VideoSelector extends PureComponent {
     return (
       <div>
         <Card border="false">
-          {mainSearch}
+          { this.state.folderId === undefined ? mainSearch : ''}
           <Table
             rowSelection={rowSelection}
             rowKey="id"

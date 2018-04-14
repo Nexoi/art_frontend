@@ -12,6 +12,7 @@ export default class MaterialSelecter extends PureComponent {
     type: 'audio', // default
     selectedItems: [],
     availableType: ['audio', 'picture', 'video'],
+    showId: this.props.showId,
   }
 
   componentWillMount() {
@@ -65,6 +66,7 @@ export default class MaterialSelecter extends PureComponent {
             {this.state.availableType.indexOf('audio') !== -1 && (
               <Tabs.TabPane tab="音频" key="audio">
                 <AudioSelector
+                  showId={this.state.showId}
                   onSelectedChange={this.onSelectedChange}
                 />
               </Tabs.TabPane>
@@ -72,6 +74,7 @@ export default class MaterialSelecter extends PureComponent {
             {this.state.availableType.indexOf('picture') !== -1 && (
               <Tabs.TabPane tab="图片" key="picture">
                 <PictureSelector
+                  showId={this.state.showId}
                   onSelectedChange={this.onSelectedChange}
                 />
               </Tabs.TabPane>
@@ -79,6 +82,7 @@ export default class MaterialSelecter extends PureComponent {
             {this.state.availableType.indexOf('video') !== -1 && (
               <Tabs.TabPane tab="视频" key="video">
                 <VideoSelector
+                  showId={this.state.showId}
                   onSelectedChange={this.onSelectedChange}
                 />
               </Tabs.TabPane>

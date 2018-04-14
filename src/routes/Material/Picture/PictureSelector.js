@@ -16,14 +16,43 @@ import ModalForFolder from '../ModalForFolder';
 export default class PictureSelector extends PureComponent {
   state = {
     selectedPictureIds: [],
+    showId: this.props.showId,
+    folderId: undefined,
   }
 
   componentWillMount() {
+    console.log('======folder======')
+    console.log(this.state);
+    console.log('======folder======^')
     this.props.dispatch({
       type: 'picture/initFolders',
-    });
-    this.props.dispatch({
-      type: 'picture/initList',
+    }).then(() => {
+      // 确定加载模式，是否只列出该展览数据
+      const { showId } = this.state;
+      if (showId === undefined) {
+        return;
+      }
+      const folders = this.props.picture.folders;
+      const theFolder = folders.filter(it => parseInt(it.showId) === parseInt(showId));
+      if (theFolder === undefined || theFolder.length === 0) {
+        return;
+      }
+      const folderId = theFolder[0].id;
+      if (folderId === undefined || folderId <= 0) {
+        this.setState({
+          folderId: undefined,
+        });
+        // 加载全部数据
+        this.props.dispatch({
+          type: 'picture/initList',
+        });
+      } else {
+        this.setState({
+          folderId,
+        });
+        this.handleChange(folderId); // 加载某一个文件夹下的数据
+      }
+      // console.log(folderId)
     });
   }
 
@@ -41,7 +70,7 @@ export default class PictureSelector extends PureComponent {
       payload: {
         folderId: folder,
         page: 0,
-        size: this.props.picture.page.size,
+        size: this.props.picture.page.size || 10,
       },
     });
   };
@@ -99,7 +128,7 @@ export default class PictureSelector extends PureComponent {
           <Select
             size="large"
             placeholder="选择一个素材组"
-            defaultValue={this.props.picture.currentFolder.name || '-'}
+            defaultValue={this.props.picture.currentFolder.name || '选择一个素材组'}
             style={{ width: 120, marginRight: 20 }}
             onChange={this.handleChange}
           >
@@ -112,7 +141,7 @@ export default class PictureSelector extends PureComponent {
     return (
       <div>
         <Card border="false">
-          {mainSearch}
+          { this.state.folderId === undefined ? mainSearch : ''}
           <Checkbox.Group
             onChange={this.onCheckChange}
             value={this.state.selectedPictureIds}
