@@ -130,9 +130,9 @@ export default class ShowPanel extends PureComponent {
     render: (text, record) => {
       if (record.showHallNames === undefined) {
         return (
-          <Button style={{ marginLeft: 8 }}>
+          <label style={{ marginLeft: 8 }}>
             未添加展厅
-          </Button>);
+          </label>);
       } else {
         const items = record.showHallNames
           .map(item => <Menu.Item style={{ cursor: 'initial' }} key={item}>{item}</Menu.Item>);

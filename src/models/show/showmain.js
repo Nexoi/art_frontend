@@ -47,8 +47,8 @@ export default {
         startTime,
         endTime,
         introduceText,
-        imageHeight,
-        imageWidth,
+        // imageHeight,
+        // imageWidth,
         imageUrl,
         imageThumbUrl,
       } = payload;
@@ -58,8 +58,8 @@ export default {
           startTime,
           endTime,
           introduceText,
-          imageHeight,
-          imageWidth,
+          imageHeight: 0,
+          imageWidth: 0,
           imageUrl,
           imageThumbUrl, }
       );
@@ -82,8 +82,8 @@ export default {
         startTime,
         endTime,
         introduceText,
-        imageHeight,
-        imageWidth,
+        // imageHeight,
+        // imageWidth,
         imageUrl,
         imageThumbUrl,
       } = payload;
@@ -94,8 +94,8 @@ export default {
           startTime,
           endTime,
           introduceText,
-          imageHeight,
-          imageWidth,
+          imageHeight: 0,
+          imageWidth: 0,
           imageUrl,
           imageThumbUrl, }
       );
@@ -138,6 +138,9 @@ export default {
             data: response2.data,
           },
         });
+      }
+      if (response.status === 423) {
+        message.warn('删除失败！该展览含有其他未删除资源需要手动清理')
       }
     },
   },

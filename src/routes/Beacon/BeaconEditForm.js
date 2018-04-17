@@ -92,7 +92,8 @@ export default class BeaconEditForm extends PureComponent {
           // uuid: values.uuid,
           uuid: beaconId,
           availableRange: values.availableRange,
-          status: values.status === undefined ? beaconStatus : values.status === true ? 'on' : 'off',
+          // status: values.status === undefined ? beaconStatus : values.status === true ? 'on' : 'off',
+          status: beaconStatus,
           height: height === -1 ? positionHeight : parseInt(height, 10),
           width: width === -1 ? positionWidth : parseInt(width, 10),
           mapId: id === -1 ? showMapId : id,
@@ -315,26 +316,26 @@ export default class BeaconEditForm extends PureComponent {
               </Radio.Group>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={
-              <span>
-                开关
-                <em className={styles.optional}>
-                  <span style={{ width: 8 }}> {' '} </span>
-                  <Tooltip title="默认设置为关，需要开启后才能正常使用">
-                    <Icon type="info-circle-o" style={{ marginRight: 4 }} />
-                  </Tooltip>
-                </em>
-              </span>
-            }
-          >
-            {getFieldDecorator('status')(
-              this.state.sourceData.status === 'on'
-                ? <Switch defaultChecked onChange={this.onSwitch} />
-                : <Switch onChange={this.onSwitch} />
-            )}
-          </FormItem>
+          {/*<FormItem*/}
+            {/*{...formItemLayout}*/}
+            {/*label={*/}
+              {/*<span>*/}
+                {/*开关*/}
+                {/*<em className={styles.optional}>*/}
+                  {/*<span style={{ width: 8 }}> {' '} </span>*/}
+                  {/*<Tooltip title="默认设置为关，需要开启后才能正常使用">*/}
+                    {/*<Icon type="info-circle-o" style={{ marginRight: 4 }} />*/}
+                  {/*</Tooltip>*/}
+                {/*</em>*/}
+              {/*</span>*/}
+            {/*}*/}
+          {/*>*/}
+            {/*{getFieldDecorator('status')(*/}
+              {/*this.state.sourceData.status === 'on'*/}
+                {/*? <Switch defaultChecked onChange={this.onSwitch} />*/}
+                {/*: <Switch onChange={this.onSwitch} />*/}
+            {/*)}*/}
+          {/*</FormItem>*/}
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button type="primary" htmlType="submit" loading={submitting}>
               保存

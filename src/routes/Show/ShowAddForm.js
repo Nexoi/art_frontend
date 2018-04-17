@@ -18,7 +18,7 @@ export default class ShowAddForm extends PureComponent {
     selectorModalVisible: false,
     uploadProps: {
       name: 'file',
-      action: `${domain_api}/api/admin/v1/upload/image`,
+      action: `${domain_api}/api/admin/v1/upload`,
       fileList: [],
     },
     uploadFileAvailable: false,
@@ -41,10 +41,10 @@ export default class ShowAddForm extends PureComponent {
           introduceText: values.introduceText,
           startTime: values.date[0].format('YYYY-MM-DD'),
           endTime: values.date[1].format('YYYY-MM-DD'),
-          imageHeight: this.state.uploadProps.fileList[0].height,
-          imageWidth: this.state.uploadProps.fileList[0].width,
+          // imageHeight: this.state.uploadProps.fileList[0].height,
+          // imageWidth: this.state.uploadProps.fileList[0].width,
           imageUrl: this.state.uploadProps.fileList[0].url,
-          imageThumbUrl: this.state.uploadProps.fileList[0].thumbUrl,
+          imageThumbUrl: `${this.state.uploadProps.fileList[0].url}?imageView2/2/w/300`,
         }
         const that = this;
         this.props.dispatch({
@@ -78,9 +78,9 @@ export default class ShowAddForm extends PureComponent {
       if (file.response) {
         // Component will show file.url as link
         file.url = file.response.data.url;
-        file.thumbUrl = file.response.data.thumbUrl;
-        file.width = file.response.data.width;
-        file.height = file.response.data.height;
+        // file.thumbUrl = file.response.data.thumbUrl;
+        // file.width = file.response.data.width;
+        // file.height = file.response.data.height;
       }
       return file;
     });

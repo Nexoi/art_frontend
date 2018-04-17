@@ -2,7 +2,7 @@
  * Created by neo on 15/3/2018.
  */
 import React, { PureComponent } from 'react';
-import { Switch, Card, Table, Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
+import { Switch, Card, Table, Modal, message, Tooltip, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import { getTimeString } from '../../utils/utils';
 import BeaconEditForm from '../Beacon/BeaconEditForm';
@@ -30,6 +30,14 @@ export default class Beacon extends PureComponent {
     });
   }
   onSwitch = (record, e) => {
+    if (record.resourcesGroupId === undefined) {
+      message.warn('请先绑定一个资源组');
+      return;
+    }
+    if (record.showMap === undefined) {
+      message.warn('请先将 Beacon 添加到地图');
+      return;
+    }
     this.props.dispatch({
       type: 'beacon/changeStatus',
       payload: {
@@ -163,10 +171,21 @@ export default class Beacon extends PureComponent {
     dataIndex: 'status',
     key: 'status',
     render: (text, record) => {
-      if (text === 'on') {
-        return (<Switch defaultChecked onChange={e => this.onSwitch(record, e)} />);
+      const disabled = record.resourcesGroupId === undefined || record.showMap === undefined;
+      if (disabled) {
+        return (
+          <Tooltip title="请先绑定一个资源组并为该 Beacon 设定地图信息" overlay="">
+            <div>
+              { text === 'on'
+                ? (<Switch defaultChecked disabled={true} onChange={e => this.onSwitch(record, e)} />)
+                : (<Switch disabled={true} onChange={e => this.onSwitch(record, e)} />)
+              }
+            </div>
+          </Tooltip>);
       } else {
-        return (<Switch onChange={e => this.onSwitch(record, e)} />);
+        return text === 'on'
+          ? (<Switch defaultChecked disabled={false} onChange={e => this.onSwitch(record, e)} />)
+          : (<Switch disabled={false} onChange={e => this.onSwitch(record, e)} />)
       }
     },
   }, {

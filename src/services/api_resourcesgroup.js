@@ -78,10 +78,10 @@ export async function removeAR(payload) {
 }
 
 export async function bindBeacons(payload) {
-  const { showId, groupId, uuids } = payload;
-  // uuids = '1232423,3124323,132432,23144432' split by ','
+  const { showId, groupId, beaconIds } = payload;
+  // beaconIds = '1232423,3124323,132432,23144432' split by ','
   const showId2 = showId === undefined || showId < 1 ? 0 : showId;
-  return request(`/api/admin/v1/show/${showId2}/resources-group/${groupId}/bind-beacons?uuids=${uuids}`, {
+  return request(`/api/admin/v1/show/${showId2}/resources-group/${groupId}/bind-beacons?beaconIds=${beaconIds}`, {
     method: 'PUT',
   });
 }

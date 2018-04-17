@@ -67,9 +67,9 @@ export default class ShowPanel2Map extends PureComponent {
     render: (text, record) => {
       if (record.showHallNames === undefined) {
         return (
-          <Button style={{ marginLeft: 8 }}>
+          <label style={{ marginLeft: 8 }}>
             未添加展厅
-          </Button>);
+          </label>);
       } else {
         const items = record.showHallNames
           .map(item => <Menu.Item key={item}>{item}</Menu.Item>);
@@ -79,9 +79,9 @@ export default class ShowPanel2Map extends PureComponent {
               {items}
             </Menu>}
           >
-            <Button style={{ marginLeft: 8 }}>
+            <label style={{ marginLeft: 8 }}>
               查看展厅 <Icon type="down" />
-            </Button>
+            </label>
           </Dropdown>)
       }
     },

@@ -13,7 +13,7 @@ import styles from './beaconselector.less';
 }))
 export default class BeaconSelector extends PureComponent {
   state = {
-    selectedUUIDs: this.props.initialData.map((item) => { return item.basicInfo.uuid; }) || [],
+    selectedUUIDs: this.props.initialData.map((item) => { return item.basicInfo.id; }) || [], // 不再以 uuid 为键
     showId: this.props.showId,
     groupId: this.props.groupId,
   }
@@ -53,43 +53,65 @@ export default class BeaconSelector extends PureComponent {
       this.props.closeSelector(needReFlush);
     }
   }
-  selectIt = (uuid) => {
-    if (this.state.selectedUUIDs.indexOf(uuid) !== -1) {
+  // selectIt = (uuid) => {
+  //   if (this.state.selectedUUIDs.indexOf(uuid) !== -1) {
+  //     // 删去
+  //     const uuids = this.state.selectedUUIDs.filter((item) => { return item !== uuid; })
+  //     this.setState({
+  //       selectedUUIDs: uuids,
+  //     });
+  //   } else {
+  //     // 添加
+  //     const uuids = this.state.selectedUUIDs.concat([uuid]);
+  //     this.setState({
+  //       selectedUUIDs: uuids,
+  //     });
+  //   }
+  // }
+  selectIt = (id) => {
+    if (this.state.selectedUUIDs.indexOf(id) !== -1) {
       // 删去
-      const uuids = this.state.selectedUUIDs.filter((item) => { return item !== uuid; })
+      const uuids = this.state.selectedUUIDs.filter((item) => { return item !== id; })
       this.setState({
         selectedUUIDs: uuids,
       });
     } else {
       // 添加
-      const uuids = this.state.selectedUUIDs.concat([uuid]);
+      const uuids = this.state.selectedUUIDs.concat([id]);
       this.setState({
         selectedUUIDs: uuids,
       });
     }
   }
-  getBeaconByUUID = (uuid) => {
+  // getBeaconByUUID = (uuid) => {
+  //   const beacons = this.props.beacon.list.filter(
+  //     (item) => { return item.uuid === uuid; }
+  //   );
+  //   return beacons.length === 0 ? { name: uuid } : beacons[0];
+  // }
+  getBeaconByUUID = (id) => {
     const beacons = this.props.beacon.list.filter(
-      (item) => { return item.uuid === uuid; }
+      (item) => { return item.basicInfo.id === id; }
     );
-    return beacons.length === 0 ? { name: uuid } : beacons[0];
+    return beacons.length === 0 ? { name: 'UNKNOW' } : beacons[0].name === undefined ? { name: '未命名' } : beacons[0];
   }
-  bindBeacons = (showId, groupId, uuids) => {
+  bindBeacons = (showId, groupId, beaconIds) => {
     const that = this;
-    if (uuids === undefined || uuids.length === 0) {
+    if (beaconIds === undefined || beaconIds.length === 0) {
       // return;
-      uuids = [];
+      beaconIds = [];
     }
-    let uuidStr = '';
-    for (let i = 0; i < uuids.length; i += 1) {
-      uuidStr += i === uuids.length - 1 ? `${uuids[i]}` : `${uuids[i]},`;
+    let beaconIdStr = '';
+    for (let i = 0; i < beaconIds.length; i += 1) {
+      beaconIdStr += i === beaconIds.length - 1 ? `${beaconIds[i]}` : `${beaconIds[i]},`;
     }
     this.props.dispatch({
       type: 'resourcesgroup/bindBeacons',
       payload: {
         showId,
         groupId,
-        uuids: uuidStr,
+        // uuids: uuidStr,
+        beaconIds: beaconIdStr,
       },
     }).then(() => {
       // close modal
@@ -122,9 +144,9 @@ export default class BeaconSelector extends PureComponent {
               renderItem={item => (
                 <List.Item
                   className={styles.listItem}
-                  style={this.state.selectedUUIDs.indexOf(item.basicInfo.uuid) !== -1 ? { backgroundColor: '#DDDDDD' }
+                  style={this.state.selectedUUIDs.indexOf(item.basicInfo.id) !== -1 ? { backgroundColor: '#DDDDDD' }
                   : item.resourcesGroupId === undefined ? {} : { backgroundColor: '#B0C4DE' }}
-                  onClick={e => this.selectIt(item.basicInfo.uuid)}
+                  onClick={e => this.selectIt(item.basicInfo.id)}
                 >
                   <List.Item.Meta
                     title={item.name || '未命名'}
@@ -144,12 +166,12 @@ export default class BeaconSelector extends PureComponent {
               bordered="true"
               itemLayout="horizontal"
               dataSource={this.state.selectedUUIDs}
-              renderItem={uuid => (
+              renderItem={id => (
                 <List.Item
-                  onClick={e => this.selectIt(uuid)}
+                  onClick={e => this.selectIt(id)}
                 >
                   <List.Item.Meta
-                    title={this.getBeaconByUUID(uuid).name}
+                    title={this.getBeaconByUUID(id).name}
                   />
                 </List.Item>
               )}

@@ -29,6 +29,11 @@ export default class BeaconEditForm extends PureComponent {
           message.warn('UUID 长度必须为 36 位（含分隔符）');
           return;
         }
+        const reg = /^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$/;
+        if (!reg.exec(values.uuid)) {
+          message.warn('UUID 格式错误，请检查后再输入');
+          return;
+        }
         if (values.majorValue < 0 || values.majorValue > 9999) {
           message.warn('MajorValue 必须在 0～9999 之间！');
           return;
@@ -51,6 +56,7 @@ export default class BeaconEditForm extends PureComponent {
         }).then(() => {
           const needReFlush = true;
           that.props.onCloseModal(needReFlush); // 关闭自己
+          that.forceRefresh();
         });
         // console.log(data);
       }
@@ -94,6 +100,7 @@ export default class BeaconEditForm extends PureComponent {
                 required: true, message: '请输入UUID',
               }],
               initialValue: this.state.sourceData.uuid,
+              pattern: /^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$/,
             })(
               <Input placeholder="12345678-abcd-88cc-1111aaaa2222" />
             )}

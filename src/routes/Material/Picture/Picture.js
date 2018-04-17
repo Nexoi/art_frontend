@@ -157,15 +157,26 @@ export default class Picture extends PureComponent {
     let { fileList } = info;
     fileList = fileList.slice(-1);
     // 转化为 state 标准格式
+    let flag = false;
     fileList = fileList.map((file) => {
       if (file.response) {
+        if(file.response === undefined || file.response.status === undefined || file.response.status !== 200) {
+          // message.warn('图片信息读取失败，请确认图片格式正确');
+          flag = true;
+          return;
+        }
         // Component will show file.url as link
         file.url = file.response.data.url;
         file.width = file.response.data.width;
         file.height = file.response.data.height;
+        flag = false;
       }
       return file;
     });
+    if (flag){
+      message.warn('图片信息读取失败，请确认图片格式正确');
+      return;
+    }
     //
     if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
@@ -211,6 +222,11 @@ export default class Picture extends PureComponent {
     }
     if (this.state.uploadProps.fileList.length !== 1) {
       message.error('请先上传图片文件');
+      return;
+    }
+    const url = this.state.uploadProps.fileList[0].url;
+    if (url === undefined || url.length < 2) {
+      message.warn('请先上传图片');
       return;
     }
     const data = {

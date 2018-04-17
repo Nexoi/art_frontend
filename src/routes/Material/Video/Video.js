@@ -291,6 +291,11 @@ export default class Video extends PureComponent {
       message.error('请先上传视频文件');
       return;
     }
+    const url = this.state.uploadProps.fileList[0].url;
+    if (url === undefined || url.length < 2) {
+      message.warn('请先上传视频文件');
+      return;
+    }
     const data = {
       folderId: this.props.video.currentFolder.id,
       name: this.state.data.name,
