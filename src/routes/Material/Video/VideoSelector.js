@@ -5,9 +5,7 @@
 import React, { PureComponent } from 'react';
 import { Table, Input, Button, Card, message, Select, Dropdown, Icon, Menu, Modal, Form, Upload } from 'antd';
 import { connect } from 'dva';
-import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
-import { getTimeString, getSizeOfFile } from '../../../utils/utils';
-import ModalForFolder from '../ModalForFolder';
+import { getTimeString, getSizeOfFile, domain_api } from '../../../utils/utils';
 
 /* 主界面 */
 @connect(({ video, loading }) => ({
@@ -19,6 +17,29 @@ export default class VideoSelector extends PureComponent {
     selectedRowKeys: [],
     showId: this.props.showId,
     folderId: undefined,
+    /* 文件上传 */
+    modalVisible: false,
+    uploadProps: {
+      name: 'file',
+      action: `${domain_api}/api/admin/v1/upload`,
+      // headers: {
+      //   authorization: 'authorization-text',
+      // },
+      // fileList: [{
+      //   uid: -1,
+      //   name: 'demo.png',
+      //   status: 'done',
+      //   url: 'http://www.baidu.com/demo.png',
+      // }],
+      fileList: [],
+    },
+    uploadFileAvailable: false,
+    // data: {
+    //   name: '',
+    //   length: 1213,
+    //   size: 2132,
+    // },
+    data: {},
   }
 
   componentWillMount() {
@@ -30,7 +51,7 @@ export default class VideoSelector extends PureComponent {
       if (showId === undefined) {
         return;
       }
-      const folders = this.props.picture.folders;
+      const folders = this.props.video.folders;
       const theFolder = folders.filter(it => parseInt(it.showId) === parseInt(showId));
       if (theFolder === undefined || theFolder.length === 0) {
         return;
@@ -108,6 +129,115 @@ export default class VideoSelector extends PureComponent {
       });
     return items;
   }
+
+  //////// uploader ////////
+
+  /* Modal 框 */
+  showModal = () => {
+    this.setState({
+      // ...this.props.video,
+      modalVisible: true,
+    });
+  };
+  /* Modal 框 */
+  handleModalOk = () => {
+    if (!this.state.uploadFileAvailable) {
+      message.error('请上传正确的视频文件');
+      return;
+    }
+    if (this.state.uploadProps.fileList.length !== 1) {
+      message.error('请先上传视频文件');
+      return;
+    }
+    const url = this.state.uploadProps.fileList[0].url;
+    if (url === undefined || url.length < 2) {
+      message.warn('请先上传视频文件');
+      return;
+    }
+    const data = {
+      folderId: this.props.video.currentFolder.id,
+      name: this.state.data.name,
+      length: this.state.data.length,
+      size: this.state.uploadProps.fileList[0].size,
+      url: this.state.uploadProps.fileList[0].url,
+    };
+    // request by data
+    const that = this;
+    this.props.dispatch({
+      type: 'video/addVideo',
+      payload: data,
+    }).then(() => {
+      // 下面两行会执行吗？
+      // message.info('添加成功！');
+      that.setState({
+        modalVisible: false,
+      });
+    });
+  };
+  /* Modal 框 */
+  handleModalCancel = () => {
+    this.setState({
+      // ...this.props.video,
+      modalVisible: false,
+    });
+  }
+  /* 表单上传数据 在这里汇合 */
+  onFormDataChange = (changedFields) => {
+    if (!changedFields.file) {
+      this.setState({
+        data: { ...this.state.data, ...changedFields },
+      });
+    } else {
+      this.setState({
+        data: { ...this.state.data, url: changedFields.file.url },
+      });
+    }
+  }
+  /* 文件上传前验证 */
+  beforeUpload = (file) => {
+    const isAUDIO = file.type.slice(0, 5) === 'video';
+    if (!isAUDIO) {
+      message.error('请上传正确的视频文件');
+      this.setState({
+        uploadFileAvailable: false,
+      });
+    }
+    return isAUDIO;
+  };
+  /* 文件上传监听 */
+  onUploadChange = (info) => {
+    console.log(info);
+    // 只允许上传一个文件
+    let { fileList } = info;
+    fileList = fileList.slice(-1);
+    // 转化为 state 标准格式
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.data.url;
+        file.size = file.response.data.size;
+      }
+      return file;
+    });
+    //
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} 文件上传成功！`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} 文件上传失败！`);
+    }
+    // 更新 Component 数据
+    const { uploadProps } = this.state;
+    this.setState({
+      uploadProps: {
+        ...uploadProps,
+        fileList,
+      },
+      uploadFileAvailable: true, // 上传的文件可用
+    });
+  };
   /* 表 */
   columns = [{
     title: '视频名称',
@@ -154,9 +284,25 @@ export default class VideoSelector extends PureComponent {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+
+    const modal = (
+      <CollectionCreateForm
+        title="添加视频文件"
+        visible={this.state.modalVisible}
+        onCreate={this.handleModalOk}
+        onCancel={this.handleModalCancel}
+        uploadProps={this.state.uploadProps}
+        uploadChange={this.onUploadChange}
+        beforeUpload={this.beforeUpload}
+        okText="添加"
+        {...this.state.data} /* 表单数据 */
+        onChange={this.onFormDataChange}
+      />
+    );
     return (
       <div>
         <Card border="false">
+          <Button size="large" onClick={this.showModal} style={{ marginBottom: 20 }}> 上传视频 </Button>
           { this.state.folderId === undefined ? mainSearch : ''}
           <Table
             rowSelection={rowSelection}
@@ -170,6 +316,57 @@ export default class VideoSelector extends PureComponent {
             }}
           />
         </Card>
+        {modal}
       </div>);
   }
 }
+
+/* 弹出 Modal 添加内容 */
+const FormItem = Form.Item;
+
+const CollectionCreateForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    // props.onChange(changedFields);
+  },
+  onValuesChange(props, values) {
+    console.log(values);
+    props.onChange(values);
+  },
+})((props) => {
+    const {
+      title, visible, onCancel, onCreate, form, okText,
+      uploadProps, uploadChange, beforeUpload,
+    } = props;
+    const { getFieldDecorator } = form;
+    return (
+      <Modal
+        visible={visible}
+        title={title}
+        okText={okText}
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout="vertical">
+          <FormItem label="文件名称">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入文件名称！' }],
+            })(<Input />)}
+          </FormItem>
+          <FormItem label="视频时长（单位：秒）">
+            {getFieldDecorator('length', {
+              rules: [{ required: true, message: '请输入视频长度！' }],
+            })(<Input type="number" />)}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('file', {
+              rules: [{ required: true, message: '请上传文件！' }],
+            })(
+              <Upload {...uploadProps} onChange={uploadChange} beforeUpload={beforeUpload}>
+                <Button><Icon type="upload" /> 上传文件</Button>
+              </Upload>)}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  }
+);

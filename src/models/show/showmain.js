@@ -17,6 +17,7 @@ export default {
       pageSize: 10,
       showSizeChanger: true,
     },
+    show: {},
   },
 
   effects: {
@@ -118,7 +119,7 @@ export default {
       const { showId } = payload;
       const response = yield call(getShow, showId);
       yield put({
-        type: 'refreshUI',
+        type: 'refreshItemUI',
         payload: response.data,
       });
     },
@@ -158,6 +159,12 @@ export default {
           pageSize: action.payload.data.size,
           showSizeChanger: true,
         },
+      };
+    },
+    refreshItemUI(state, action) {
+      return {
+        ...state,
+        show: action.payload,
       };
     },
   },

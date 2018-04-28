@@ -160,7 +160,7 @@ export default class Beacon extends PureComponent {
       } else {
         return record.resourceGroup === undefined
           ? (<label size="small" type="primary" style={styles}> 已绑定 </label>)
-          : (<a href={`#/show-resources/${record.resourcesGroupId}/items/${record.resourceGroup.name}`}
+          : (<a href={`#/show-resources/${record.resourcesGroupId}/show/${this.state.showId}/items/${record.resourceGroup.name}`}
                 size="small"
                 type="primary"
           > { `${record.resourceGroup.name}` } </a>);
@@ -197,15 +197,16 @@ export default class Beacon extends PureComponent {
     title: '操作',
     key: 'operation',
     render: (text, record) => (
-      <Dropdown overlay={
-        <Menu onClick={e => this.handleMenuClick(record, e)}>
-          <Menu.Item key="1">编辑</Menu.Item>
-        </Menu>}
-      >
-        <Button style={{ marginLeft: 8 }}>
-          操作 <Icon type="down" />
-        </Button>
-      </Dropdown>),
+      <div>
+        <Menu onClick={e => this.handleMenuClick(record, e)}
+              mode="vertical"
+              style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
+          <Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>编辑</Menu.Item>
+        </Menu>
+        {/*<Button style={{ marginLeft: 8 }}>*/}
+          {/*操作 <Icon type="down" />*/}
+        {/*</Button>*/}
+      </div>),
   }];
   render() {
     const modalEdit = (

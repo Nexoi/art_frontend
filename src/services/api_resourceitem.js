@@ -32,13 +32,14 @@ export async function addResourceImage(payload) {
   });
 }
 export async function addResourceWebPage(payload) {
-  const { showId, groupId, title, author, coverImageUrl, introduce, contentHtml } = payload;
+  const { showId, groupId, title, author, link, coverImageUrl, introduce, contentHtml } = payload;
   const showId2 = showId === undefined || showId < 1 ? 0 : showId;
   return request(`/api/admin/v1/show/${showId2}/resources-group/${groupId}/item/web`, {
     method: 'POST',
     body: {
       title,
       author,
+      link,
       coverImageUrl,
       introduce,
       contentHtml,
@@ -71,11 +72,12 @@ export async function getWebPage(itemId) {
 }
 
 export async function updateWebPage(payload) {
-  const { itemId, author, contentHtml, coverImageUrl, introduce, title } = payload;
+  const { itemId, author, link, contentHtml, coverImageUrl, introduce, title } = payload;
   return request(`/api/admin/v1/webpage/${itemId}`, {
     method: 'PUT',
     body: {
       author,
+      link,
       contentHtml,
       coverImageUrl,
       introduce,

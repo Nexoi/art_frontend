@@ -78,6 +78,7 @@ export default class WebEditor2Edit extends PureComponent {
           coverImageUrl: this.state.selectedImageUrl,
           introduce: values.introduce,
           contentHtml: this.state.htmlContent,
+          link: values.link,
         }
         dispatch({
           type: 'webpage/updateWebPage',
@@ -279,6 +280,19 @@ export default class WebEditor2Edit extends PureComponent {
                 initialValue: this.state.currentSourceData.author || '',
               })(
                 <Input style={{ width: 400 }} placeholder="请输入作者" />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="超链接"
+            >
+              {getFieldDecorator('link', {
+                rules: [{
+                  required: true, message: '请输入超链接：http://',
+                }],
+                initialValue: this.state.currentSourceData.link || '',
+              })(
+                <Input style={{ width: 400 }} placeholder="请输入超链接：http://" />
               )}
             </FormItem>
             <FormItem

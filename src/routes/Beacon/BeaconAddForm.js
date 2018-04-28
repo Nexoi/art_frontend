@@ -13,7 +13,7 @@ const FormItem = Form.Item;
   submitting: loading.effects['beacon/addBeacon'],
 }))
 @Form.create()
-export default class BeaconEditForm extends PureComponent {
+export default class BeaconAddForm extends PureComponent {
   state = {
     mapSelectModalVisible: false,
     mapEditModalVisible: false,

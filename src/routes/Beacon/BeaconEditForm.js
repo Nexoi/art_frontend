@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import {
   Form, Input, Button, Card, Modal, Radio, Icon, Tooltip, Switch, message, InputNumber,
 } from 'antd';
-import styles from './style.less';
 import ShowMapSelector from './ShowMapSelector';
 import MapPositionEditor from './MapPositionEditor';
 

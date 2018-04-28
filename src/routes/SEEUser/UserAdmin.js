@@ -137,17 +137,18 @@ export default class UserAdmin extends PureComponent {
     title: '操作',
     key: 'operation',
     render: (text, record) => (
-      <Dropdown overlay={
-        <Menu onClick={e => this.handleMenuClick(record, e)}>
-          <Menu.Item key="1">修改权限</Menu.Item>
+      <div>
+        <Menu onClick={e => this.handleMenuClick(record, e)}
+              mode="vertical"
+              style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
+          <Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>修改权限</Menu.Item>
           {/*<Menu.Item key="2">编辑</Menu.Item>*/}
-          <Menu.Item key="3">删除</Menu.Item>
-        </Menu>}
-      >
-        <Button style={{ marginLeft: 8 }}>
-          操作 <Icon type="down" />
-        </Button>
-      </Dropdown>),
+          <Menu.Item key="3" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>删除</Menu.Item>
+        </Menu>
+        {/*<Button style={{ marginLeft: 8 }}>*/}
+          {/*操作 <Icon type="down" />*/}
+        {/*</Button>*/}
+      </div>),
   }];
   render() {
     const mainSearch = (

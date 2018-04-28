@@ -125,10 +125,10 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['beacon/installBeacon'], () => import('../routes/BeaconInstalled/Beacon')),
     },
     '/beacon/show/:showId/maps/:showTitle': {
-      component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowMap')),
+      component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/BeaconInstalled/ShowMap')),
     },
     '/beacon/show-maps': {
-      component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/Beacon/ShowPanel2Map')),
+      component: dynamicWrapper(app, ['beacon/showmap'], () => import('../routes/BeaconInstalled/ShowPanel2Map')),
     },
     '/beacon/show/:showId/beacons/:showTitle': {
       component: dynamicWrapper(app, ['beacon/installBeacon2Show'], () => import('../routes/BeaconInstalled/ShowBeacon')),
@@ -151,13 +151,13 @@ export const getRouterData = (app) => {
     '/shows/:showId/qrcode': {
       component: dynamicWrapper(app, ['resources/resourcesgroup'], () => import('../routes/ResourcesGroup/QRCodeList')),
     },
-    '/show-resources/:groupId/items/:groupName': {
+    '/show-resources/:groupId/show/:showId/items/:groupName': {
       component: dynamicWrapper(app, ['resources/resourceitem'], () => import('../routes/ResourceItem/ResourceItem')),
     },
-    '/show-resources/:groupId/editor': {
+    '/show-resources/:groupId/show/:showId/editor': {
       component: dynamicWrapper(app, ['material/webpage'], () => import('../routes/ResourceItem/WebEditor')),
     },
-    '/show-resources/:groupId/items/editor/:itemId': {
+    '/show-resources/:groupId/show/:showId/items/editor/:itemId': {
       component: dynamicWrapper(app, ['material/webpage'], () => import('../routes/ResourceItem/WebEditor2Edit')),
     },
     '/users/appusers': {

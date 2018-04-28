@@ -21,10 +21,10 @@ export default {
 
   effects: {
     *addWebPage({ payload }, { call, put }) {
-      const { showId, groupId, title, author, coverImageUrl, introduce, contentHtml } = payload;
+      const { showId, groupId, title, author, link, coverImageUrl, introduce, contentHtml } = payload;
       const response = yield call(
         addResourceWebPage,
-        { showId, groupId, title, author, coverImageUrl, introduce, contentHtml }
+        { showId, groupId, title, author, link, coverImageUrl, introduce, contentHtml }
       );
       if (response.status === 201) {
         message.info('添加成功！');
@@ -47,8 +47,8 @@ export default {
       }
     },
     *updateWebPage({ payload }, { call, put }) {
-      const { itemId, author, contentHtml, coverImageUrl, introduce, title } = payload;
-      const response = yield call(updateWebPage, { itemId, author, contentHtml, coverImageUrl, introduce, title });
+      const { itemId, author, link, contentHtml, coverImageUrl, introduce, title } = payload;
+      const response = yield call(updateWebPage, { itemId, author, link, contentHtml, coverImageUrl, introduce, title });
       if (response.status === 200) {
         message.info('修改成功！');
         yield put(routerRedux.goBack());

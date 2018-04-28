@@ -78,7 +78,7 @@ export default class ARList extends PureComponent {
     title: '绑定资源组',
     dataIndex: 'name',
     key: 'name',
-    render: (text, record) => (<a href={`#/show-resources/${record.id}/items/${record.name}`}> {text} </a>),
+    render: (text, record) => (<a href={`#/show-resources/${record.id}/show/${this.state.showId}/items/${record.name}`}> {text} </a>),
   }, {
     title: '更新时间',
     dataIndex: 'updateTime',
@@ -88,15 +88,16 @@ export default class ARList extends PureComponent {
     title: '操作',
     key: 'operation',
     render: (text, record) => (
-      <Dropdown overlay={
-        <Menu onClick={e => this.handleMenuClick(record, e)}>
-          <Menu.Item key="1">解除绑定</Menu.Item>
-        </Menu>}
-      >
-        <Button style={{ marginLeft: 8 }}>
-          操作 <Icon type="down" />
-        </Button>
-      </Dropdown>),
+      <div>
+        <Menu onClick={e => this.handleMenuClick(record, e)}
+              mode="vertical"
+              style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
+          <Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>解除绑定</Menu.Item>
+        </Menu>
+        {/*<Button style={{ marginLeft: 8 }}>*/}
+          {/*操作 <Icon type="down" />*/}
+        {/*</Button>*/}
+      </div>),
   }];
   render() {
     return (

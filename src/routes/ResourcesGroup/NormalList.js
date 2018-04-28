@@ -2,6 +2,7 @@
  * Created by neo on 17/3/2018.
  */
 import React, { PureComponent } from 'react';
+// import { routerRedux } from 'dva/router';
 import { Card, Table, Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import { getTimeString } from '../../utils/utils';
@@ -10,8 +11,9 @@ import MaterialSelecter from '../Material/MaterialSelecter';
 import BeaconSelector from '../Beacon/BeaconSelector';
 
 /* 主界面 */
-@connect(({ resourcesgroup, loading }) => ({
+@connect(({ resourcesgroup, showmain, loading }) => ({
   resourcesgroup,
+  showmain,
   loading: loading.effects['resourcesgroup/listGroup'],
 }))
 export default class NormalList extends PureComponent {
@@ -40,6 +42,27 @@ export default class NormalList extends PureComponent {
         page: 0,
         size: 10,
       },
+    });
+    this.props.dispatch({
+      type: 'showmain/getShow',
+      payload: {
+        showId: this.state.showId,
+      },
+    }).then(() => {
+      const { show } = this.props.showmain;
+      // console.log(show);
+      if (show === undefined || show.maps === undefined || show.maps.length === 0) {
+        // message.warn('该展览资源为空，请及时添加资源');
+        Modal.confirm({
+          title: '该展览还未创建地图信息，是否添加地图？',
+          cancelText: '取消',
+          okText: '添加',
+          onOk() {
+            window.location.href = `/#/beacon/show/${show.id}/maps/${show.title}`;
+            // routerRedux.push(`/beacon/show/${show.id}/maps/${show.name}`);
+          },
+        });
+      }
     });
   }
   handleMenuClick = (record, e) => {
@@ -247,7 +270,7 @@ export default class NormalList extends PureComponent {
     title: '资源组名称',
     dataIndex: 'name',
     key: 'name',
-    render: (text, record) => (<a href={`#/show-resources/${record.id}/items/${record.name}`}> {text} </a>),
+    render: (text, record) => (<a href={`#/show-resources/${record.id}/show/${this.state.showId}/items/${record.name}`}> {text} </a>),
   }, {
     title: '所在地图',
     dataIndex: 'showMap.name',
@@ -329,25 +352,26 @@ export default class NormalList extends PureComponent {
     title: '操作',
     key: 'operation',
     render: (text, record) => (
-      <Dropdown overlay={
-        <Menu onClick={e => this.handleMenuClick(record, e)}>
-          <Menu.Item key="7">修改名称</Menu.Item>
+      <div>
+        <Menu onClick={e => this.handleMenuClick(record, e)}
+              mode="vertical"
+              style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
+          <Menu.Item key="7" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>修改名称</Menu.Item>
           {record.showMap === undefined
             ? ''
-            : (<Menu.Item key="1">查看位置</Menu.Item>)}
+            : (<Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>查看位置</Menu.Item>)}
           {record.beacons === undefined || record.beacons.length === 0
-            ? (<Menu.Item key="2">绑定 Beacon</Menu.Item>)
-            : (<Menu.Item key="3">修改 Beacon</Menu.Item>)}
+            ? (<Menu.Item key="2" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>绑定 Beacon</Menu.Item>)
+            : (<Menu.Item key="3" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>修改 Beacon</Menu.Item>)}
           {record.ar === undefined || record.ar.id === undefined
-            ? (<Menu.Item key="4">绑定 AR</Menu.Item>)
-            : (<Menu.Item key="5">解绑 AR</Menu.Item>)}
-          <Menu.Item key="6">删除</Menu.Item>
-        </Menu>}
-      >
-        <Button style={{ marginLeft: 8 }}>
-          操作 <Icon type="down" />
-        </Button>
-      </Dropdown>),
+            ? (<Menu.Item key="4" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>绑定 AR</Menu.Item>)
+            : (<Menu.Item key="5" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>解绑 AR</Menu.Item>)}
+          <Menu.Item key="6" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>删除</Menu.Item>
+        </Menu>
+        {/*<Button style={{ marginLeft: 8 }}>*/}
+          {/*操作 <Icon type="down" />*/}
+        {/*</Button>*/}
+      </div>),
   }];
   render() {
     const mapViewer = (

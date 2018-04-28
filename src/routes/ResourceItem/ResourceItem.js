@@ -22,7 +22,8 @@ import EditableCell from '../Material/EditableCell';
 }))
 export default class ResourceItem extends PureComponent {
   state = {
-    groupId: this.props.match.url.slice(this.props.match.url.indexOf('/show-resources/') + 16, this.props.match.url.indexOf('/items')),
+    showId: this.props.match.url.slice(this.props.match.url.indexOf('/show/') + 6, this.props.match.url.indexOf('/items')),
+    groupId: this.props.match.url.slice(this.props.match.url.indexOf('/show-resources/') + 16, this.props.match.url.indexOf('/show/')),
     groupName: this.props.match.url.slice(this.props.match.url.indexOf('/items/') + 7),
     selectorVisible: false,
     selectorType: [],
@@ -278,17 +279,18 @@ export default class ResourceItem extends PureComponent {
     title: '操作',
     key: 'operation',
     render: (text, record) => (
-      <Dropdown overlay={
-        <Menu onClick={e => this.handleMenuClick(record, e)}>
-          { record.type === 'WEB' && (<Menu.Item key="1">查看二维码</Menu.Item>)}
-          { record.type === 'WEB' && (<Menu.Item key="2">编辑</Menu.Item>)}
-          <Menu.Item key="3">删除</Menu.Item>
-        </Menu>}
-      >
-        <Button style={{ marginLeft: 8 }}>
-          操作 <Icon type="down" />
-        </Button>
-      </Dropdown>),
+      <div>
+        <Menu onClick={e => this.handleMenuClick(record, e)}
+              mode="vertical"
+              style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
+          { record.type === 'WEB' && (<Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>查看二维码</Menu.Item>)}
+          { record.type === 'WEB' && (<Menu.Item key="2" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>编辑</Menu.Item>)}
+          <Menu.Item key="3" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>删除</Menu.Item>
+        </Menu>
+        {/*<Button style={{ marginLeft: 8 }}>*/}
+          {/*操作 <Icon type="down" />*/}
+        {/*</Button>*/}
+      </div>),
   }];
   render() {
     const rowSelection = {
@@ -400,6 +402,7 @@ export default class ResourceItem extends PureComponent {
         handleSelected={this.handleSelected}
         onCancel={this.closeSelectorModal}
         isSingleSelect="true"
+        showId={this.state.showId}
         availableType={this.state.selectorType}
       />);
     return (

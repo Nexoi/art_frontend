@@ -256,23 +256,25 @@ export default class ShowMap extends PureComponent {
     title: '操作',
     key: 'operation',
     render: (text, record) => (
-      <Dropdown overlay={
-        <Menu onClick={e => this.handleMenuClick(record, e)}>
-          <Menu.Item key="1">查看</Menu.Item>
-          <Menu.Item key="2">修改</Menu.Item>
-          <Menu.Item key="3">删除</Menu.Item>
-        </Menu>}
-      >
-        <Button style={{ marginLeft: 8 }}>
-          操作 <Icon type="down" />
-        </Button>
-      </Dropdown>),
+      <div>
+        <Menu onClick={e => this.handleMenuClick(record, e)}
+              mode="vertical"
+              style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
+          <Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>查看</Menu.Item>
+          <Menu.Item key="2" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>修改</Menu.Item>
+          <Menu.Item key="3" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>删除</Menu.Item>
+        </Menu>
+        {/*<Button style={{ marginLeft: 8 }}>*/}
+          {/*操作 <Icon type="down" />*/}
+        {/*</Button>*/}
+      </div>),
   }];
   render() {
     const mainSearch = (
       <div>
         <div style={{ float: 'right' }}>
-          <Button size="large" onClick={this.openAddMapModal}> 添加地图 </Button>
+          <Button size="large" onClick={this.openAddMapModal}><a href={`#/shows/${this.state.showId}/all`}> 回到展览 </a></Button>
+          <Button size="large" onClick={this.openAddMapModal} style={{ marginLeft: 20 }}> 添加地图 </Button>
         </div>
       </div>
     );

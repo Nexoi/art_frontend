@@ -93,7 +93,20 @@ export default class BeaconSelector extends PureComponent {
     const beacons = this.props.beacon.list.filter(
       (item) => { return item.basicInfo.id === id; }
     );
-    return beacons.length === 0 ? { name: 'UNKNOW' } : beacons[0].name === undefined ? { name: '未命名' } : beacons[0];
+    return beacons.length === 0
+      ?
+      { name: 'UNKNOW',
+        basicInfo: {
+          id: 'UNKNOW',
+        }
+      }
+      : beacons[0].name === undefined
+      ?
+      { name: `未命名`,
+        basicInfo: {
+          id: beacons[0].basicInfo.id,
+        }
+      } : beacons[0];
   }
   bindBeacons = (showId, groupId, beaconIds) => {
     const that = this;
@@ -150,7 +163,7 @@ export default class BeaconSelector extends PureComponent {
                 >
                   <List.Item.Meta
                     title={item.name || '未命名'}
-                    description={item.basicInfo.uuid}
+                    description={`B${item.basicInfo.id}`}
                   />
                 </List.Item>
               )}
@@ -171,7 +184,7 @@ export default class BeaconSelector extends PureComponent {
                   onClick={e => this.selectIt(id)}
                 >
                   <List.Item.Meta
-                    title={this.getBeaconByUUID(id).name}
+                    title={ `${this.getBeaconByUUID(id).name} B${this.getBeaconByUUID(id).basicInfo.id}` }
                   />
                 </List.Item>
               )}
