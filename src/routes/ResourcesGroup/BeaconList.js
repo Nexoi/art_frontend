@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 import { Switch, Card, Table, Modal, message, Tooltip, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import { getTimeString } from '../../utils/utils';
-import BeaconEditForm from '../Beacon/BeaconEditForm';
+import BeaconEditForm from '../Beacon/BeaconEditForm.js';
 
 @connect(({ beacon, loading }) => ({
   beacon,
