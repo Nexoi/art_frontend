@@ -15,6 +15,8 @@ import {
   removeAR,
   bindBeacons,
   removeBeacon,
+  listResourceGroupAllByQRCode,
+  listResourceWebItemByQRCode,
 } from '../../services/api_resourcesgroup';
 
 export default {
@@ -30,6 +32,8 @@ export default {
       pageSize: 10,
       showSizeChanger: true,
     },
+    resList: [],
+    webList: [],
   },
 
   effects: {
@@ -179,6 +183,26 @@ export default {
         });
       }
     },
+    *listAllWebItems({ payload }, { call, put }) {
+      const { showId } = payload;
+      const response = yield call(listResourceWebItemByQRCode, { showId });
+      if (response.status === 200) {
+        yield put({
+          type: 'refreshWebListUI',
+          payload: response.data,
+        });
+      }
+    },
+    *listAllResList({ payload }, { call, put }) {
+      const { showId } = payload;
+      const response = yield call(listResourceGroupAllByQRCode, { showId });
+      if (response.status === 200) {
+        yield put({
+          type: 'refreshResListUI',
+          payload: response.data,
+        });
+      }
+    },
   },
 
   reducers: {
@@ -195,5 +219,17 @@ export default {
         },
       };
     },
+    refreshWebListUI(state, action) {
+      return {
+        ...state,
+        webList: action.payload,
+      };
+    },
+    refreshResListUI(state, action) {
+      return {
+        ...state,
+        resList: action.payload,
+      };
+    }
   },
 };

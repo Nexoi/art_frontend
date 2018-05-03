@@ -9,6 +9,8 @@ import domtoimage from 'dom-to-image';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 import { getTimeString, domain_api } from '../../utils/utils';
+import QrcodeResGroupSelector from './QrcodeResGroupSelector';
+import QrcodeWebItemSelector from './QrcodeWebItemSelector';
 
 /* 主界面 */
 @connect(({ resourcesgroup, loading }) => ({
@@ -23,6 +25,9 @@ export default class QRCodeList extends PureComponent {
     currentSelectedUrl: '',
     downloadAllButtonVisible: false,
     selectedRows: [],
+    exportQrcodeSwitchModalVisible: false,
+    exportQrcodeResGroupModalVisible: false,
+    exportQrcodeWebItemModalVisible: false,
   }
   componentWillMount() {
     this.props.dispatch({
@@ -71,6 +76,40 @@ export default class QRCodeList extends PureComponent {
       qrcodeModalVisible: false,
     });
   }
+  //
+  // 导出二维码选择框（两种二维码选择按钮）
+  openExportQRCodeSwitchModal = () => {
+    this.setState({
+      exportQrcodeSwitchModalVisible: true,
+    });
+  }
+  closeExportQRCodeSwitchModal = () => {
+    this.setState({
+      exportQrcodeSwitchModalVisible: false,
+    });
+  }
+  openExportQRCodeResGroupModal = () => {
+    this.setState({
+      exportQrcodeResGroupModalVisible: true,
+    });
+  }
+  closeExportQRCodeResGroupModal = () => {
+    this.setState({
+      exportQrcodeResGroupModalVisible: false,
+    });
+  }
+  openExportQRCodeWebItemModal = () => {
+    this.setState({
+      exportQrcodeWebItemModalVisible: true,
+    });
+  }
+  closeExportQRCodeWebItemModal = () => {
+    this.setState({
+      exportQrcodeWebItemModalVisible: false,
+    });
+  }
+  //...
+
   // 点击下载一张图
   downloadQRCode = () => {
     const that = this;
@@ -109,6 +148,10 @@ export default class QRCodeList extends PureComponent {
     // 开始准备下载
     const that = this;
     const { selectedRows } = this.state;
+    if (selectedRows.length === 0) {
+      message.warn('请至少选择一张二维码进行下载');
+      return;
+    }
     const images = [];
     for (let i = 0; i < selectedRows.length; i += 1) {
       let qrDiv = document.getElementById(`qrcodeDownload${selectedRows[i].id}`);
@@ -252,7 +295,7 @@ export default class QRCodeList extends PureComponent {
                 <QRCode
                   style={{ margin: 'auto 0' }}
                   size={400}
-                  value={`${domain_api}/api/v1/show/resources/${item.id}?type=QRCODE`}
+                  value={`${domain_api}/api/v1/show/${item.showId}/resources/${item.id}?type=QRCODE`}
                   level={'H'}
                 />
               </div>
@@ -263,15 +306,58 @@ export default class QRCodeList extends PureComponent {
     );
     const downloadAllButton = (
       <div style={{ marginBottom: 60 }}>
-        <Button size="large" type="primary" style={{ float: 'right' }} onClick={this.downloadAllQRCode}> 下载选中的二维码 </Button>
+        {/*<Button size="large" type="primary" style={{ float: 'right' }} onClick={this.downloadAllQRCode}> 下载选中的二维码 </Button>*/}
+        <Button size="large" type="primary" style={{ float: 'right' }} onClick={this.openExportQRCodeSwitchModal}> 导出二维码 </Button>
       </div>
+    );
+    const exportSwatchModal = (
+      <Modal
+        style={{ width: 1000 }}
+        title="选择二维码类型"
+        visible={this.state.exportQrcodeSwitchModalVisible}
+        onCancel={this.closeExportQRCodeSwitchModal}
+        footer={null}
+      >
+        <div style={{ textAlign: 'center' }}>
+          <Button size="large" type="primary" style={{ margin: 20 }} onClick={this.openExportQRCodeResGroupModal}>资源二维码</Button>
+          <Button size="large" type="primary" style={{ margin: 20 }} onClick={this.openExportQRCodeWebItemModal}>网页二维码</Button>
+        </div>
+      </Modal>);
+    const qrCode_ResGroupModal = (
+      <Modal
+        style={{ width: 1000 }}
+        title="资源二维码"
+        visible={this.state.exportQrcodeResGroupModalVisible}
+        onCancel={this.closeExportQRCodeResGroupModal}
+        footer={null}
+      >
+        <QrcodeResGroupSelector
+          style={{ width: 1000 }}
+          showId={this.state.showId}
+        />
+      </Modal>
+    );
+    const qrCode_WebItempModal = (
+      <Modal
+        style={{ width: 1000 }}
+        title="网页二维码"
+        visible={this.state.exportQrcodeWebItemModalVisible}
+        onCancel={this.closeExportQRCodeWebItemModal}
+        footer={null}
+      >
+        <QrcodeWebItemSelector
+          style={{ width: 1000 }}
+          showId={this.state.showId}
+        />
+      </Modal>
     );
     return (
       <div>
         <Card border="false">
-          {this.state.downloadAllButtonVisible ? downloadAllButton : ''}
+          {/*{this.state.downloadAllButtonVisible ? downloadAllButton : ''}*/}
+          {downloadAllButton}
           <Table
-            rowSelection={rowSelection}
+            // rowSelection={rowSelection}
             rowKey="id"
             columns={this.columns}
             dataSource={this.props.resourcesgroup.list}
@@ -284,6 +370,9 @@ export default class QRCodeList extends PureComponent {
         </Card>
         {this.state.qrcodeModalVisible ? modalQRCode : ''}
         {hiddenDiv}
+        {exportSwatchModal}
+        {this.state.exportQrcodeResGroupModalVisible ? qrCode_ResGroupModal : ''}
+        {this.state.exportQrcodeWebItemModalVisible ? qrCode_WebItempModal : ''}
       </div>);
   }
 }

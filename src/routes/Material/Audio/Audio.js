@@ -109,11 +109,11 @@ const CollectionCreateForm = Form.create({
               rules: [{ required: true, message: '请输入文件名称！' }],
             })(<Input />)}
         </FormItem>
-        <FormItem label="音频时长（单位：秒）">
-          {getFieldDecorator('length', {
-              rules: [{ required: true, message: '请输入声音长度！' }],
-            })(<Input type="number" />)}
-        </FormItem>
+        {/*<FormItem label="音频时长（单位：秒）">*/}
+          {/*{getFieldDecorator('length', {*/}
+              {/*rules: [{ required: true, message: '请输入声音长度！' }],*/}
+            {/*})(<Input type="number" />)}*/}
+        {/*</FormItem>*/}
         <FormItem>
           {getFieldDecorator('file', {
               rules: [{ required: true, message: '请上传文件！' }],
@@ -313,7 +313,7 @@ export default class Audio extends PureComponent {
     const data = {
       folderId: this.props.audio.currentFolder.id,
       name: this.state.data.name,
-      length: this.state.data.length,
+      length: this.state.data.length || -1,
       size: this.state.uploadProps.fileList[0].size,
       url: this.state.uploadProps.fileList[0].url,
     };
@@ -390,11 +390,11 @@ export default class Audio extends PureComponent {
       />
     ),
   }, {
-    title: '时长',
-    dataIndex: 'length',
-    key: 'length',
-    render: text => (<div> {`${text} 秒`} </div>),
-  }, {
+  //   title: '时长',
+  //   dataIndex: 'length',
+  //   key: 'length',
+  //   render: text => (<div> {`${text} 秒`} </div>),
+  // }, {
     title: '大小',
     dataIndex: 'size',
     key: 'size',

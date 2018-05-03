@@ -5,6 +5,8 @@ import { Button, Modal, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getRoutes } from '../../utils/utils';
 import AsyncWeChatPanel from './AsyncWeChatPanel';
+import QrcodeResGroupSelector from './QrcodeResGroupSelector';
+import QrcodeWebItemSelector from './QrcodeWebItemSelector';
 
 @connect()
 export default class ResourcesGroupTabPanel extends Component {
@@ -14,6 +16,9 @@ export default class ResourcesGroupTabPanel extends Component {
     addNewGroupVisible: false,
     addNewGroupInputValue: '',
     asyncWeChatModalVisible: false,
+    exportQrcodeSwitchModalVisible: false,
+    exportQrcodeResGroupModalVisible: false,
+    exportQrcodeWebItemModalVisible: false,
   }
   componentDidMount() {
     const key = this.props.location.pathname.replace(`${this.props.match.path}/`, '');
@@ -106,6 +111,37 @@ export default class ResourcesGroupTabPanel extends Component {
       asyncWeChatModalVisible: false,
     });
   }
+  // 导出二维码选择框（两种二维码选择按钮）
+  openExportQRCodeSwitchModal = () => {
+    this.setState({
+      exportQrcodeSwitchModalVisible: true,
+    });
+  }
+  closeExportQRCodeSwitchModal = () => {
+    this.setState({
+      exportQrcodeSwitchModalVisible: false,
+    });
+  }
+  openExportQRCodeResGroupModal = () => {
+    this.setState({
+      exportQrcodeResGroupModalVisible: true,
+    });
+  }
+  closeExportQRCodeResGroupModal = () => {
+    this.setState({
+      exportQrcodeResGroupModalVisible: false,
+    });
+  }
+  openExportQRCodeWebItemModal = () => {
+    this.setState({
+      exportQrcodeWebItemModalVisible: true,
+    });
+  }
+  closeExportQRCodeWebItemModal = () => {
+    this.setState({
+      exportQrcodeWebItemModalVisible: false,
+    });
+  }
   render() {
     const tabList = [{
       key: 'all',
@@ -128,6 +164,7 @@ export default class ResourcesGroupTabPanel extends Component {
         <span style={{ fontSize: 20, fontWeight: 500, color: '#000000' }}>展览资源组</span>
         {this.state.selectedKey === 'all' &&
           (<div style={{ marginBottom: 0, float: 'right' }}>
+            {/*<Button size="large" style={{ marginRight: 20 }} onClick={this.openExportQRCodeSwitchModal}> 导出二维码 </Button>*/}
             <Button size="large" style={{ marginRight: 20 }} onClick={this.openAsyncWxModal}> 微信同步 </Button>
             <Button size="large" onClick={this.openAddGroupModal}> 新建资源组 </Button>
           </div>)
@@ -155,6 +192,47 @@ export default class ResourcesGroupTabPanel extends Component {
         onCloseModal={this.closeAsyncWxModal}
       />
     );
+    const exportSwatchModal = (
+      <Modal
+        style={{ width: 1000 }}
+        title="选择二维码类型"
+        visible={this.state.exportQrcodeSwitchModalVisible}
+        onCancel={this.closeExportQRCodeSwitchModal}
+        footer={null}
+      >
+        <div style={{ textAlign: 'center' }}>
+          <Button size="large" type="primary" style={{ margin: 20 }} onClick={this.openExportQRCodeResGroupModal}>资源二维码</Button>
+          <Button size="large" type="primary" style={{ margin: 20 }} onClick={this.openExportQRCodeWebItemModal}>网页二维码</Button>
+        </div>
+    </Modal>);
+    const qrCode_ResGroupModal = (
+      <Modal
+        style={{ width: 1000 }}
+        title="资源二维码"
+        visible={this.state.exportQrcodeResGroupModalVisible}
+        onCancel={this.closeExportQRCodeResGroupModal}
+        footer={null}
+      >
+        <QrcodeResGroupSelector
+          style={{ width: 1000 }}
+          showId={this.state.showId}
+        />
+      </Modal>
+    );
+    const qrCode_WebItempModal = (
+      <Modal
+        style={{ width: 1000 }}
+        title="网页二维码"
+        visible={this.state.exportQrcodeWebItemModalVisible}
+        onCancel={this.closeExportQRCodeWebItemModal}
+        footer={null}
+      >
+        <QrcodeWebItemSelector
+          style={{ width: 1000 }}
+          showId={this.state.showId}
+        />
+      </Modal>
+    );
     return (
       <PageHeaderLayout
         tabList={tabList}
@@ -180,6 +258,9 @@ export default class ResourcesGroupTabPanel extends Component {
         {this.state.addNewGroupVisible ? newGroupModal : ''}
         {/*{this.state.asyncWeChatModalVisible ? asyncWeChatModal : ''}*/}
         {asyncWeChatModal} {/*保持长期维护，不能删去该组件*/}
+        {exportSwatchModal}
+        {this.state.exportQrcodeResGroupModalVisible ? qrCode_ResGroupModal : ''}
+        {this.state.exportQrcodeWebItemModalVisible ? qrCode_WebItempModal : ''}
       </PageHeaderLayout>
     );
   }

@@ -34,7 +34,18 @@ export async function listResourceGroupByQRCode(payload) {
     method: 'GET',
   });
 }
-
+export async function listResourceGroupAllByQRCode(payload) {
+  const { showId } = payload;
+  return request(`/api/admin/v1/show/${showId}/resources-group/list/by-qrcode/all`, {
+    method: 'GET',
+  });
+}
+export async function listResourceWebItemByQRCode(payload) {
+  const { showId } = payload;
+  return request(`/api/admin/v1/show/${showId}/resources-group/list/by-webcode/all`, {
+    method: 'GET',
+  });
+}
 export async function getResourceGroup(payload) {
   const { showId, groupId } = payload;
   const showId2 = showId === undefined || showId < 1 ? 0 : showId;
