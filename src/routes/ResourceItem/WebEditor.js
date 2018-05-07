@@ -21,7 +21,8 @@ const { TextArea } = Input;
 @Form.create()
 export default class WebEditor extends PureComponent {
   state = {
-    groupId: this.props.match.url.slice(this.props.match.url.indexOf('/show-resources/') + 16, this.props.match.url.indexOf('/editor')),
+    showId: this.props.match.url.slice(this.props.match.url.indexOf('/show/') + 6, this.props.match.url.indexOf('/editor')),
+    groupId: this.props.match.url.slice(this.props.match.url.indexOf('/show-resources/') + 16, this.props.match.url.indexOf('/show/')),
     selectorVisible: false,
     selectedImageUrl: undefined,
     htmlContent: '',
@@ -227,6 +228,7 @@ export default class WebEditor extends PureComponent {
         visible={this.state.selectorVisible}
         handleSelected={this.handleSelected}
         onCancel={this.closeSelectorModal}
+        showId={this.state.showId}
         isSingleSelect="true"
         availableType={['picture']}
       />);
