@@ -5,7 +5,7 @@
 import React, { PureComponent } from 'react';
 import { Avatar, Card, Table, Modal, message, List, Input, Dropdown, Menu, Button, Icon } from 'antd';
 import { connect } from 'dva';
-import { getTimeString } from '../../utils/utils';
+import { domain_api } from '../../utils/utils';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import MaterialSelecter from '../Material/MaterialSelecter';
 import EditableCell from '../Material/EditableCell';
@@ -76,7 +76,7 @@ export default class User extends PureComponent {
           style={{ width: 360, float: 'left' }}
         />
         <div style={{ float: 'right' }}>
-          <Button size="large" onClick={this.exportUsers}><a target="blank" href="//art.seeuio.com/export/users.txt"> 导出用户 </a></Button>
+          <Button size="large" onClick={this.exportUsers}><a target="blank" href={`${domain_api}/export/users.txt`}> 导出用户 </a></Button>
         </div>
       </div>
     );
