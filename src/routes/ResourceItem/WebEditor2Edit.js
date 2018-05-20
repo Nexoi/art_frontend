@@ -8,6 +8,7 @@ import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/braft.css'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import MaterialSelecter from '../Material/MaterialSelecter';
+import { domain_api } from '../../utils/utils';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
