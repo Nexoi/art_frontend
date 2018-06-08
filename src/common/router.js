@@ -157,7 +157,7 @@ export const getRouterData = (app) => {
     '/show-resources/:groupId/show/:showId/editor': {
       component: dynamicWrapper(app, ['material/webpage'], () => import('../routes/ResourceItem/WebEditor')),
     },
-    '/show-resources/:groupId/show/:showId/items/editor/:itemId': {
+    '/show-resources/:groupId/show/:showId/items/editor/:itemId/update': {
       component: dynamicWrapper(app, ['material/webpage'], () => import('../routes/ResourceItem/WebEditor2Edit')),
     },
     '/users/appusers': {

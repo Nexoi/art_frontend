@@ -28639,7 +28639,9 @@ UE.ui = baidu.editor.ui = {};
                     countDom.innerHTML = errMsg;
                     editor.fireEvent("wordcountoverflow");
                 } else {
+                  if(countDom != null){
                     countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
+                  }
                 }
             }
 

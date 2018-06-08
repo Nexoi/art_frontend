@@ -52,7 +52,7 @@ export default class ResourceItem extends PureComponent {
       })
     }
     if (e.key === '2') {
-      this.props.dispatch(routerRedux.push(`editor/${record.id}`));
+      this.props.dispatch(routerRedux.push(`editor/${record.id}/update`));
       console.log('-=-==-=-=-=-=-=-=')
       this.props.dispatch({
         type: 'resourceitem/getWebPage',
@@ -284,7 +284,12 @@ export default class ResourceItem extends PureComponent {
               mode="vertical"
               style={{ float: 'left', border: 'none', background: 'rgba(0, 0, 0, 0)' }}>
           { record.type === 'WEB' && (<Menu.Item key="1" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>查看二维码</Menu.Item>)}
-          { record.type === 'WEB' && (<Menu.Item key="2" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>编辑</Menu.Item>)}
+          { record.type === 'WEB'
+          &&
+          (<Menu.Item key="9999" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>
+            <a target="_blank" href={`#/show-resources/${this.state.groupId}/show/${this.state.showId}/items/editor/${record.id}/update`}>编辑</a>
+          </Menu.Item>)}
+          {/*{ record.type === 'WEB' && (<Menu.Item key="2" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>编辑</Menu.Item>)}*/}
           <Menu.Item key="3" style={{ float: 'left', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgba(0, 0, 0, 0.65)' }}>删除</Menu.Item>
         </Menu>
         {/*<Button style={{ marginLeft: 8 }}>*/}
@@ -387,7 +392,7 @@ export default class ResourceItem extends PureComponent {
               <Menu.Item key="1">添加音频</Menu.Item>
               <Menu.Item key="2">添加视频</Menu.Item>
               {/*<Menu.Item key="3">添加图片</Menu.Item>*/}
-              <Menu.Item key="4"><a href={`#/show-resources/${this.state.groupId}/show/${this.state.showId}/editor`}>添加网页</a></Menu.Item>
+              <Menu.Item key="4"><a target="_blank" href={`#/show-resources/${this.state.groupId}/show/${this.state.showId}/editor`}>添加网页</a></Menu.Item>
             </Menu>}
           >
             <Button size="large" onClick={this.openAddResourceItem}> 添加资源 <Icon type="down" /></Button>

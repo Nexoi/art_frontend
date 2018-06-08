@@ -16,8 +16,10 @@
 .main .btn_container #meitu:hover{filter:alpha(Opacity=60);-moz-opacity:0.6;opacity: 0.6;}
 .main .btn_container #emoji:hover{filter:alpha(Opacity=60);-moz-opacity:0.6;opacity: 0.6;}
 
-
-.wxeditor{ margin:0 auto; width:1000px;}
+.wxeditor video, audio, img {
+  max-width: 100%
+}
+.wxeditor{ margin:0 auto; width:1000px; text-align: justify}
 .wxeditor .left {
 	position:relative;
 	float:left;
@@ -30,6 +32,15 @@
 .wxeditor .left .tplcontent {
 	float:left;
 	width:372px
+}
+.tplcontent{
+  height: 885px;
+}
+.tplcontent>div{
+  height: 885px;
+}
+.tplcontent>div>div>ul{
+  height: 885px;
 }
 .wxeditor .right {
 	float:left;
@@ -45,7 +56,7 @@
 	overflow-y:scroll
 }
 #bdeditor {
-	width:100%;
+	width:120%;
 	margin:0 auto
 }
 .wxeditor a:hover {
@@ -53,8 +64,8 @@
 }
 .tabs {
 	background-color:#efefef;
-  /*height:880px;*/
-  height:766px;
+  /*height:910px;*/
+  height: 783px;
 }
 .tabs li a {
 	display:block;
@@ -84,7 +95,8 @@
 	border-left:0
 }
 .tab_con .content {
-	height:681px;
+  /*height:681px;*/
+  height:895px;
 	overflow-y:scroll;
 	/*background: #FFF9F7;*/
 }
@@ -95,7 +107,7 @@
 	padding:10px;
 }
 .tab_con .content li:hover .itembox {
-    background:#FFFFFF;
+  background:#FFFFFF;
 }
 .tab_con .content li .itembox {
 	width:310px;
@@ -211,11 +223,11 @@
 	top:0px;
 	bottom:100px;
 	width:235px;
-	height:392px;
+	height:500px;
 	background:url('../images/colorpicker/jizzyoujizz_com.png');
 	margin:0px 650px;
-	background-size:contain;
-	padding:120px 25px 116px 36px
+	background-size:cover;
+	padding:90px 25px 126px 35px
 }
 .fenxiang {
 	position:absolute;

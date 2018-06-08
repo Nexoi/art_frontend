@@ -31,10 +31,17 @@ export default {
         payload: count,
       });
     },
+    *changeCollapsed({ payload }, { put }){
+      yield put({
+        type: 'changeLayoutCollapsed',
+        payload,
+      })
+    },
   },
 
   reducers: {
     changeLayoutCollapsed(state, { payload }) {
+      const { collapsed } = payload;
       return {
         ...state,
         collapsed: payload,

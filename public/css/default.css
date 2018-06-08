@@ -1,4 +1,4 @@
-﻿*{font-family:微软雅黑;}
+﻿/**{font-family:微软雅黑;}*/
 body{background:#fff; }
 a{ color:Black; text-decoration:none;outline: none;}
 a:hover{ text-decoration:none;}
@@ -48,7 +48,7 @@ img{ border:none;}
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	-moz-box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	-webkit-box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-	
+
 	-webkit-transition: top 1s ease, left 1s ease;
 	-moz-transition: top 1s ease, left 1s ease;
 	-o-transition: top 1s ease, left 1s ease;
@@ -423,7 +423,7 @@ input, button, select, textarea {
     color: #2c3e50;
     display: block;
     font-size: 15px;
-    
+
     line-height: 1.42857;
     padding: 2px 1px;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
